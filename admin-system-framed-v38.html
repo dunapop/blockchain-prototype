@@ -1,0 +1,2781 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>版权登记管理系统</title>
+  <!-- 设计系统：区块链版权登记 - 后台管理系统 -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+  <style>
+    /* ===== 设计令牌 ===== */
+    :root {
+      --color-primary: #0A0A0A;
+      --color-primary-hover: #1A1A1A;
+      --color-primary-foreground: #FFFFFF;
+      --color-bg: #FFFFFF;
+      --color-bg-admin: #F8F8F8;
+      --color-surface: #FAFAFA;
+      --color-surface-raised: #F4F4F5;
+      --color-border: #E4E4E7;
+      --color-border-strong: #D1D1D6;
+      --color-text-primary: #09090B;
+      --color-text-secondary: #71717A;
+      --color-text-tertiary: #A1A1AA;
+      --color-text-inverse: #FFFFFF;
+      --color-accent: #3F3F46;
+      --color-success: #16A34A;
+      --color-success-bg: #F0FDF4;
+      --color-warning: #D97706;
+      --color-warning-bg: #FFFBEB;
+      --color-danger: #DC2626;
+      --color-danger-bg: #FEF2F2;
+      --font-sans: "Inter", -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif;
+      --font-mono: "JetBrains Mono", "Fira Code", "SF Mono", monospace;
+      --radius-sm: 4px;
+      --radius-md: 6px;
+      --radius-lg: 8px;
+      --shadow-md: 0 4px 16px rgba(0,0,0,0.08), 0 0 0 1px rgba(0,0,0,0.04);
+    }
+
+    /* ===== 基础重置 ===== */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { font-size: 16px; -webkit-font-smoothing: antialiased; }
+    body {
+      font-family: var(--font-sans);
+      color: var(--color-text-primary);
+      background: var(--color-bg-admin);
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+    a { color: inherit; text-decoration: none; }
+    button { font-family: inherit; cursor: pointer; border: none; outline: none; }
+    input, select, textarea { font-family: inherit; outline: none; }
+
+    /* ===== 登录页 ===== */
+    .login-page {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--color-bg-admin);
+    }
+    .login-card {
+      width: 380px;
+      background: var(--color-bg);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-md);
+      padding: 40px 32px;
+    }
+    .login-card-title {
+      font-size: 20px;
+      font-weight: 600;
+      text-align: center;
+      margin-bottom: 8px;
+    }
+    .login-card-sub {
+      font-size: 13px;
+      color: var(--color-text-secondary);
+      text-align: center;
+      margin-bottom: 28px;
+    }
+    .form-group { margin-bottom: 16px; }
+    .form-group label {
+      display: block;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--color-text-secondary);
+      margin-bottom: 6px;
+    }
+    .form-input {
+      width: 100%;
+      height: 40px;
+      padding: 0 12px;
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-md);
+      font-size: 14px;
+      color: var(--color-text-primary);
+      background: var(--color-bg);
+      transition: border-color 0.15s;
+    }
+    .form-input:focus { border-color: var(--color-primary); }
+    .form-input::placeholder { color: var(--color-text-tertiary); }
+    .btn-primary {
+      width: 100%;
+      height: 40px;
+      background: var(--color-primary);
+      color: var(--color-primary-foreground);
+      font-size: 14px;
+      font-weight: 500;
+      border-radius: var(--radius-md);
+      border: none;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+    .btn-primary:hover { background: var(--color-primary-hover); }
+
+    /* ===== 主布局 ===== */
+    .app-layout {
+      display: none;
+      min-height: 100vh;
+    }
+    .app-layout.visible { display: flex; }
+
+    /* 侧边栏 */
+    .sidebar {
+      width: 220px;
+      background: var(--color-bg);
+      border-right: 1px solid var(--color-border);
+      display: flex;
+      flex-direction: column;
+      flex-shrink: 0;
+      height: calc(100vh - 56px);
+      position: fixed;
+      left: 0;
+      top: 56px;
+      z-index: 100;
+    }
+    .sidebar-logo {
+      display: none;
+    }
+    .sidebar-logo-icon {
+      width: 24px;
+      height: 24px;
+      border-radius: var(--radius-sm);
+      background: var(--color-primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .sidebar-logo-icon svg { width: 14px; height: 14px; }
+    .sidebar-nav {
+      flex: 1;
+      padding: 12px 0;
+      overflow-y: auto;
+    }
+    .nav-group { margin-bottom: 4px; }
+    .nav-item {
+      display: flex;
+      align-items: center;
+      padding: 9px 20px;
+      font-size: 14px;
+      color: var(--color-text-secondary);
+      cursor: pointer;
+      transition: all 0.15s;
+      gap: 8px;
+      border: none;
+      background: none;
+      width: 100%;
+      text-align: left;
+    }
+    .nav-item:hover { background: var(--color-surface); color: var(--color-text-primary); }
+    .nav-item.active {
+      background: var(--color-surface-raised);
+      color: var(--color-text-primary);
+      font-weight: 600;
+    }
+    .nav-item .nav-icon { width: 16px; height: 16px; flex-shrink: 0; vertical-align: middle; }
+    .nav-sub { padding-left: 28px; }
+    .nav-sub .nav-item { font-size: 13px; padding: 7px 20px 7px 36px; }
+    .nav-sub .nav-item::before {
+      content: '';
+      width: 4px;
+      height: 4px;
+      border-radius: 50%;
+      background: var(--color-text-tertiary);
+      margin-right: 8px;
+      flex-shrink: 0;
+    }
+    .nav-sub .nav-item.active::before { background: var(--color-text-primary); }
+    .nav-badge {
+      font-size: 11px;
+      padding: 1px 6px;
+      background: var(--color-surface-raised);
+      border-radius: 99px;
+      color: var(--color-text-tertiary);
+      margin-left: auto;
+    }
+
+    /* 主内容区 */
+    .main-wrap {
+      flex: 1;
+      margin-left: 220px;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+      padding-top: 56px;
+    }
+
+
+    .topbar-brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--color-text-primary);
+    }
+    .topbar-brand-icon {
+      width: 28px;
+      height: 28px;
+      border-radius: 7px;
+      background: var(--color-primary);
+      color: var(--color-primary-foreground);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .topbar-brand-icon svg {
+      width: 16px;
+      height: 16px;
+    }
+
+    /* 顶部栏 */
+    .topbar {
+      height: 56px;
+      background: var(--color-bg);
+      border-bottom: 1px solid var(--color-border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 24px;
+      flex-shrink: 0;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      width: 100%;
+      z-index: 160;
+    }
+    .topbar-left { font-size: 15px; font-weight: 600; min-width: 24px; }
+    .topbar-right { display: flex; align-items: center; gap: 16px; font-size: 14px; color: var(--color-text-secondary); }
+    .topbar-right a { color: var(--color-text-secondary); transition: color 0.15s; }
+    .topbar-right a:hover { color: var(--color-text-primary); }
+    .logout-btn {
+      font-size: 13px;
+      color: var(--color-text-secondary);
+      background: none;
+      border: 1px solid var(--color-border);
+      padding: 5px 12px;
+      border-radius: var(--radius-md);
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .logout-btn:hover { border-color: var(--color-border-strong); color: var(--color-text-primary); }
+
+    /* 内容区 */
+    .content-area {
+      flex: 1;
+      padding: 24px;
+    }
+
+    /* ===== 原型框架内嵌模式 ===== */
+    body.prototype-embedded .sidebar { display: flex !important; }
+    body.prototype-embedded .main-wrap { margin-left: 220px; padding-top: 56px; }
+    body:not(.admin-flow-only) .sidebar { display: flex !important; }
+    body:not(.admin-flow-only) .main-wrap { margin-left: 220px !important; width: auto !important; padding-top: 56px; }
+
+    /* 页面标题 / 返回 / 操作区 */
+    .page-title-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+    }
+    .page-title-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-width: 0;
+    }
+    .page-title-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      justify-content: flex-end;
+      flex-wrap: wrap;
+    }
+    .page-title-row .section-title {
+      margin-bottom: 0;
+    }
+    .subpage-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 12px;
+      margin-top: 20px;
+    }
+    .page-back-btn {
+      height: 34px;
+      padding: 0 14px;
+      background: var(--color-bg);
+      color: var(--color-text-primary);
+      font-size: 13px;
+      font-weight: 500;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--color-border);
+      cursor: pointer;
+      transition: all 0.15s;
+      flex-shrink: 0;
+    }
+    .page-back-btn:hover { border-color: var(--color-border-strong); }
+    .list-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      justify-content: flex-start;
+      margin: 0 0 16px;
+    }
+    .list-action-btn {
+      height: 36px;
+      padding: 0 16px;
+      border-radius: var(--radius-md);
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      border: 1px solid var(--color-border);
+      background: var(--color-bg);
+      color: var(--color-text-primary);
+      transition: all 0.15s;
+    }
+    .list-action-btn:hover { border-color: var(--color-border-strong); }
+    .list-action-btn.primary {
+      background: var(--color-primary);
+      color: var(--color-primary-foreground);
+      border-color: var(--color-primary);
+    }
+    .list-action-btn.primary:hover { background: var(--color-primary-hover); border-color: var(--color-primary-hover); }
+
+
+
+
+    /* 后台业务流程图页面：仅显示流程图内容，不显示后台内部菜单 */
+    body.admin-flow-only .sidebar,
+    body.admin-flow-only .topbar {
+      display: none !important;
+    }
+    body.admin-flow-only .main-wrap {
+      margin-left: 0 !important;
+      width: 100% !important;
+    }
+    body.admin-flow-only .content-area {
+      padding: 32px 48px 48px !important;
+    }
+
+    /* ===== 后台业务流程图 ===== */
+    .flow-card {
+      background: var(--color-bg);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg);
+      padding: 20px;
+      margin-bottom: 18px;
+    }
+    .flow-card h4 {
+      font-size: 16px;
+      margin-bottom: 12px;
+    }
+    .flow-steps {
+      display: flex;
+      gap: 10px;
+      align-items: stretch;
+      flex-wrap: wrap;
+    }
+    .flow-node {
+      flex: 1;
+      min-width: 150px;
+      border: 1px solid var(--color-border);
+      background: var(--color-surface);
+      border-radius: var(--radius-md);
+      padding: 12px;
+    }
+    .flow-node strong { display: block; font-size: 14px; margin-bottom: 4px; }
+    .flow-node span { font-size: 12px; color: var(--color-text-secondary); line-height: 1.5; }
+    .flow-arrow {
+      display: flex;
+      align-items: center;
+      color: var(--color-text-tertiary);
+      font-size: 18px;
+    }
+    .flow-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+      margin-top: 12px;
+    }
+    .flow-table th,
+    .flow-table td {
+      border: 1px solid var(--color-border);
+      padding: 10px 12px;
+      text-align: left;
+      vertical-align: top;
+    }
+    .flow-table th {
+      background: var(--color-surface);
+      color: var(--color-text-secondary);
+      font-weight: 600;
+    }
+
+
+
+    .pagination-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 14px 4px 0;
+      color: var(--color-text-secondary);
+      font-size: 13px;
+    }
+    .pagination-actions {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .page-btn {
+      min-width: 30px;
+      height: 30px;
+      padding: 0 10px;
+      border: 1px solid var(--color-border);
+      background: var(--color-bg);
+      border-radius: var(--radius-md);
+      cursor: pointer;
+      color: var(--color-text-secondary);
+    }
+    .page-btn.active {
+      background: var(--color-primary);
+      color: var(--color-primary-foreground);
+      border-color: var(--color-primary);
+    }
+    .row-checkbox {
+      width: 15px;
+      height: 15px;
+      cursor: pointer;
+    }
+    .record-type-tags {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+    .type-tag {
+      display: inline-flex;
+      align-items: center;
+      height: 22px;
+      padding: 0 8px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 500;
+      background: #f4f4f5;
+      color: var(--color-text-secondary);
+      border: 1px solid var(--color-border);
+      white-space: nowrap;
+    }
+    .type-tag.cert { background: #eff6ff; color: #1d4ed8; border-color: #bfdbfe; }
+    .type-tag.reg { background: #f0fdf4; color: #15803d; border-color: #bbf7d0; }
+    .upload-modal-hint {
+      background: var(--color-warning-bg);
+      color: var(--color-warning);
+      border: 1px solid #fde68a;
+      border-radius: var(--radius-md);
+      padding: 10px 12px;
+      font-size: 13px;
+      margin-bottom: 14px;
+      line-height: 1.6;
+    }
+    .upload-file-list {
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      margin-top: 12px;
+      font-size: 13px;
+    }
+    .upload-file-row {
+      display: grid;
+      grid-template-columns: 1fr 120px;
+      gap: 12px;
+      padding: 10px 12px;
+      border-bottom: 1px solid var(--color-border);
+      align-items: center;
+    }
+    .upload-file-row:last-child { border-bottom: 0; }
+    .readonly-tip {
+      display: none;
+      padding: 10px 12px;
+      background: var(--color-success-bg);
+      color: var(--color-success);
+      border: 1px solid #bbf7d0;
+      border-radius: var(--radius-md);
+      font-size: 13px;
+      margin-bottom: 16px;
+    }
+    .readonly-tip.visible { display: block; }
+
+    /* 页面容器 */
+    .page { display: none; }
+    .page.active { display: block; }
+
+    /* ===== 工作台 ===== */
+    .stat-cards {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+    .stat-card {
+      background: var(--color-bg);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg);
+      padding: 20px;
+    }
+    .stat-card-label {
+      font-size: 13px;
+      color: var(--color-text-secondary);
+      margin-bottom: 8px;
+    }
+    .stat-card-value {
+      font-size: 28px;
+      font-weight: 700;
+      color: var(--color-text-primary);
+    }
+    .section-title {
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 16px;
+    }
+    .quick-actions {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+    .quick-action-btn {
+      padding: 10px 20px;
+      background: var(--color-primary);
+      color: var(--color-primary-foreground);
+      font-size: 14px;
+      font-weight: 500;
+      border-radius: var(--radius-md);
+      border: none;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+    .quick-action-btn:hover { background: var(--color-primary-hover); }
+
+    /* ===== 通用表格 ===== */
+    .data-table-wrap {
+      background: var(--color-bg);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+    }
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+    }
+    .data-table thead { background: var(--color-surface); }
+    .data-table th {
+      padding: 10px 14px;
+      text-align: left;
+      font-weight: 500;
+      color: var(--color-text-secondary);
+      font-size: 12px;
+      border-bottom: 1px solid var(--color-border);
+      white-space: nowrap;
+    }
+    .data-table td {
+      padding: 10px 14px;
+      border-bottom: 1px solid var(--color-border);
+      color: var(--color-text-primary);
+    }
+    .data-table tbody tr:last-child td { border-bottom: none; }
+    .data-table tbody tr:hover { background: var(--color-surface); }
+    .table-badge {
+      display: inline-flex;
+      padding: 2px 8px;
+      border-radius: 99px;
+      font-size: 12px;
+      font-weight: 500;
+    }
+    .badge-success { background: var(--color-success-bg); color: var(--color-success); }
+    .badge-warning { background: var(--color-warning-bg); color: var(--color-warning); }
+    .badge-danger { background: var(--color-danger-bg); color: var(--color-danger); }
+    .badge-default { background: var(--color-surface-raised); color: var(--color-text-secondary); }
+    .table-btn {
+      font-size: 13px;
+      color: var(--color-primary);
+      font-weight: 500;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 0;
+      margin-right: 12px;
+    }
+    .table-btn:hover { opacity: 0.7; }
+    .table-btn:disabled { color: var(--color-text-tertiary); cursor: not-allowed; }
+    .table-btn:disabled:hover { opacity: 1; }
+    .table-mono { font-family: var(--font-mono); font-size: 12px; }
+    .pagination {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 14px;
+      font-size: 13px;
+      color: var(--color-text-secondary);
+    }
+
+    /* ===== 筛选栏 ===== */
+    .filter-bar {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+    }
+    .filter-input {
+      height: 36px;
+      padding: 0 12px;
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-md);
+      font-size: 13px;
+      min-width: 400px;
+      background: var(--color-bg);
+    }
+    .filter-input:focus { border-color: var(--color-primary); }
+    .filter-select {
+      height: 36px;
+      padding: 0 10px;
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-md);
+      font-size: 13px;
+      background: var(--color-bg);
+      color: var(--color-text-primary);
+      min-width: 120px;
+    }
+    .filter-btn {
+      height: 36px;
+      padding: 0 16px;
+      background: var(--color-primary);
+      color: var(--color-primary-foreground);
+      font-size: 13px;
+      font-weight: 500;
+      border-radius: var(--radius-md);
+      border: none;
+      cursor: pointer;
+    }
+    .filter-btn:hover { background: var(--color-primary-hover); }
+
+    /* ===== 表单通用 ===== */
+    .form-card {
+      background: var(--color-bg);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg);
+      padding: 24px;
+      margin-bottom: 20px;
+    }
+    .form-card-title {
+      font-size: 15px;
+      font-weight: 600;
+      margin-bottom: 20px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--color-border);
+    }
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+    .form-grid .full-width { grid-column: 1 / -1; }
+    .form-group-inline { display: flex; flex-direction: column; gap: 6px; }
+    .form-group-inline label {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--color-text-secondary);
+    }
+    .form-group-inline label .required { color: var(--color-danger); }
+    .form-group-inline input,
+    .form-group-inline select {
+      height: 38px;
+      padding: 0 12px;
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-md);
+      font-size: 14px;
+      color: var(--color-text-primary);
+      background: var(--color-bg);
+      transition: border-color 0.15s;
+    }
+    .form-group-inline input:focus,
+    .form-group-inline select:focus { border-color: var(--color-primary); }
+    .form-group-inline textarea {
+      padding: 8px 12px;
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-md);
+      font-size: 14px;
+      color: var(--color-text-primary);
+      background: var(--color-bg);
+      resize: vertical;
+      min-height: 72px;
+      transition: border-color 0.15s;
+    }
+    .form-group-inline textarea:focus { border-color: var(--color-primary); }
+    .form-error {
+      font-size: 12px;
+      color: var(--color-danger);
+      margin-top: 2px;
+      display: none;
+    }
+    .form-error.visible { display: block; }
+
+    /* 著作权人动态行 */
+    .holder-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr auto;
+      gap: 12px;
+      align-items: end;
+      margin-bottom: 12px;
+      padding: 16px;
+      background: var(--color-surface);
+      border-radius: var(--radius-md);
+      border: 1px solid var(--color-border);
+    }
+    .holder-row .form-group-inline { gap: 4px; }
+    .holder-row .form-group-inline input,
+    .holder-row .form-group-inline select {
+      height: 34px;
+      font-size: 13px;
+    }
+    .remove-holder-btn {
+      width: 34px;
+      height: 34px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: var(--radius-md);
+      background: none;
+      border: 1px solid var(--color-border);
+      color: var(--color-text-tertiary);
+      cursor: pointer;
+      margin-bottom: 0;
+      align-self: end;
+      transition: all 0.15s;
+    }
+    .remove-holder-btn:hover { border-color: var(--color-danger); color: var(--color-danger); }
+    .add-holder-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 13px;
+      color: var(--color-primary);
+      font-weight: 500;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 6px 0;
+    }
+    .add-holder-btn:hover { opacity: 0.7; }
+
+    /* 权利 Checkbox */
+    .rights-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+    .rights-grid label {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 13px;
+      color: var(--color-text-primary);
+      cursor: pointer;
+    }
+    .rights-grid input[type="checkbox"] {
+      width: 16px;
+      height: 16px;
+      accent-color: var(--color-primary);
+    }
+
+    /* 文件上传区 */
+    .upload-zone {
+      border: 2px dashed var(--color-border-strong);
+      border-radius: var(--radius-lg);
+      padding: 40px 24px;
+      text-align: center;
+      cursor: pointer;
+      transition: border-color 0.15s, background 0.15s;
+      background: var(--color-surface);
+    }
+    .upload-zone:hover {
+      border-color: var(--color-accent);
+      background: var(--color-surface-raised);
+    }
+    .upload-zone-icon {
+      width: 40px;
+      height: 40px;
+      margin: 0 auto 12px;
+      color: var(--color-text-tertiary);
+    }
+    .upload-zone-text { font-size: 14px; color: var(--color-text-secondary); }
+    .upload-zone-hint { font-size: 12px; color: var(--color-text-tertiary); margin-top: 4px; }
+
+    /* 表单底部 */
+    .form-actions {
+      display: flex;
+      gap: 12px;
+      justify-content: flex-end;
+      margin-top: 24px;
+    }
+    .btn-secondary {
+      height: 40px;
+      padding: 0 20px;
+      background: var(--color-bg);
+      color: var(--color-text-primary);
+      font-size: 14px;
+      font-weight: 500;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--color-border);
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .btn-secondary:hover { border-color: var(--color-border-strong); }
+    .btn-primary-sm {
+      height: 40px;
+      padding: 0 20px;
+      background: var(--color-primary);
+      color: var(--color-primary-foreground);
+      font-size: 14px;
+      font-weight: 500;
+      border-radius: var(--radius-md);
+      border: none;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+    .btn-primary-sm:hover { background: var(--color-primary-hover); }
+
+    /* ===== 批量上传页 ===== */
+    .steps {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0;
+      margin-bottom: 32px;
+    }
+    .step {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .step-num {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: var(--color-primary);
+      color: var(--color-primary-foreground);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      font-weight: 600;
+    }
+    .step-text { font-size: 14px; font-weight: 500; }
+    .step-arrow {
+      width: 40px;
+      height: 1px;
+      background: var(--color-border-strong);
+      margin: 0 16px;
+    }
+    .batch-upload-zone {
+      min-height: 200px;
+    }
+    .batch-error-row { background: var(--color-danger-bg) !important; }
+    .batch-error-text { font-size: 12px; color: var(--color-danger); }
+
+    /* ===== 确认弹窗 ===== */
+    .confirm-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.4);
+      z-index: 1000;
+      display: none;
+      align-items: center;
+      justify-content: center;
+    }
+    .confirm-overlay.visible { display: flex; }
+    .confirm-dialog {
+      background: var(--color-bg);
+      border-radius: var(--radius-lg);
+      box-shadow: 0 16px 48px rgba(0,0,0,0.16);
+      padding: 24px;
+      width: 420px;
+      max-width: 90vw;
+    }
+    .confirm-title {
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 12px;
+    }
+    .confirm-msg {
+      font-size: 14px;
+      color: var(--color-text-secondary);
+      margin-bottom: 24px;
+      line-height: 1.6;
+    }
+    .confirm-actions { display: flex; gap: 12px; justify-content: flex-end; }
+
+    /* ===== 记录详情弹窗 ===== */
+    .detail-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.4);
+      z-index: 1000;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+    .detail-overlay.visible { display: flex; }
+    .detail-modal {
+      background: var(--color-bg);
+      border-radius: var(--radius-lg);
+      box-shadow: 0 16px 48px rgba(0,0,0,0.16);
+      width: 100%;
+      max-width: 900px;
+      max-height: 80vh;
+      display: flex;
+      flex-direction: column;
+    }
+    .detail-modal-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--color-border);
+    }
+    .detail-modal-title { font-size: 16px; font-weight: 600; }
+    .detail-modal-close {
+      width: 28px;
+      height: 28px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: var(--radius-sm);
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: var(--color-text-secondary);
+    }
+    .detail-modal-close:hover { background: var(--color-surface-raised); }
+    .detail-modal-body {
+      padding: 20px;
+      overflow-y: auto;
+    }
+    .detail-info-group { margin-bottom: 16px; }
+    .detail-info-title {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--color-text-primary);
+      margin-bottom: 8px;
+      padding-bottom: 6px;
+      border-bottom: 1px solid var(--color-border);
+    }
+    .detail-info-row {
+      display: flex;
+      font-size: 13px;
+      line-height: 2;
+    }
+    .detail-info-label { flex: 0 0 100px; color: var(--color-text-secondary); }
+    .detail-info-value { flex: 1; }
+
+
+    .detail-cert-card {
+      display: flex;
+      gap: 20px;
+      padding: 12px;
+      background: var(--color-surface-raised);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-md);
+      align-items: flex-start;
+    }
+    .detail-cert-preview {
+      width: 150px;
+      flex: 0 0 150px;
+    }
+    .cert-sheet {
+      background: #fff;
+      border: 2px solid #ef9a9a;
+      border-radius: 8px;
+      min-height: 210px;
+      padding: 12px 10px;
+      position: relative;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+    }
+    .cert-sheet::before {
+      content: '';
+      position: absolute;
+      inset: 8px;
+      border: 1px dashed #ef9a9a;
+      border-radius: 4px;
+      pointer-events: none;
+    }
+    .cert-sheet-title {
+      text-align: center;
+      font-size: 14px;
+      font-weight: 700;
+      color: #d32f2f;
+      margin: 14px 0 12px;
+    }
+    .cert-sheet-sub {
+      text-align: center;
+      font-size: 11px;
+      color: #888;
+      margin-bottom: 18px;
+    }
+    .cert-sheet-line {
+      font-size: 11px;
+      color: #555;
+      margin: 8px 10px;
+      line-height: 1.6;
+    }
+    .cert-sheet-footer {
+      position: absolute;
+      left: 14px; right: 14px; bottom: 14px;
+      display: flex;
+      justify-content: space-between;
+      font-size: 10px;
+      color: #999;
+    }
+    .detail-cert-meta { flex: 1; }
+    .detail-cert-name { font-size: 18px; font-weight: 600; margin-bottom: 10px; }
+    .detail-cert-row { font-size: 14px; line-height: 2; color: var(--color-text-primary); }
+    .detail-cert-actions { display:flex; gap:12px; margin-top: 14px; flex-wrap:wrap; }
+    .detail-cert-btn {
+      border: none;
+      border-radius: 999px;
+      background: #ef5350;
+      color: #fff;
+      padding: 10px 18px;
+      font-size: 13px;
+      cursor: pointer;
+    }
+    .detail-cert-btn:hover { opacity: .92; }
+
+    /* ===== Tooltip ===== */
+    .tooltip-wrap { position: relative; display: inline-block; }
+    .tooltip-wrap .tooltip-text {
+      visibility: hidden;
+      opacity: 0;
+      position: absolute;
+      bottom: calc(100% + 6px);
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--color-primary);
+      color: var(--color-primary-foreground);
+      padding: 6px 10px;
+      border-radius: var(--radius-sm);
+      font-size: 12px;
+      white-space: nowrap;
+      transition: opacity 0.15s;
+      z-index: 10;
+    }
+    .tooltip-wrap:hover .tooltip-text { visibility: visible; opacity: 1; }
+
+    /* ===== Toast ===== */
+    .toast {
+      position: fixed;
+      bottom: 32px;
+      left: 50%;
+      transform: translateX(-50%) translateY(20px);
+      background: var(--color-primary);
+      color: var(--color-primary-foreground);
+      padding: 10px 20px;
+      border-radius: var(--radius-md);
+      font-size: 14px;
+      font-weight: 500;
+      opacity: 0;
+      transition: all 0.3s ease;
+      z-index: 2000;
+      pointer-events: none;
+    }
+    .toast.visible { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+    /* ===== 响应式 ===== */
+    @media (max-width: 1024px) {
+      .stat-cards { grid-template-columns: repeat(2, 1fr); }
+      .form-grid { grid-template-columns: 1fr; }
+      .holder-row { grid-template-columns: 1fr 1fr; }
+    }
+
+    /* 移动端侧边栏适配 */
+    @media (max-width: 768px) {
+      .admin-layout { grid-template-columns: 1fr; }
+      .sidebar {
+        position: fixed;
+        left: -260px;
+        top: 0;
+        height: 100vh;
+        z-index: var(--z-modal, 300);
+        transition: left 0.25s ease;
+      }
+      .sidebar.open { left: 0; }
+      .sidebar-overlay {
+        display: none;
+        position: fixed;
+        inset: 0;
+        background: rgba(0,0,0,0.3);
+        z-index: calc(var(--z-modal, 300) - 1);
+      }
+      .sidebar-overlay.show { display: block; }
+      .topbar-left::before {
+        content: '☰';
+        cursor: pointer;
+        margin-right: 12px;
+        font-size: 18px;
+        color: var(--color-text-primary);
+      }
+      .content-area { padding: 16px !important; }
+    }
+
+    /* 减弱动画偏好 */
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        transition-duration: 0.01ms !important;
+        animation-duration: 0.01ms !important;
+      }
+    }
+  
+    .enterprise-field { display: none; }
+      .single-reg-enterprise { display: none; }
+  </style>
+</head>
+<body>
+
+  <!-- ===== 登录页 ===== -->
+  <div class="login-page" id="loginPage">
+    <div class="login-card">
+      <h1 class="login-card-title">版权登记管理系统</h1>
+      <p class="login-card-sub">区块链版权存证与登记后台</p>
+      <div class="form-group">
+        <label>账号</label>
+        <input class="form-input" type="text" id="loginUser" placeholder="请输入账号">
+      </div>
+      <div class="form-group">
+        <label>密码</label>
+        <input class="form-input" type="password" id="loginPass" placeholder="请输入密码">
+      </div>
+      <button class="btn-primary" onclick="doLogin()">登 录</button>
+    </div>
+  </div>
+
+  <!-- ===== 主布局 ===== -->
+  <div class="app-layout" id="appLayout">
+    <!-- 侧边栏 -->
+    
+<aside class="sidebar">
+      <nav class="sidebar-nav">
+        <div class="nav-group">
+          <button class="nav-item active" data-page="cert-records" onclick="navigateTo('cert-records')">
+            <svg class="nav-icon" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 2l5 3v6l-5 3-5-3V5l5-3z" stroke="currentColor" stroke-width="1.4"/><path d="M8 2v12M3 5l5 3 5-3M3 11l5-3 5 3" stroke="currentColor" stroke-width="1.2"/></svg> 区块链存证
+          </button>
+        </div>
+        <div class="nav-group">
+          <button class="nav-item" data-page="reg-records" onclick="navigateTo('reg-records')">
+            <svg class="nav-icon" width="16" height="16" viewBox="0 0 16 16" fill="none"><rect x="3" y="2.5" width="10" height="11" rx="2" stroke="currentColor" stroke-width="1.4"/><path d="M5.5 5.5h5M5.5 8h5M5.5 10.5h3.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg> 版权登记
+          </button>
+        </div>
+      </nav>
+    </aside>
+
+    <!-- 主内容 -->
+    <div class="main-wrap">
+      <!-- 顶部栏 -->
+      <header class="topbar">
+        <div class="topbar-left">
+          <div class="topbar-brand">
+            <div class="topbar-brand-icon">
+              <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect x="2" y="2" width="5" height="5" rx="1" fill="white"/>
+                <rect x="9" y="2" width="5" height="5" rx="1" fill="white" opacity="0.6"/>
+                <rect x="2" y="9" width="5" height="5" rx="1" fill="white" opacity="0.6"/>
+                <rect x="9" y="9" width="5" height="5" rx="1" fill="white" opacity="0.3"/>
+              </svg>
+            </div>
+            <span>区块链版权登记系统</span>
+          </div>
+        </div>
+        <div class="topbar-right">
+          <a href="public-query-framed-v38.html#idcard-query">返回公开页</a>
+          <span>管理员 admin ▾</span>
+          <button class="logout-btn" onclick="doLogout()">退出</button>
+        </div>
+      </header>
+
+      <!-- 内容区 -->
+      <div class="content-area">
+
+
+
+        <!-- ===== 后台管理端业务流程图 ===== -->
+        <div class="page" id="page-admin-flow">
+          <h3 class="section-title">后台管理端业务流程图</h3>
+          <div class="flow-card">
+            <h4>一、区块链存证业务线</h4>
+            <div class="flow-steps">
+              <div class="flow-node"><strong>新增存证 / 上传Excel</strong><span>录入单条数据或批量导入基础数据。</span></div>
+              <div class="flow-arrow">→</div>
+              <div class="flow-node"><strong>待上传作品</strong><span>记录已生成，等待上传作品文件。</span></div>
+              <div class="flow-arrow">→</div>
+              <div class="flow-node"><strong>上传作品</strong><span>仅上传作品文件，用于生成文件 Hash 并发起上链。</span></div>
+              <div class="flow-arrow">→</div>
+              <div class="flow-node"><strong>待提交</strong><span>作品上传完成，可单条或批量提交。</span></div>
+              <div class="flow-arrow">→</div>
+              <div class="flow-node"><strong>存证中 / 已存证</strong><span>上链处理并返回存证编号、TxHash、区块高度。</span></div>
+            </div>
+          </div>
+          <div class="flow-card">
+            <h4>二、版权登记业务线</h4>
+            <div class="flow-steps">
+              <div class="flow-node"><strong>新增登记 / 上传Excel</strong><span>录入单条数据或批量导入登记数据。</span></div>
+              <div class="flow-arrow">→</div>
+              <div class="flow-node"><strong>待上传资料</strong><span>等待上传权利保证书、证件、其他材料。</span></div>
+              <div class="flow-arrow">→</div>
+              <div class="flow-node"><strong>待提交</strong><span>材料齐全后提交登记申请。</span></div>
+              <div class="flow-arrow">→</div>
+              <div class="flow-node"><strong>已提交 / 办理中</strong><span>登记机构受理审核。</span></div>
+              <div class="flow-arrow">→</div>
+              <div class="flow-node"><strong>已登记并存证 / 已驳回</strong><span>发证并完成存证，或退回修改后重新提交。</span></div>
+            </div>
+          </div>
+          <div class="flow-card">
+            <h4>三、菜单与页面关系</h4>
+            <table class="flow-table">
+              <thead><tr><th>业务菜单</th><th>页面/弹窗</th><th>说明</th></tr></thead>
+              <tbody>
+                <tr><td>区块链存证</td><td>新增存证、查看存证、上传Excel表格、上传作品</td><td>只处理区块链存证业务。</td></tr>
+                <tr><td>版权登记</td><td>新增登记、查看登记、上传Excel表格、上传资料</td><td>只处理版权登记业务。</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- ===== 工作台页面 ===== -->
+        <div class="page active" id="page-dashboard">
+          <div class="stat-cards">
+            <div class="stat-card">
+              <div class="stat-card-label">总存证数</div>
+              <div class="stat-card-value">1,284</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-card-label">总登记数</div>
+              <div class="stat-card-value">876</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-card-label">本月新增</div>
+              <div class="stat-card-value">53</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-card-label">待处理</div>
+              <div class="stat-card-value">12</div>
+            </div>
+          </div>
+          <h3 class="section-title">最近记录</h3>
+          <div class="data-table-wrap" style="margin-bottom:24px;">
+            <table class="data-table">
+              <thead>
+                <tr><th>作品名称</th><th>类型</th><th>提交时间</th><th>状态</th><th>操作</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>蜀道山水图</td><td>美术</td><td>2024-06-01 14:23</td><td><span class="table-badge badge-success">已发证</span></td><td><button class="table-btn" onclick="showRecordDetail(0)">查看</button></td></tr>
+                <tr><td>川剧变脸数字化影像</td><td>电影</td><td>2024-05-28 10:08</td><td><span class="table-badge badge-success">已发证</span></td><td><button class="table-btn" onclick="showRecordDetail(1)">查看</button></td></tr>
+                <tr><td>羌族刺绣纹样集</td><td>美术</td><td>2024-05-25 09:15</td><td><span class="table-badge badge-warning">办理中</span></td><td><button class="table-btn" onclick="showRecordDetail(2)">查看</button></td></tr>
+                <tr><td>三星堆数字文创方案</td><td>文字</td><td>2024-05-22 16:30</td><td><span class="table-badge badge-danger">已驳回</span></td><td><button class="table-btn" onclick="showRecordDetail(3)">查看</button></td></tr>
+                <tr><td>川西高原风光摄影集</td><td>摄影</td><td>2024-05-20 11:42</td><td><span class="table-badge badge-default">已提交</span></td><td><button class="table-btn" onclick="showRecordDetail(4)">查看</button></td></tr>
+              </tbody>
+            </table>
+          </div>
+          <h3 class="section-title">快速操作</h3>
+          <div class="quick-actions">
+            <button class="quick-action-btn" onclick="navigateTo('blockchain-cert')">新增存证</button>
+            <button class="quick-action-btn" onclick="navigateTo('new-registration')">新增登记</button>
+            <button class="quick-action-btn" onclick="openExcelUploadModal()">上传Excel表格</button><button class="list-action-btn" onclick="openWorkUploadModal()">批量上传资料</button>
+          </div>
+        </div>
+
+
+        <!-- ===== 统一新增页面 ===== -->
+        <div class="page" id="page-add-record">
+          <div class="page-title-row">
+            <div class="page-title-left">
+              <button class="page-back-btn" onclick="navigateTo('cert-records')">返回</button>
+              <h3 class="section-title">新增</h3>
+            </div>
+            <div class="page-title-actions">
+              <button class="btn-secondary" onclick="showToast('已保存为待提交状态，可在记录列表中继续提交');navigateTo('cert-records')">保存</button>
+              <button class="btn-primary-sm" id="addSubmitBtn" onclick="submitAddRecord()">提交</button>
+            </div>
+          </div>
+
+          <div class="form-card">
+            <div class="form-card-title">选择新增类型</div>
+            <div class="form-grid">
+              <div class="form-group-inline full-width">
+                <label>业务类型 <span class="required">*</span></label>
+                <div style="display:flex;gap:18px;align-items:center;flex-wrap:wrap;">
+                  <label style="display:flex;align-items:center;gap:6px;font-size:14px;"><input type="checkbox" id="addTypeCert" checked onchange="toggleAddRecordFields('cert')"> 区块链存证</label>
+                  <label style="display:flex;align-items:center;gap:6px;font-size:14px;"><input type="checkbox" id="addTypeReg" onchange="toggleAddRecordFields('reg')"> 版权登记</label>
+                  <span style="font-size:12px;color:var(--color-text-tertiary);">不能单独选择版权登记；选择版权登记时，区块链存证默认选中且不可取消。</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="readonly-tip" id="fromCertReadonlyTip">当前登记由“已完成存证”记录发起，已完成存证字段已自动填入并锁定。</div>
+
+          <div class="form-card" id="workBaseSection">
+            <div class="form-card-title">作品基础信息</div>
+            <div class="form-grid">
+              <div class="form-group-inline"><label>作品名称 <span class="required">*</span></label><input type="text" id="addWorkName" placeholder="请输入作品名称"></div>
+              <div class="form-group-inline full-width"><label>资料文件 <span class="required">*</span></label><div class="upload-zone" onclick="showToast('请选择文件')"><div class="upload-zone-text">上传资料文件</div><div class="upload-zone-hint">支持图片、文档、音视频、压缩包等作品材料</div></div></div>
+              <div class="form-group-inline"><label>存证方 <span class="required">*</span></label><select id="addCertifier"><option>四川省文化大数据有限责任公司</option></select></div>
+            </div>
+          </div>
+
+          <div class="form-card" id="certFieldSection">
+            <div class="form-card-title">区块链存证</div>
+            <div class="form-grid">
+              <div class="form-group-inline"><label>著作权人类型 <span class="required">*</span></label><select id="certOwnerType"><option>自然人</option><option>组织</option></select></div>
+              <div class="form-group-inline"><label>著作权人姓名 / 组织名称 <span class="required">*</span></label><input type="text" id="certOwnerName" placeholder="请输入著作权人姓名或组织名称"></div>
+              <div class="form-group-inline"><label>著作权人身份证号码 / 统一社会信用代码 <span class="required">*</span></label><input type="text" id="certOwnerNo" placeholder="请输入证件号码"></div>
+            </div>
+          </div>
+
+          <div id="regFieldSection">
+            <div class="form-card">
+              <div class="form-card-title">版权登记</div>
+              <div class="form-grid">
+                <div class="form-group-inline"><label>作品类型 <span class="required">*</span></label><select id="regWorkType"><option>文字</option><option>音乐</option><option>美术</option><option>摄影</option><option>电影</option><option>图形</option><option>模型</option><option>其他</option></select></div>
+                <div class="form-group-inline"><label>作者名称 <span class="required">*</span></label><input type="text" id="regAuthorName" placeholder="请输入作者名称"></div>
+                <div class="form-group-inline"><label>作者署名 <span class="required">*</span></label><input type="text" id="regAuthorSign" placeholder="请输入作者署名"></div>
+                <div class="form-group-inline full-width"><label>权利保证书文件 <span class="required">*</span></label><div class="upload-zone" onclick="showToast('请选择文件')"><div class="upload-zone-text">上传权利保证书文件</div><div class="upload-zone-hint">点击或拖拽文件至此处上传</div></div></div>
+                <div class="form-group-inline full-width"><label>其他材料文件</label><div class="upload-zone" onclick="showToast('请选择文件')"><div class="upload-zone-text">上传其他材料文件</div><div class="upload-zone-hint">可上传补充说明、授权材料等</div></div></div>
+
+                <div class="form-group-inline"><label>著作权人类型 <span class="required">*</span></label><select id="regOwnerType" onchange="toggleRegEnterpriseFields()"><option>自然人</option><option>企业</option></select></div>
+                <div class="form-group-inline"><label>著作权人名称 <span class="required">*</span></label><input type="text" id="regCopyrightOwnerName" placeholder="请输入著作权人名称"></div>
+                <div class="form-group-inline"><label>著作权人证件号码 <span class="required">*</span></label><input type="text" id="regCopyrightOwnerNo" placeholder="身份证号码或统一社会信用代码"></div>
+                <div class="form-group-inline full-width"><label>著作权人身份证正反面上传或营业执照上传 <span class="required">*</span></label><div class="upload-zone" onclick="showToast('请选择文件')"><div class="upload-zone-text">上传身份证正反面或营业执照</div><div class="upload-zone-hint">点击或拖拽文件至此处上传</div></div></div>
+
+                <div class="form-group-inline enterprise-field"><label>法人名称</label><input type="text" id="regLegalName" placeholder="著作权人为企业时填写"></div>
+                <div class="form-group-inline enterprise-field"><label>法人身份证号码</label><input type="text" id="regLegalNo" placeholder="著作权人为企业时填写"></div>
+                <div class="form-group-inline full-width enterprise-field"><label>法人身份证正反面上传</label><div class="upload-zone" onclick="showToast('请选择文件')"><div class="upload-zone-text">上传法人身份证正反面</div><div class="upload-zone-hint">点击或拖拽文件至此处上传</div></div></div>
+
+                <div class="form-group-inline"><label>创作性质 <span class="required">*</span></label><select id="regNature"><option>原创</option><option>改编</option><option>翻译</option><option>汇编</option><option>整理</option></select></div>
+                <div class="form-group-inline"><label>权利拥有方式 <span class="required">*</span></label><select id="regRightOwnWay"><option>全部权利</option><option>部分权利</option></select></div>
+                <div class="form-group-inline"><label>作品归属情况 <span class="required">*</span></label><select id="regBelong"><option>个人作品</option><option>合作作品</option><option>法人作品</option><option>职务作品</option><option>委托作品</option></select></div>
+                <div class="form-group-inline"><label>权利获得方式 <span class="required">*</span></label><select id="regRightGetWay"><option>原始取得</option><option>继受取得</option></select></div>
+                <div class="form-group-inline full-width"><label>作品创作说明 <span class="required">*</span></label><textarea rows="3" id="regCreateDesc" placeholder="请说明作品创作背景、创作过程、独创性等"></textarea></div>
+                <div class="form-group-inline"><label>创作完成时间 <span class="required">*</span></label><input type="date" id="regCompletionDate"></div>
+                <div class="form-group-inline"><label>创作完成地点 <span class="required">*</span></label><input type="text" id="regCompletionPlace" placeholder="请输入创作完成地点"></div>
+                <div class="form-group-inline"><label>首次发表日期</label><input type="date" id="regPublishDate"></div>
+                <div class="form-group-inline"><label>发表地点</label><input type="text" id="regPublishPlace" placeholder="非必填"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ===== 区块链存证页面 ===== -->
+        <div class="page" id="page-blockchain-cert">
+          <div class="page-title-row">
+            <div class="page-title-left">
+              <button class="page-back-btn" onclick="navigateTo('cert-records')">返回</button>
+              <h3 class="section-title">新增存证</h3>
+            </div>
+            <div class="page-title-actions">
+              <button class="btn-secondary" onclick="showToast('已保存为待提交，可在区块链存证记录列表继续处理');navigateTo('cert-records')">保存</button>
+              <button class="btn-primary-sm" onclick="showConfirm('确认提交区块链存证？', function(){ showToast('已提交区块链存证，状态更新为存证中');navigateTo('cert-records'); })">提交</button>
+            </div>
+          </div>
+
+          <div class="form-card">
+            <div class="form-card-title">作品基础信息</div>
+            <div class="form-grid">
+              <div class="form-group-inline">
+                <label>作品名称 <span class="required">*</span></label>
+                <input type="text" placeholder="请输入作品名称">
+              </div>
+              <div class="form-group-inline">
+                <label>存证方 <span class="required">*</span></label>
+                <select>
+                  <option>四川省文化大数据有限责任公司</option>
+                  <option>成都数字版权服务中心</option>
+                </select>
+              </div>
+              <div class="form-group-inline full-width">
+                <label>作品文件 <span class="required">*</span></label>
+                <div class="upload-zone" onclick="showToast('请选择作品文件')">
+                  <div class="upload-zone-text">点击或拖拽作品文件至此处上传</div>
+                  <div class="upload-zone-hint">用于区块链存证的原始作品文件，支持图片、文档、音视频、压缩包等格式</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-card">
+            <div class="form-card-title">著作权人信息</div>
+            <div class="form-grid">
+              <div class="form-group-inline">
+                <label>著作权人类型 <span class="required">*</span></label>
+                <select>
+                  <option>自然人</option>
+                  <option>组织</option>
+                </select>
+              </div>
+              <div class="form-group-inline">
+                <label>著作权人姓名 / 组织名称 <span class="required">*</span></label>
+                <input type="text" placeholder="请输入著作权人姓名或组织名称">
+              </div>
+              <div class="form-group-inline">
+                <label>著作权人身份证号码 / 统一社会信用代码 <span class="required">*</span></label>
+                <input type="text" placeholder="请输入证件号码">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ===== 存证记录页面 ===== -->
+        <div class="page" id="page-cert-records">
+          <h3 class="section-title">区块链存证</h3>
+          <div class="filter-bar">
+            <input class="filter-input" placeholder="搜索作品名称或存证编号">
+            <select class="filter-select">
+              <option>全部存证状态</option>
+              <option>待上传作品</option>
+              <option>待提交</option>
+              <option>存证中</option>
+              <option>已存证</option>
+            </select>
+            <button class="filter-btn">筛选</button>
+          </div>
+          <div class="list-actions">
+            <button class="list-action-btn primary" onclick="navigateTo('blockchain-cert')">新增存证</button>
+            <button class="list-action-btn primary" onclick="batchSubmitSelected()">批量提交</button>
+            <button class="list-action-btn" onclick="openCertExcelUploadModal()">上传Excel表格</button>
+            <button class="list-action-btn" onclick="openCertWorkUploadModal()">上传作品</button>
+          </div>
+          <div class="data-table-wrap">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th><input class="row-checkbox" type="checkbox" id="selectAllRowsCert" onclick="toggleAllRows(this)"></th>
+                  <th>序号</th><th>作品名称</th><th>作品类型</th><th>权利人</th><th>创作者</th><th>存证状态</th><th>存证编号</th><th>更新时间</th><th>操作</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><input class="row-checkbox record-check" type="checkbox"></td>
+                  <td>1</td><td>青羊宫古建筑摄影集</td><td>摄影</td><td>成都城市影像工作室</td><td>陈志强</td>
+                  <td><span class="table-badge badge-warning">待上传作品</span></td><td class="table-mono">—</td><td>2024-06-06 10:30</td>
+                  <td><button class="table-btn" onclick="openCertWorkUploadModal()">上传作品</button><button class="table-btn" onclick="showToast('请先上传作品文件')">提交</button></td>
+                </tr>
+                <tr>
+                  <td><input class="row-checkbox record-check" type="checkbox"></td>
+                  <td>2</td><td>蜀道山水图</td><td>美术</td><td>张明远</td><td>张明远</td>
+                  <td><span class="table-badge badge-warning">待提交</span></td><td class="table-mono">—</td><td>2024-06-01 09:30</td>
+                  <td><button class="table-btn">编辑</button><button class="table-btn" onclick="showToast('已提交区块链存证，状态更新为存证中')">提交</button><button class="table-btn" style="color:var(--color-danger);">删除</button></td>
+                </tr>
+                <tr>
+                  <td><input class="row-checkbox record-check" type="checkbox"></td>
+                  <td>3</td><td>川剧变脸数字化影像</td><td>电影</td><td>四川文化传媒有限公司</td><td>四川文化传媒有限公司</td>
+                  <td><span class="table-badge badge-warning">存证中</span></td><td class="table-mono">—</td><td>2024-06-02 10:08</td>
+                  <td><button class="table-btn" onclick="showCertRecordDetail(0)">查看</button></td>
+                </tr>
+                <tr>
+                  <td><input class="row-checkbox record-check" type="checkbox"></td>
+                  <td>4</td><td>羌族刺绣纹样集</td><td>美术</td><td>李秀芳</td><td>李秀芳</td>
+                  <td><span class="table-badge badge-success">已存证</span></td><td class="table-mono">BD-2024-SC-003891</td><td>2024-05-09 09:15</td>
+                  <td><button class="table-btn" onclick="showCertRecordDetail(0)">查看</button></td>
+                </tr>
+                <tr>
+                  <td><input class="row-checkbox record-check" type="checkbox"></td>
+                  <td>5</td><td>峨眉山云海摄影</td><td>摄影</td><td>陈志强</td><td>陈志强</td>
+                  <td><span class="table-badge badge-warning">待上传作品</span></td><td class="table-mono">—</td><td>2024-06-07 09:18</td>
+                  <td><button class="table-btn" onclick="openCertWorkUploadModal()">上传作品</button><button class="table-btn" onclick="showToast('请先上传作品文件')">提交</button></td>
+                </tr>
+                <tr>
+                  <td><input class="row-checkbox record-check" type="checkbox"></td>
+                  <td>6</td><td>龙纹样数字素材包</td><td>美术</td><td>四川博物院</td><td>四川博物院</td>
+                  <td><span class="table-badge badge-warning">待提交</span></td><td class="table-mono">—</td><td>2024-06-07 12:10</td>
+                  <td><button class="table-btn">编辑</button><button class="table-btn" onclick="showToast('已提交区块链存证，状态更新为存证中')">提交</button><button class="table-btn" style="color:var(--color-danger);">删除</button></td>
+                </tr>
+                <tr>
+                  <td><input class="row-checkbox record-check" type="checkbox"></td>
+                  <td>7</td><td>巴蜀节庆影像志</td><td>电影</td><td>四川影像资料馆</td><td>四川影像资料馆</td>
+                  <td><span class="table-badge badge-success">已存证</span></td><td class="table-mono">BD-2024-SC-007188</td><td>2024-06-07 15:00</td>
+                  <td><button class="table-btn" onclick="showCertRecordDetail(0)">查看</button></td>
+                </tr>
+                <tr>
+                  <td><input class="row-checkbox record-check" type="checkbox"></td>
+                  <td>8</td><td>川菜传统技艺视频</td><td>电影</td><td>四川美食文化中心</td><td>四川美食文化中心</td>
+                  <td><span class="table-badge badge-warning">存证中</span></td><td class="table-mono">—</td><td>2024-06-07 10:22</td>
+                  <td><button class="table-btn" onclick="showCertRecordDetail(0)">查看</button></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="pagination-bar">
+            <div>共 8 条，每页 8 条</div>
+            <div class="pagination-actions">
+              <button class="page-btn">上一页</button>
+              <button class="page-btn active">1</button>
+              <button class="page-btn">下一页</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- ===== 存证记录批量上传页面 ===== -->
+        <div class="page" id="page-cert-batch-upload">
+          <div class="page-title-row">
+            <div class="page-title-left">
+              <button class="page-back-btn" onclick="navigateTo('cert-records')">返回</button>
+              <h3 class="section-title">批量上传</h3>
+            </div>
+          </div>
+
+          <div class="steps">
+            <div class="step"><span class="step-num">1</span><span class="step-text">下载模板</span></div>
+            <div class="step-arrow"></div>
+            <div class="step"><span class="step-num">2</span><span class="step-text">填写数据</span></div>
+            <div class="step-arrow"></div>
+            <div class="step"><span class="step-num">3</span><span class="step-text">上传提交</span></div>
+          </div>
+
+          <div class="form-card">
+            <div style="margin-bottom:20px;">
+              <button class="quick-action-btn" onclick="showToast('存证批量模板下载中...')">下载 Excel 模板</button>
+            </div>
+
+            <div class="upload-zone batch-upload-zone" style="margin-bottom:20px;" onclick="this.querySelector('input').click()">
+              <svg class="upload-zone-icon" viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.5">
+                <path d="M20 8v16M12 16l8-8 8 8"/><rect x="4" y="24" width="32" height="10" rx="2"/>
+              </svg>
+              <div class="upload-zone-text">点击或拖拽 Excel 文件至此处上传</div>
+              <div class="upload-zone-hint">仅支持 .xlsx 格式文件</div>
+              <input type="file" style="display:none" accept=".xlsx" onchange="simulateBatchParse('certBatchResult')">
+            </div>
+
+            <div style="display:flex;gap:12px;margin-bottom:24px;">
+              <button class="quick-action-btn" onclick="simulateBatchParse('certBatchResult')">上传 Excel 文件</button>
+              <button class="btn-secondary" onclick="showToast('请选择ZIP包')">同时上传作品文件（ZIP包）</button>
+            </div>
+          </div>
+
+          <div class="form-card" id="certBatchResult" style="display:none;">
+            <div class="form-card-title">解析结果预览</div>
+            <div class="data-table-wrap">
+              <table class="data-table">
+                <thead>
+                  <tr><th>序号</th><th>作品名称</th><th>著作权人</th><th>证件号码</th><th>校验结果</th><th>问题说明</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td>1</td><td>蜀锦纹样设计稿</td><td>张明远</td><td class="table-mono">510104199003123456</td><td><span class="table-badge badge-success">通过</span></td><td>—</td></tr>
+                  <tr class="batch-error-row"><td>2</td><td>青城山水墨画</td><td>刘芳</td><td class="table-mono" style="color:var(--color-danger);">510104199001</td><td><span class="table-badge badge-danger">错误</span></td><td class="batch-error-text">身份证号码格式不正确，应为18位</td></tr>
+                  <tr><td>3</td><td>峨眉山古建筑图集</td><td>四川文创科技有限公司</td><td class="table-mono">91510100MA6CWK3X3K</td><td><span class="table-badge badge-success">通过</span></td><td>—</td></tr>
+                  <tr><td>4</td><td>藏族民歌精选集</td><td>扎西达瓦</td><td class="table-mono">510104198805056789</td><td><span class="table-badge badge-success">通过</span></td><td>—</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <div style="margin-top:16px;display:flex;align-items:center;gap:12px;">
+              <button class="btn-primary-sm" onclick="showToast('已提交3条正确数据')">提交正确数据（忽略错误行）</button>
+              <span style="font-size:13px;color:var(--color-danger);">1 行数据有误，将被跳过</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- ===== 新增登记页面 ===== -->
+        <div class="page" id="page-new-registration">
+          <div class="page-title-row">
+            <div class="page-title-left">
+              <button class="page-back-btn" onclick="navigateTo('reg-records')">返回</button>
+              <h3 class="section-title">新增登记</h3>
+            </div>
+            <div class="page-title-actions">
+              <button class="btn-secondary" onclick="showToast('已保存为待提交，可在版权登记记录列表继续处理');navigateTo('reg-records')">保存</button>
+              <button class="btn-primary-sm" onclick="submitRegistration()">提交</button>
+            </div>
+          </div>
+
+          <div class="form-card">
+            <div class="form-card-title">作品基础信息</div>
+            <div class="form-grid">
+              <div class="form-group-inline">
+                <label>作品名称 <span class="required">*</span></label>
+                <input type="text" placeholder="请输入作品名称">
+              </div>
+              <div class="form-group-inline">
+                <label>存证方 <span class="required">*</span></label>
+                <select>
+                  <option>四川省文化大数据有限责任公司</option>
+                  <option>成都数字版权服务中心</option>
+                </select>
+              </div>
+              <div class="form-group-inline full-width">
+                <label>作品文件 <span class="required">*</span></label>
+                <div class="upload-zone" onclick="showToast('请选择作品文件')">
+                  <div class="upload-zone-text">上传作品文件</div>
+                  <div class="upload-zone-hint">用于版权登记的作品原始文件或样本文件</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-card">
+            <div class="form-card-title">版权登记</div>
+            <div class="form-grid">
+              <div class="form-group-inline">
+                <label>作品类型 <span class="required">*</span></label>
+                <select>
+                  <option>文字</option><option>音乐</option><option>美术</option><option>摄影</option><option>电影</option><option>图形</option><option>模型</option><option>其他</option>
+                </select>
+              </div>
+              <div class="form-group-inline">
+                <label>作者名称 <span class="required">*</span></label>
+                <input type="text" placeholder="请输入作者名称">
+              </div>
+              <div class="form-group-inline">
+                <label>作者署名 <span class="required">*</span></label>
+                <input type="text" placeholder="请输入作者署名">
+              </div>
+              <div class="form-group-inline full-width">
+                <label>权利保证书文件 <span class="required">*</span></label>
+                <div class="upload-zone" onclick="showToast('请选择文件')">
+                  <div class="upload-zone-text">上传权利保证书文件</div>
+                  <div class="upload-zone-hint">支持 PDF、图片等格式</div>
+                </div>
+              </div>
+              <div class="form-group-inline full-width">
+                <label>其他材料文件</label>
+                <div class="upload-zone" onclick="showToast('请选择文件')">
+                  <div class="upload-zone-text">上传其他材料文件</div>
+                  <div class="upload-zone-hint">可上传授权材料、补充说明、证明材料等</div>
+                </div>
+              </div>
+              <div class="form-group-inline">
+                <label>著作权人类型 <span class="required">*</span></label>
+                <select id="regOwnerTypeSingle" onchange="toggleSingleRegEnterpriseFields()">
+                  <option>自然人</option><option>企业</option>
+                </select>
+              </div>
+              <div class="form-group-inline">
+                <label>著作权人名称 <span class="required">*</span></label>
+                <input type="text" placeholder="请输入著作权人名称">
+              </div>
+              <div class="form-group-inline">
+                <label>著作权人证件号码 <span class="required">*</span></label>
+                <input type="text" placeholder="请输入身份证号码或统一社会信用代码">
+              </div>
+              <div class="form-group-inline full-width">
+                <label>著作权人身份证正反面上传或营业执照上传 <span class="required">*</span></label>
+                <div class="upload-zone" onclick="showToast('请选择文件')">
+                  <div class="upload-zone-text">上传身份证正反面或营业执照</div>
+                  <div class="upload-zone-hint">自然人上传身份证正反面，企业上传营业执照</div>
+                </div>
+              </div>
+              <div class="form-group-inline single-reg-enterprise">
+                <label>法人名称</label>
+                <input type="text" placeholder="著作权人为企业时填写">
+              </div>
+              <div class="form-group-inline single-reg-enterprise">
+                <label>法人身份证号码</label>
+                <input type="text" placeholder="著作权人为企业时填写">
+              </div>
+              <div class="form-group-inline full-width single-reg-enterprise">
+                <label>法人身份证正反面上传</label>
+                <div class="upload-zone" onclick="showToast('请选择文件')">
+                  <div class="upload-zone-text">上传法人身份证正反面</div>
+                  <div class="upload-zone-hint">著作权人为企业时填写</div>
+                </div>
+              </div>
+              <div class="form-group-inline">
+                <label>创作性质 <span class="required">*</span></label>
+                <select><option>原创</option><option>改编</option><option>翻译</option><option>汇编</option><option>整理</option><option>其他</option></select>
+              </div>
+              <div class="form-group-inline">
+                <label>权利拥有方式 <span class="required">*</span></label>
+                <select><option>全部权利</option><option>部分权利</option></select>
+              </div>
+              <div class="form-group-inline">
+                <label>作品归属情况 <span class="required">*</span></label>
+                <select><option>个人作品</option><option>合作作品</option><option>法人作品</option><option>职务作品</option><option>委托作品</option></select>
+              </div>
+              <div class="form-group-inline">
+                <label>权利获得方式 <span class="required">*</span></label>
+                <select><option>原始取得</option><option>继受取得</option></select>
+              </div>
+              <div class="form-group-inline full-width">
+                <label>作品创作说明 <span class="required">*</span></label>
+                <textarea rows="3" placeholder="请说明作品创作背景、创作过程、独创性等"></textarea>
+              </div>
+              <div class="form-group-inline">
+                <label>创作完成时间 <span class="required">*</span></label>
+                <input type="date">
+              </div>
+              <div class="form-group-inline">
+                <label>创作完成地点 <span class="required">*</span></label>
+                <input type="text" placeholder="请输入创作完成地点">
+              </div>
+              <div class="form-group-inline">
+                <label>首次发表日期</label>
+                <input type="date">
+              </div>
+              <div class="form-group-inline">
+                <label>发表地点</label>
+                <input type="text" placeholder="非必填">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ===== 登记记录页面 ===== -->
+        <div class="page" id="page-reg-records">
+          <h3 class="section-title">版权登记</h3>
+          <div class="filter-bar">
+            <input class="filter-input" placeholder="搜索作品名称、存证编号或登记编号">
+            <select class="filter-select">
+              <option>全部状态</option>
+              <option>待上传资料</option>
+              <option>待提交</option>
+              <option>办理中</option>
+              <option>已登记并存证</option>
+              <option>已驳回</option>
+            </select>
+            <button class="filter-btn">筛选</button>
+          </div>
+          <div class="list-actions">
+            <button class="list-action-btn primary" onclick="navigateTo('new-registration')">新增登记</button>
+            <button class="list-action-btn primary" onclick="batchSubmitSelected()">批量提交</button>
+            <button class="list-action-btn" onclick="openRegExcelUploadModal()">上传Excel表格</button>
+            <button class="list-action-btn" onclick="openRegWorkUploadModal()">上传资料</button>
+          </div>
+          <div class="data-table-wrap">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th><input class="row-checkbox" type="checkbox" id="selectAllRowsReg" onclick="toggleAllRows(this)"></th>
+                  <th>序号</th><th>作品名称</th><th>作品类型</th><th>著作权人</th><th>作者</th><th>状态</th><th>存证编号</th><th>登记编号</th><th>更新时间</th><th>操作</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><input class="row-checkbox record-check" type="checkbox"></td>
+                  <td>1</td><td>锦里古街摄影集</td><td>摄影</td><td>赵伟</td><td>赵伟</td>
+                  <td><span class="table-badge badge-warning">待上传资料</span></td><td class="table-mono">—</td><td class="table-mono">—</td><td>2024-06-08 09:35</td>
+                  <td><button class="table-btn" onclick="navigateTo('new-registration')">编辑</button><button class="table-btn" onclick="openRegWorkUploadModal()">上传资料</button></td>
+                </tr>
+                <tr>
+                  <td><input class="row-checkbox record-check" type="checkbox"></td>
+                  <td>2</td><td>蜀绣图案素材库</td><td>美术</td><td>四川非遗中心</td><td>四川非遗中心</td>
+                  <td><span class="table-badge badge-warning">待提交</span></td><td class="table-mono">—</td><td class="table-mono">—</td><td>2024-06-08 10:12</td>
+                  <td><button class="table-btn" onclick="navigateTo('new-registration')">编辑</button><button class="table-btn" onclick="showToast('已提交版权登记')">提交</button></td>
+                </tr>
+                <tr>
+                  <td><input class="row-checkbox record-check" type="checkbox"></td>
+                  <td>3</td><td>成都话方言词典</td><td>文字</td><td>刘小蓉</td><td>刘小蓉</td>
+                  <td><span class="table-badge badge-warning">办理中</span></td><td class="table-mono">—</td><td class="table-mono">—</td><td>2024-06-08 10:45</td>
+                  <td><button class="table-btn" onclick="showRegRecordDetail(2)">查看</button></td>
+                </tr>
+                <tr>
+                  <td><input class="row-checkbox record-check" type="checkbox"></td>
+                  <td>4</td><td>巴蜀节庆影像志</td><td>电影</td><td>四川影像资料馆</td><td>四川影像资料馆</td>
+                  <td><span class="table-badge badge-warning">办理中</span></td><td class="table-mono">—</td><td class="table-mono">—</td><td>2024-06-08 11:20</td>
+                  <td><button class="table-btn" onclick="showRegRecordDetail(3)">查看</button></td>
+                </tr>
+                <tr>
+                  <td><input class="row-checkbox record-check" type="checkbox"></td>
+                  <td>5</td><td>三星堆数字文创方案</td><td>文字</td><td>四川文创科技有限公司</td><td>赵启明</td>
+                  <td><span class="table-badge badge-success">已登记并存证</span></td><td class="table-mono">BD-2024-SC-004012</td><td class="table-mono">川作登字-2024-W-001128</td><td>2024-06-07 16:45</td>
+                  <td><button class="table-btn" onclick="showRegRecordDetail(4)">查看</button></td>
+                </tr>
+                <tr>
+                  <td><input class="row-checkbox record-check" type="checkbox"></td>
+                  <td>6</td><td>青城山水墨画</td><td>美术</td><td>刘芳</td><td>刘芳</td>
+                  <td><span class="table-badge badge-danger">已驳回</span></td><td class="table-mono">—</td><td class="table-mono">—</td><td>2024-06-07 15:20</td>
+                  <td><button class="table-btn" onclick="showRegRecordDetail(5)">查看</button><button class="table-btn" onclick="navigateTo('new-registration')">编辑</button><button class="table-btn" onclick="showToast('已重新提交登记')">重新提交</button></td>
+                </tr>
+                <tr>
+                  <td><input class="row-checkbox record-check" type="checkbox"></td>
+                  <td>7</td><td>竹编工艺图谱</td><td>图形</td><td>眉山非遗馆</td><td>周建</td>
+                  <td><span class="table-badge badge-warning">待上传资料</span></td><td class="table-mono">—</td><td class="table-mono">—</td><td>2024-06-07 14:10</td>
+                  <td><button class="table-btn" onclick="navigateTo('new-registration')">编辑</button><button class="table-btn" onclick="openRegWorkUploadModal()">上传资料</button></td>
+                </tr>
+                <tr>
+                  <td><input class="row-checkbox record-check" type="checkbox"></td>
+                  <td>8</td><td>川西民居建筑模型</td><td>模型</td><td>成都建筑设计院</td><td>成都建筑设计院</td>
+                  <td><span class="table-badge badge-warning">待提交</span></td><td class="table-mono">—</td><td class="table-mono">—</td><td>2024-06-07 11:35</td>
+                  <td><button class="table-btn" onclick="navigateTo('new-registration')">编辑</button><button class="table-btn" onclick="showToast('已提交版权登记')">提交</button></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="pagination-bar">
+            <div>共 8 条，每页 8 条</div>
+            <div class="pagination-actions">
+              <button class="page-btn">上一页</button>
+              <button class="page-btn active">1</button>
+              <button class="page-btn">下一页</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- ===== 批量上传页面 ===== -->
+        <div class="page" id="page-batch-upload">
+          <div class="page-title-row">
+            <div class="page-title-left">
+              <button class="page-back-btn" onclick="navigateTo('cert-records')">返回</button>
+              <h3 class="section-title">批量上传</h3>
+            </div>
+          </div>
+
+          <!-- 步骤说明 -->
+          <div class="steps">
+            <div class="step"><span class="step-num">1</span><span class="step-text">下载模板</span></div>
+            <div class="step-arrow"></div>
+            <div class="step"><span class="step-num">2</span><span class="step-text">填写数据</span></div>
+            <div class="step-arrow"></div>
+            <div class="step"><span class="step-num">3</span><span class="step-text">上传提交</span></div>
+          </div>
+
+          <div class="form-card">
+            <div style="margin-bottom:20px;">
+              <button class="quick-action-btn" onclick="showToast('登记批量模板下载中...')">下载 Excel 模板</button>
+            </div>
+
+            <div class="upload-zone batch-upload-zone" style="margin-bottom:20px;" onclick="this.querySelector('input').click()">
+              <svg class="upload-zone-icon" viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.5">
+                <path d="M20 8v16M12 16l8-8 8 8"/><rect x="4" y="24" width="32" height="10" rx="2"/>
+              </svg>
+              <div class="upload-zone-text">点击或拖拽 Excel 文件至此处上传</div>
+              <div class="upload-zone-hint">仅支持 .xlsx 格式文件</div>
+              <input type="file" style="display:none" accept=".xlsx" onchange="simulateBatchParse('batchResult')">
+            </div>
+
+            <div style="display:flex;gap:12px;margin-bottom:24px;">
+              <button class="quick-action-btn" onclick="simulateBatchParse('batchResult')">上传 Excel 文件</button>
+              <button class="btn-secondary" onclick="showToast('请选择ZIP包')">同时上传资料文件（ZIP包）</button>
+            </div>
+          </div>
+
+          <!-- 模拟解析结果 -->
+          <div class="form-card" id="batchResult" style="display:none;">
+            <div class="form-card-title">解析结果预览</div>
+            <div class="data-table-wrap">
+              <table class="data-table">
+                <thead>
+                  <tr><th>行号</th><th>作品名称</th><th>著作权人</th><th>证件号码</th><th>校验状态</th><th>错误原因</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td>1</td><td>九寨沟风景摄影</td><td>王建国</td><td class="table-mono">510104199001011234</td><td><span class="table-badge badge-success">通过</span></td><td>—</td></tr>
+                  <tr class="batch-error-row"><td>2</td><td>青城山水墨画</td><td>刘芳</td><td class="table-mono" style="color:var(--color-danger);">510104199001</td><td><span class="table-badge badge-danger">错误</span></td><td class="batch-error-text">身份证号码格式不正确，应为18位</td></tr>
+                  <tr><td>3</td><td>峨眉山古建筑图集</td><td>四川文创科技有限公司</td><td class="table-mono">91510100MA6CWK3X3K</td><td><span class="table-badge badge-success">通过</span></td><td>—</td></tr>
+                  <tr><td>4</td><td>藏族民歌精选集</td><td>扎西达瓦</td><td class="table-mono">510104198805056789</td><td><span class="table-badge badge-success">通过</span></td><td>—</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <div style="margin-top:16px;display:flex;align-items:center;gap:12px;">
+              <button class="btn-primary-sm" onclick="showToast('已提交3条正确数据')">提交正确数据（忽略错误行）</button>
+              <span style="font-size:13px;color:var(--color-danger);">1 行数据有误，将被跳过</span>
+            </div>
+          </div>
+        </div>
+</div><!-- /content-area -->
+    </div><!-- /main-wrap -->
+  </div><!-- /app-layout -->
+
+
+  <!-- ===== 上传Excel表格弹窗 ===== -->
+  <div class="detail-overlay" id="excelUploadOverlay" onclick="if(event.target===this)closeUploadModals()">
+    <div class="detail-modal">
+      <div class="detail-modal-header">
+        <div class="detail-modal-title">上传Excel表格</div>
+        <button class="detail-modal-close" onclick="closeUploadModals()">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3l8 8M11 3l-8 8"/></svg>
+        </button>
+      </div>
+      <div class="detail-modal-body">
+        <div class="form-grid">
+          <div class="form-group-inline">
+            <label>下载模板</label>
+            <button class="btn-secondary" onclick="showToast('模板下载中...')">下载模板</button>
+          </div>
+          <div class="form-group-inline full-width">
+            <label>上传表格 <span class="required">*</span></label>
+            <div class="upload-zone" onclick="document.getElementById('excelUploadFile').click()">
+              <div class="upload-zone-text" id="excelUploadText">点击上传Excel表格文件</div>
+              <div class="upload-zone-hint" id="excelUploadHint">仅支持.xlsx格式，提交后生成待上传作品记录。</div>
+              <input type="file" id="excelUploadFile" style="display:none" accept=".xlsx" onchange="document.getElementById('excelFileName').textContent=this.files[0]?this.files[0].name:'未选择文件'">
+            </div>
+            <div id="excelFileName" style="font-size:13px;color:var(--color-text-secondary);margin-top:8px;">未选择文件</div>
+          </div>
+        </div>
+        <div class="form-actions"><button class="btn-secondary" onclick="closeUploadModals()">取消</button><button class="btn-primary-sm" onclick="submitExcelUpload()">提交</button></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== 上传资料/作品弹窗 ===== -->
+  <div class="detail-overlay" id="workUploadOverlay" onclick="if(event.target===this)closeUploadModals()">
+    <div class="detail-modal" style="max-width:820px;">
+      <div class="detail-modal-header">
+        <div class="detail-modal-title" id="workUploadTitle">上传资料</div>
+        <button class="detail-modal-close" onclick="closeUploadModals()">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3l8 8M11 3l-8 8"/></svg>
+        </button>
+      </div>
+      <div class="detail-modal-body">
+        <div class="upload-modal-hint" id="workUploadHint"></div>
+        <div class="detail-info-group">
+          <div class="detail-info-title" id="workUploadCodeTitle">资料类型代码表</div>
+          <table class="flow-table">
+            <thead>
+              <tr><th>资料代码</th><th>资料类型</th><th>说明</th><th>序号规则</th></tr>
+            </thead>
+            <tbody id="workUploadCodeBody"></tbody>
+          </table>
+        </div>
+        <div class="detail-info-group">
+          <div class="detail-info-title">上传标注规则</div>
+          <div class="detail-info-row"><span class="detail-info-label">资料代码</span><span class="detail-info-value" id="workUploadCodeRule"></span></div>
+          <div class="detail-info-row"><span class="detail-info-label">资料名称</span><span class="detail-info-value">建议使用作品名称或材料名称，需与 Excel 表格中的作品记录可对应。</span></div>
+          <div class="detail-info-row"><span class="detail-info-label">序号</span><span class="detail-info-value">同一类型存在多个文件时，按 01、02、03 递增；单个文件使用 01。</span></div>
+        </div>
+        <div class="upload-zone" onclick="simulateWorkUpload()">
+          <div class="upload-zone-text" id="workUploadZoneText">点击或拖拽文件至此处上传</div>
+          <div class="upload-zone-hint" id="workUploadZoneHint"></div>
+        </div>
+        <div class="upload-file-list" id="workUploadFileList" style="display:none;"></div>
+        <div class="form-actions"><button class="btn-secondary" onclick="closeUploadModals()">取消</button><button class="btn-primary-sm" onclick="submitWorkUpload()">提交</button></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== 确认弹窗 ===== -->
+  <div class="confirm-overlay" id="confirmOverlay">
+    <div class="confirm-dialog">
+      <div class="confirm-title" id="confirmTitle">确认操作</div>
+      <div class="confirm-msg" id="confirmMsg"></div>
+      <div class="confirm-actions">
+        <button class="btn-secondary" onclick="hideConfirm()">取消</button>
+        <button class="btn-primary-sm" id="confirmOkBtn" onclick="confirmOk()">确认</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== 记录详情弹窗 ===== -->
+  <div class="detail-overlay" id="detailOverlay" onclick="if(event.target===this)hideDetail()">
+    <div class="detail-modal">
+      <div class="detail-modal-header">
+        <div class="detail-modal-title" id="detailTitle">记录详情</div>
+        <button class="detail-modal-close" onclick="hideDetail()">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3l8 8M11 3l-8 8"/></svg>
+        </button>
+      </div>
+      <div class="detail-modal-body" id="detailBody"></div>
+    </div>
+  </div>
+
+  <!-- Toast -->
+  <div class="toast" id="toast"></div>
+
+  <script>
+
+    // ===== 原型框架联动：支持左侧页面树控制 =====
+    function isInPrototypeFrame() {
+      return window.self !== window.top;
+    }
+    function getPrototypeTargetPage() {
+      const params = new URLSearchParams(window.location.search);
+      return params.get('page') || (window.location.hash ? window.location.hash.replace('#', '') : 'login');
+    }
+    function notifyPrototypeFrame(page) {
+      if (isInPrototypeFrame()) {
+        window.parent.postMessage({ type: 'prototype:navigate', file: 'admin-system.html', page: page }, '*');
+      }
+    }
+    function bootPrototypeFrame() {
+      if (!isInPrototypeFrame()) return;
+      document.body.classList.add('prototype-embedded');
+      const page = getPrototypeTargetPage();
+      setTimeout(function(){ navigateTo(page); }, 0);
+    }
+    window.addEventListener('hashchange', function(){
+      if (isInPrototypeFrame()) navigateTo(getPrototypeTargetPage());
+    });
+
+    // ===== 登录逻辑 =====
+    function doLogin() {
+      const user = document.getElementById('loginUser').value;
+      const pass = document.getElementById('loginPass').value;
+      if (!user || !pass) { showToast('请输入账号和密码'); return; }
+      navigateTo('cert-records');
+      showToast('登录成功');
+    }
+    function doLogout() {
+      navigateTo('login');
+      showToast('已退出登录');
+    }
+
+    // ===== 页面导航 =====
+    function navigateTo(page) {
+      const loginPage = document.getElementById('loginPage');
+      const appLayout = document.getElementById('appLayout');
+      document.body.classList.toggle('admin-flow-only', page === 'admin-flow');
+      document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+      document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+      const detailOverlay = document.getElementById('detailOverlay');
+      if (detailOverlay) detailOverlay.classList.remove('visible');
+
+      if (page === 'login') {
+        document.body.classList.remove('admin-flow-only');
+        appLayout.classList.remove('visible');
+        loginPage.style.display = '';
+        if (isInPrototypeFrame() && window.location.hash !== '#login') {
+          history.replaceState(null, '', window.location.pathname + '#login');
+        }
+        notifyPrototypeFrame('login');
+        return;
+      }
+
+      if (page === 'cert-record-detail') {
+        loginPage.style.display = 'none';
+        appLayout.classList.add('visible');
+        document.getElementById('page-cert-records').classList.add('active');
+        const navItem = document.querySelector('.nav-item[data-page="cert-records"]'); if (navItem) navItem.classList.add('active');
+        setTimeout(function(){ showCertRecordDetail(0, true); }, 0);
+        return;
+      }
+      if (page === 'reg-record-detail') {
+        loginPage.style.display = 'none';
+        appLayout.classList.add('visible');
+        document.getElementById('page-reg-records').classList.add('active');
+        const navItem = document.querySelector('.nav-item[data-page="reg-records"]'); if (navItem) navItem.classList.add('active');
+        if (isInPrototypeFrame() && window.location.hash !== '#reg-view-full') {
+          history.replaceState(null, '', window.location.pathname + '#reg-view-full');
+          notifyPrototypeFrame('reg-view-full');
+        }
+        setTimeout(function(){ showRegRecordDetail(findRegRecordIndexByStatus(['已登记并存证']), true); }, 0);
+        return;
+      }
+      if (page === 'reg-view-pending-upload') {
+        loginPage.style.display = 'none';
+        appLayout.classList.add('visible');
+        document.getElementById('page-reg-records').classList.add('active');
+        const navItem = document.querySelector('.nav-item[data-page="reg-records"]'); if (navItem) navItem.classList.add('active');
+        setTimeout(function(){ showRegRecordDetail(findRegRecordIndexByStatus(['待上传资料']), true); }, 0);
+        return;
+      }
+      if (page === 'reg-view-no-chain') {
+        loginPage.style.display = 'none';
+        appLayout.classList.add('visible');
+        document.getElementById('page-reg-records').classList.add('active');
+        const navItem = document.querySelector('.nav-item[data-page="reg-records"]'); if (navItem) navItem.classList.add('active');
+        setTimeout(function(){ showRegRecordDetail(findRegRecordIndexByStatus(['办理中']), true); }, 0);
+        return;
+      }
+      if (page === 'reg-view-full') {
+        loginPage.style.display = 'none';
+        appLayout.classList.add('visible');
+        document.getElementById('page-reg-records').classList.add('active');
+        const navItem = document.querySelector('.nav-item[data-page="reg-records"]'); if (navItem) navItem.classList.add('active');
+        setTimeout(function(){ showRegRecordDetail(findRegRecordIndexByStatus(['已登记并存证']), true); }, 0);
+        return;
+      }
+      if (page === 'reg-view-rejected') {
+        loginPage.style.display = 'none';
+        appLayout.classList.add('visible');
+        document.getElementById('page-reg-records').classList.add('active');
+        const navItem = document.querySelector('.nav-item[data-page="reg-records"]'); if (navItem) navItem.classList.add('active');
+        setTimeout(function(){ showRegRecordDetail(findRegRecordIndexByStatus(['已驳回']), true); }, 0);
+        return;
+      }
+      if (page === 'new-registration-from-cert') {
+        loginPage.style.display = 'none';
+        appLayout.classList.add('visible');
+        document.getElementById('page-add-record').classList.add('active');
+        setTimeout(function(){ setRegistrationFromCertMode(true); }, 0);
+        return;
+      }
+      if (['excel-upload-modal','cert-excel-upload-modal'].includes(page)) {
+        loginPage.style.display = 'none';
+        appLayout.classList.add('visible');
+        document.getElementById('page-cert-records').classList.add('active');
+        const navItem = document.querySelector('.nav-item[data-page="cert-records"]'); if (navItem) navItem.classList.add('active');
+        setTimeout(function(){ openCertExcelUploadModal(); }, 0);
+        return;
+      }
+      if (page === 'reg-excel-upload-modal') {
+        loginPage.style.display = 'none';
+        appLayout.classList.add('visible');
+        document.getElementById('page-reg-records').classList.add('active');
+        const navItem = document.querySelector('.nav-item[data-page="reg-records"]'); if (navItem) navItem.classList.add('active');
+        setTimeout(function(){ openRegExcelUploadModal(); }, 0);
+        return;
+      }
+      if (['work-upload-modal','cert-work-upload-modal'].includes(page)) {
+        loginPage.style.display = 'none';
+        appLayout.classList.add('visible');
+        document.getElementById('page-cert-records').classList.add('active');
+        const navItem = document.querySelector('.nav-item[data-page="cert-records"]'); if (navItem) navItem.classList.add('active');
+        setTimeout(function(){ openCertWorkUploadModal(); }, 0);
+        return;
+      }
+      if (page === 'reg-work-upload-modal') {
+        loginPage.style.display = 'none';
+        appLayout.classList.add('visible');
+        document.getElementById('page-reg-records').classList.add('active');
+        const navItem = document.querySelector('.nav-item[data-page="reg-records"]'); if (navItem) navItem.classList.add('active');
+        setTimeout(function(){ openRegWorkUploadModal(); }, 0);
+        return;
+      }
+      loginPage.style.display = 'none';
+      appLayout.classList.add('visible');
+      const target = document.getElementById('page-' + page);
+      if (target) target.classList.add('active');
+      if (page === 'add-record') setTimeout(function(){ setRegistrationFromCertMode(false); toggleAddRecordFields(); }, 0);
+
+      const pageToMenu = {
+        'admin-flow': 'cert-records',
+        'add-record': 'cert-records',
+        'blockchain-cert': 'cert-records',
+        'cert-records': 'cert-records',
+        'cert-record-detail': 'cert-records',
+        'cert-excel-upload-modal': 'cert-records',
+        'cert-work-upload-modal': 'cert-records',
+        'new-registration': 'reg-records',
+        'new-registration-from-cert': 'reg-records',
+        'reg-records': 'reg-records',
+        'reg-record-detail': 'reg-records',
+        'reg-view-pending-upload': 'reg-records',
+        'reg-view-no-chain': 'reg-records',
+        'reg-view-full': 'reg-records',
+        'reg-view-rejected': 'reg-records',
+        'reg-excel-upload-modal': 'reg-records',
+        'reg-work-upload-modal': 'reg-records',
+      };
+      const menuPage = pageToMenu[page] || page;
+      const navItem = document.querySelector(`.nav-item[data-page="${menuPage}"]`);
+      if (navItem) navItem.classList.add('active');
+
+      if (isInPrototypeFrame() && window.location.hash !== '#' + page) {
+        history.replaceState(null, '', window.location.pathname + '#' + page);
+      }
+      notifyPrototypeFrame(page);
+    }
+
+    // ===== 确认弹窗 =====
+    let confirmCallback = null;
+    function showConfirm(msg, cb) {
+      document.getElementById('confirmMsg').textContent = msg;
+      confirmCallback = cb;
+      document.getElementById('confirmOverlay').classList.add('visible');
+    }
+    function hideConfirm() {
+      document.getElementById('confirmOverlay').classList.remove('visible');
+      confirmCallback = null;
+    }
+    function confirmOk() {
+      if (confirmCallback) confirmCallback();
+      hideConfirm();
+    }
+
+    // ===== Toast =====
+    function showToast(msg) {
+      const t = document.getElementById('toast');
+      t.textContent = msg;
+      t.classList.add('visible');
+      setTimeout(() => t.classList.remove('visible'), 2000);
+    }
+
+    // ===== 身份证格式校验 =====
+    function validateIdNumber(input) {
+      const val = input.value.trim();
+      const errorEl = input.parentElement.querySelector('.form-error');
+      if (val.length === 0) {
+        errorEl.classList.remove('visible');
+        errorEl.textContent = '';
+        return;
+      }
+      const idRegex = /^[1-9]\d{5}(19|20)\d{2}(0[1-9]|1[0-2])(0[1-9]|[12]\d|3[01])\d{3}[\dXx]$/;
+      if (!idRegex.test(val)) {
+        errorEl.textContent = '身份证号码格式不正确，应为18位';
+        errorEl.classList.add('visible');
+      } else {
+        errorEl.classList.remove('visible');
+        errorEl.textContent = '';
+      }
+    }
+
+    // ===== 权利范围联动 =====
+    function handleRightsScope() {
+      const scope = document.getElementById('rightsScope').value;
+      const cbs = document.querySelectorAll('#rightsCheckboxes input[type="checkbox"]');
+      if (scope === '全部') {
+        cbs.forEach(cb => cb.checked = true);
+      }
+    }
+
+    // ===== 添加/删除著作权人 =====
+    let holderIndex = 1;
+    function addHolder() {
+      const container = document.getElementById('holdersContainer');
+      const idx = holderIndex++;
+      const row = document.createElement('div');
+      row.className = 'holder-row';
+      row.dataset.index = idx;
+      row.innerHTML = `
+        <div class="form-group-inline">
+          <label>姓名/机构 <span class="required">*</span></label>
+          <input type="text" class="holder-name" placeholder="姓名/机构名称">
+        </div>
+        <div class="form-group-inline">
+          <label>类别 <span class="required">*</span></label>
+          <select class="holder-type"><option>个人</option><option>企业</option></select>
+        </div>
+        <div class="form-group-inline">
+          <label>证件类型 <span class="required">*</span></label>
+          <select class="holder-id-type"><option>身份证</option><option>营业执照</option></select>
+        </div>
+        <div class="form-group-inline">
+          <label>证件号码 <span class="required">*</span></label>
+          <input type="text" class="holder-id-number" placeholder="身份证18位" oninput="validateIdNumber(this)">
+          <div class="form-error" id="idError${idx}"></div>
+        </div>
+        <div class="form-group-inline">
+          <label>国籍</label>
+          <select class="holder-nationality"><option>中国</option><option>其他</option></select>
+        </div>
+        <div class="form-group-inline">
+          <label>省份</label>
+          <input type="text" class="holder-province" value="四川">
+        </div>
+        <div class="form-group-inline">
+          <label>城市</label>
+          <input type="text" class="holder-city" value="成都">
+        </div>
+        <button class="remove-holder-btn" onclick="removeHolder(this)" title="删除">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3l8 8M11 3l-8 8"/></svg>
+        </button>
+      `;
+      container.appendChild(row);
+    }
+    function removeHolder(btn) {
+      const rows = document.querySelectorAll('.holder-row');
+      if (rows.length <= 1) { showToast('至少保留一个著作权人'); return; }
+      btn.closest('.holder-row').remove();
+    }
+
+    // ===== 提交登记 =====
+    function submitRegistration() {
+      showConfirm(
+        '确认提交？提交后将向九天版权登记机构发起申请，处理时间约3-7个工作日。',
+        function() { showToast('登记已提交，状态为已提交'); navigateTo('cert-records'); }
+      );
+    }
+
+    // ===== 批量上传模拟解析 =====
+    function simulateBatchParse(targetId) {
+      const id = targetId || 'batchResult';
+      const target = document.getElementById(id);
+      if (target) target.style.display = 'block';
+    }
+
+    // ===== 登记记录模拟数据 =====
+    const certRecords = [
+      { id: 'BD-CERT-001', name: '蜀道山水图', category: '美术', creator: '张明远', certNo: 'BD-2024-SC-001287', time: '2024-03-16 10:23', status: '已存证', platform: '蜀信链', txHash: '0x7a3f8c2e1d4b5a6f9e0c3d8b7a2f1e4c5d6b9a0f3e8c7d6b5a4f3e2d1c0b9a' },
+      { id: 'BD-CERT-002', name: '川剧变脸数字化影像', category: '电影', creator: '四川文化传媒有限公司', certNo: 'BD-2024-SC-002543', time: '2024-01-21 14:08', status: '已存证', platform: '蜀信链', txHash: '0x2f8e4c7a9b1d3f5e8c0a6d4b2f7e9c1a3d5b8f0e2c4a6d8b0f3e5c7a9d1b4f' },
+      { id: 'BD-CERT-003', name: '羌族刺绣纹样集', category: '美术', creator: '李秀芳', certNo: 'BD-2024-SC-003891', time: '2024-05-09 09:15', status: '已存证', platform: '蜀信链', txHash: '0x5c9e2a7f4b1d8e3c6a0f2d8b4e7c9a1f3d5b8e0c2a4f6d8b0e3c5a7f9d1b4e6' }
+    ];
+
+    const regRecords = [
+      { id: 'BD-REG-001', name: '锦里古街摄影集', category: '摄影', holder: '赵伟', author: '赵伟', certifier: '成都数字版权服务中心', time: '2024-06-08 09:35', status: '待上传资料', certNo: '', regNo: '', rejectReason: '', platform: '蜀信链', txHash: '' },
+      { id: 'BD-REG-002', name: '蜀绣图案素材库', category: '美术', holder: '四川非遗中心', author: '四川非遗中心', certifier: '四川省文化大数据有限责任公司', time: '2024-06-08 10:12', status: '待提交', certNo: '', regNo: '', rejectReason: '', platform: '蜀信链', txHash: '' },
+      { id: 'BD-REG-003', name: '成都话方言词典', category: '文字', holder: '刘小蓉', author: '刘小蓉', certifier: '四川省文化大数据有限责任公司', time: '2024-06-08 10:45', status: '办理中', certNo: '', regNo: '', rejectReason: '', platform: '蜀信链', txHash: '' },
+      { id: 'BD-REG-004', name: '巴蜀节庆影像志', category: '电影', holder: '四川影像资料馆', author: '四川影像资料馆', certifier: '四川省文化大数据有限责任公司', time: '2024-06-08 11:20', status: '办理中', certNo: '', regNo: '', rejectReason: '', platform: '蜀信链', txHash: '' },
+      { id: 'BD-REG-005', name: '三星堆数字文创方案', category: '文字', holder: '四川文创科技有限公司', author: '赵启明', certifier: '四川省文化大数据有限责任公司', time: '2024-06-07 16:45', status: '已登记并存证', certNo: 'BD-2024-SC-004012', regNo: '川作登字-2024-W-001128', rejectReason: '', platform: '蜀信链', txHash: '0x130b34383cc86504fff0d425248badf5d29bb68c457815df8b9eb9c9dfc9d843', blockHeight: '12,847,563', certTime: '2024-06-07 16:50' },
+      { id: 'BD-REG-006', name: '青城山水墨画', category: '美术', holder: '刘芳', author: '刘芳', certifier: '四川省文化大数据有限责任公司', time: '2024-06-07 15:20', status: '已驳回', certNo: '', regNo: '', rejectReason: '作品创作说明不完整，请补充权利来源与创作过程后重新提交。', platform: '蜀信链', txHash: '' },
+      { id: 'BD-REG-007', name: '竹编工艺图谱', category: '图形', holder: '眉山非遗馆', author: '周建', certifier: '四川省文化大数据有限责任公司', time: '2024-06-07 14:10', status: '待上传资料', certNo: '', regNo: '', rejectReason: '', platform: '蜀信链', txHash: '' },
+      { id: 'BD-REG-008', name: '川西民居建筑模型', category: '模型', holder: '成都建筑设计院', author: '成都建筑设计院', certifier: '四川省文化大数据有限责任公司', time: '2024-06-07 11:35', status: '待提交', certNo: '', regNo: '', rejectReason: '', platform: '蜀信链', txHash: '' }
+    ];
+
+    function renderRegRecords(data) {
+      const tbody = document.getElementById('regRecordsBody');
+      const statusMap = {
+        draft: { label: '草稿', cls: 'badge-default' },
+        issued: { label: '已发证', cls: 'badge-success' },
+        processing: { label: '办理中', cls: 'badge-warning' },
+        rejected: { label: '已驳回', cls: 'badge-danger' },
+        submitted: { label: '已提交', cls: 'badge-default' }
+      };
+      tbody.innerHTML = data.map((r, i) => {
+        const st = statusMap[r.status];
+        const rejectCol = r.status === 'rejected'
+          ? `<div class="tooltip-wrap"><span class="table-badge ${st.cls}">${st.label}</span><span class="tooltip-text">${r.rejectReason}</span></div>`
+          : `<span class="table-badge ${st.cls}">${st.label}</span>`;
+        return `<tr>
+          <td>${i + 1}</td>
+          <td>${r.id}</td>
+          <td>${r.name}</td>
+          <td>${r.category}</td>
+          <td>${r.holder}</td>
+          <td>${r.certifier}</td>
+          <td>${r.time}</td>
+          <td>${rejectCol}</td>
+          <td>${r.certNo ? `<span class="table-mono">${r.certNo}</span>` : '—'}</td>
+          <td>${r.regNo ? `<span class="table-mono">${r.regNo}</span>` : '—'}</td>
+          <td>
+            ${r.status === '待上传资料'
+              ? `<button class="table-btn" onclick="navigateTo('new-registration')">编辑</button><button class="table-btn" onclick="openRegWorkUploadModal()">上传资料</button>`
+              : (r.status === '待提交'
+                ? `<button class="table-btn" onclick="navigateTo('new-registration')">编辑</button><button class="table-btn" onclick="showToast('已提交版权登记')">提交</button>`
+                : `<button class="table-btn" onclick="showRecordDetail(${i})">查看</button>`)}
+            ${r.status === 'issued' ? '<button class="table-btn">下载证书</button>' : ''}
+          </td>
+        </tr>`;
+      }).join('');
+    }
+
+    function filterRecords() {
+      const statusVal = document.getElementById('statusFilter').value;
+      if (statusVal === 'all') {
+        renderRegRecords(regRecords);
+      } else {
+        renderRegRecords(regRecords.filter(r => r.status === statusVal));
+      }
+    }
+
+    // ===== 记录详情弹窗 =====
+    function getRegViewPageByStatus(status) {
+      if (status === '待上传资料') return 'reg-view-pending-upload';
+      if (status === '办理中') return 'reg-view-no-chain';
+      if (status === '已登记并存证') return 'reg-view-full';
+      if (status === '已驳回') return 'reg-view-rejected';
+      return 'reg-record-detail';
+    }
+    function findRegRecordIndexByStatus(statuses) {
+      const idx = regRecords.findIndex(r => statuses.includes(r.status));
+      return idx >= 0 ? idx : 0;
+    }
+    function showRegRecordDetail(index, fromPrototypePage) {
+      const r = regRecords[index] || regRecords[0];
+      const viewPage = getRegViewPageByStatus(r.status);
+      const isPendingUpload = r.status === '待上传资料';
+      const isNoChain = r.status === '办理中';
+      const isFull = r.status === '已登记并存证';
+      const isRejected = r.status === '已驳回';
+      document.getElementById('detailOverlay').dataset.returnPage = 'reg-records';
+      document.getElementById('detailTitle').textContent = '查看登记 - ' + r.name;
+      const rejectHtml = isRejected
+        ? `<div class="detail-info-group">
+            <div class="detail-info-title">驳回意见</div>
+            <div class="detail-info-row"><span class="detail-info-label">驳回原因</span><span class="detail-info-value" style="color:var(--color-danger);">${r.rejectReason || '材料信息不完整，请补充后重新提交。'}</span></div>
+            <div class="detail-info-row"><span class="detail-info-label">处理建议</span><span class="detail-info-value">可点击列表“编辑”按钮，修改原登记内容后重新提交。</span></div>
+          </div>` : '';
+      const progressHtml = isPendingUpload ? `
+        <div class="detail-info-group">
+          <div class="detail-info-title">资料上传进度</div>
+          <div class="detail-info-row"><span class="detail-info-label">当前阶段</span><span class="detail-info-value">待上传资料</span></div>
+          <div class="detail-info-row"><span class="detail-info-label">需要上传</span><span class="detail-info-value">作品文件、权利保证书、身份证/营业执照、其他材料</span></div>
+          <div class="detail-info-row"><span class="detail-info-label">说明</span><span class="detail-info-value">资料上传齐全后，状态进入待提交。</span></div>
+        </div>` : '';
+      const stageHint = isPendingUpload
+        ? '资料未上传完成，暂无存证信息与登记证书。'
+        : (isNoChain ? '当前状态暂无存证信息与登记证书，待业务办理完成后回传。' : (isRejected ? '该记录已驳回，暂无存证信息与登记证书。' : ''));
+      const blockchainSection = `
+        <div class="detail-info-group">
+          <div class="detail-info-title">区块链存证信息</div>
+          <div class="detail-info-row"><span class="detail-info-label">存证状态</span><span class="detail-info-value">${isFull ? '已存证' : '—'}</span></div>
+          <div class="detail-info-row"><span class="detail-info-label">存证编号</span><span class="detail-info-value table-mono">${isFull ? (r.certNo || '—') : '—'}</span></div>
+          <div class="detail-info-row"><span class="detail-info-label">区块链平台</span><span class="detail-info-value">${isFull ? (r.platform || '蜀信链') : '—'}</span></div>
+          <div class="detail-info-row"><span class="detail-info-label">TxHash</span><span class="detail-info-value table-mono" style="word-break:break-all;">${isFull ? (r.txHash || '—') : '—'}</span></div>
+          <div class="detail-info-row"><span class="detail-info-label">区块高度</span><span class="detail-info-value">${isFull ? (r.blockHeight || '—') : '—'}</span></div>
+          <div class="detail-info-row"><span class="detail-info-label">存证时间</span><span class="detail-info-value">${isFull ? (r.certTime || r.time) : '—'}</span></div>
+          ${stageHint ? `<div class="detail-info-row"><span class="detail-info-label">说明</span><span class="detail-info-value">${stageHint}</span></div>` : ''}
+        </div>
+      `;
+      const proofSection = isFull ? `
+        <div class="detail-info-group">
+          <div class="detail-info-title">存证凭证</div>
+          <div class="detail-cert-card">
+            <div class="detail-cert-preview">
+              <div class="cert-sheet">
+                <div class="cert-sheet-title">电子数据存证凭证</div>
+                <div class="cert-sheet-sub">DATA DEPOSIT PROOF</div>
+                <div class="cert-sheet-line">作品名称：${r.name}</div>
+                <div class="cert-sheet-line">存证编号：${r.certNo || '—'}</div>
+                <div class="cert-sheet-line">状态：已生成</div>
+                <div class="cert-sheet-footer"><span>${r.platform || '蜀信链'}</span><span>电子凭证</span></div>
+              </div>
+            </div>
+            <div class="detail-cert-meta">
+              <div class="detail-cert-name">电子数据存证凭证</div>
+              <div class="detail-cert-row">凭证状态：已生成</div>
+              <div class="detail-cert-row">存证编号：${r.certNo || '—'}</div>
+              <div class="detail-cert-row">生成时间：${r.certTime || r.time}</div>
+              <div class="detail-cert-actions">
+                <button class="detail-cert-btn" onclick="showToast('存证凭证下载中...')">下载存证凭证</button>
+                <button class="detail-cert-btn" onclick="showToast('可信时间戳下载中...')">下载可信时间戳</button>
+              </div>
+            </div>
+          </div>
+        </div>` : `
+        <div class="detail-info-group">
+          <div class="detail-info-title">存证凭证</div>
+          <div class="detail-info-row"><span class="detail-info-label">状态</span><span class="detail-info-value">未生成</span></div>
+          <div class="detail-info-row"><span class="detail-info-label">说明</span><span class="detail-info-value">${stageHint || '该阶段暂无存证凭证。'}</span></div>
+        </div>`;
+      const certSection = isFull ? `
+        <div class="detail-info-group">
+          <div class="detail-info-title">登记证书</div>
+          <div class="detail-cert-card">
+            <div class="detail-cert-preview">
+              <div class="cert-sheet">
+                <div class="cert-sheet-title">作品著作权登记证书</div>
+                <div class="cert-sheet-sub">COPYRIGHT REGISTRATION CERTIFICATE</div>
+                <div class="cert-sheet-line">作品名称：${r.name}</div>
+                <div class="cert-sheet-line">登记号：${r.regNo || '—'}</div>
+                <div class="cert-sheet-line">著作权人：${r.holder}</div>
+                <div class="cert-sheet-footer"><span>四川版权登记中心</span><span>电子证书</span></div>
+              </div>
+            </div>
+            <div class="detail-cert-meta">
+              <div class="detail-cert-name">作品著作权登记证书</div>
+              <div class="detail-cert-row">证书状态：已发放</div>
+              <div class="detail-cert-row">证书编号：${r.regNo || '—'}</div>
+              <div class="detail-cert-row">发放日期：${r.time}</div>
+              <div class="detail-cert-actions">
+                <button class="detail-cert-btn" onclick="showToast('证书下载中...')">下载证书</button>
+                <button class="detail-cert-btn" onclick="showToast('可信时间戳下载中...')">下载可信时间戳</button>
+              </div>
+            </div>
+          </div>
+        </div>` : '';
+      const certPlaceholderSection = isFull ? '' : `
+        <div class="detail-info-group">
+          <div class="detail-info-title">登记证书</div>
+          <div class="detail-info-row"><span class="detail-info-label">状态</span><span class="detail-info-value">未发放</span></div>
+          <div class="detail-info-row"><span class="detail-info-label">说明</span><span class="detail-info-value">${stageHint || '该阶段暂无登记证书。'}</span></div>
+        </div>`;
+      document.getElementById('detailBody').innerHTML = `
+        <div class="detail-info-group">
+          <div class="detail-info-title">作品基础信息</div>
+          <div class="detail-info-row"><span class="detail-info-label">登记编号</span><span class="detail-info-value">${r.id}</span></div>
+          <div class="detail-info-row"><span class="detail-info-label">作品名称</span><span class="detail-info-value">${r.name}</span></div>
+          <div class="detail-info-row"><span class="detail-info-label">作品类型</span><span class="detail-info-value">${r.category}</span></div>
+          <div class="detail-info-row"><span class="detail-info-label">作者名称</span><span class="detail-info-value">${r.author || r.holder}</span></div>
+          <div class="detail-info-row"><span class="detail-info-label">著作权人</span><span class="detail-info-value">${r.holder}</span></div>
+          <div class="detail-info-row"><span class="detail-info-label">存证方</span><span class="detail-info-value">${r.certifier}</span></div>
+        </div>
+        <div class="detail-info-group">
+          <div class="detail-info-title">版权登记信息</div>
+          <div class="detail-info-row"><span class="detail-info-label">状态</span><span class="detail-info-value">${r.status}</span></div>
+          <div class="detail-info-row"><span class="detail-info-label">登记编号</span><span class="detail-info-value table-mono">${r.regNo || '—'}</span></div>
+          <div class="detail-info-row"><span class="detail-info-label">创作性质</span><span class="detail-info-value">原创</span></div>
+          <div class="detail-info-row"><span class="detail-info-label">权利拥有方式</span><span class="detail-info-value">全部权利</span></div>
+          <div class="detail-info-row"><span class="detail-info-label">作品归属情况</span><span class="detail-info-value">个人作品</span></div>
+          <div class="detail-info-row"><span class="detail-info-label">作品创作说明</span><span class="detail-info-value">作品内容真实完整，材料齐备，已按版权登记要求提交。</span></div>
+          <div class="detail-info-row"><span class="detail-info-label">提交时间</span><span class="detail-info-value">${r.time}</span></div>
+        </div>
+        ${progressHtml}
+        ${blockchainSection}
+        ${rejectHtml}
+        ${proofSection}
+        ${certSection}
+        ${certPlaceholderSection}
+      `;
+      document.getElementById('detailOverlay').classList.add('visible');
+      if (isInPrototypeFrame() && !fromPrototypePage && window.location.hash !== '#' + viewPage) {
+        history.replaceState(null, '', window.location.pathname + '#' + viewPage);
+      }
+      notifyPrototypeFrame(viewPage);
+    }
+
+    function showCertRecordDetail(index, fromPrototypePage) {
+      const r = certRecords[index] || certRecords[0];
+      document.getElementById('detailOverlay').dataset.returnPage = 'cert-records';
+      document.getElementById('detailTitle').textContent = '查看存证 - ' + r.name;
+      document.getElementById('detailBody').innerHTML = `
+        <div class="detail-info-group">
+          <div class="detail-info-title">作品与文件信息</div>
+          <div class="detail-info-row"><span class="detail-info-label">本地编号</span><span class="detail-info-value">${r.id}</span></div>
+          <div class="detail-info-row"><span class="detail-info-label">作品名称</span><span class="detail-info-value">${r.name}</span></div>
+          <div class="detail-info-row"><span class="detail-info-label">作品类别</span><span class="detail-info-value">${r.category}</span></div>
+          <div class="detail-info-row"><span class="detail-info-label">创作者</span><span class="detail-info-value">${r.creator}</span></div>
+          <div class="detail-info-row"><span class="detail-info-label">文件列表</span><span class="detail-info-value">${r.name}.jpg（0.41M）</span></div>
+          <div class="detail-info-row"><span class="detail-info-label">文件Hash</span><span class="detail-info-value table-mono" style="word-break:break-all;">SHA256-${(r.txHash || '').slice(2, 34).toUpperCase()}</span></div>
+        </div>
+        <div class="detail-info-group">
+          <div class="detail-info-title">区块链存证信息</div>
+          <div class="detail-info-row"><span class="detail-info-label">存证状态</span><span class="detail-info-value">${r.status}</span></div>
+          <div class="detail-info-row"><span class="detail-info-label">存证编号</span><span class="detail-info-value table-mono">${r.certNo || '—'}</span></div>
+          <div class="detail-info-row"><span class="detail-info-label">区块链平台</span><span class="detail-info-value">${r.platform || '—'}</span></div>
+          <div class="detail-info-row"><span class="detail-info-label">Hash算法</span><span class="detail-info-value">SHA-256</span></div>
+          <div class="detail-info-row"><span class="detail-info-label">数据指纹</span><span class="detail-info-value table-mono" style="word-break:break-all;">b67edae132806d994cd07f05ce1ab627addb400d211e70a144074334fbca88e9</span></div>
+          <div class="detail-info-row"><span class="detail-info-label">存证时间</span><span class="detail-info-value">${r.time || '—'}</span></div>
+          <div class="detail-info-row"><span class="detail-info-label">授时时间</span><span class="detail-info-value">2026-04-24 16:00:06（UTC/GMT+08:00）</span></div>
+          <div class="detail-info-row"><span class="detail-info-label">TxHash</span><span class="detail-info-value table-mono" style="word-break:break-all;">${r.txHash || '—'}</span></div>
+          <div class="detail-info-row"><span class="detail-info-label">区块高度</span><span class="detail-info-value">${r.blockHeight || '—'}</span></div>
+          <div class="detail-info-row"><span class="detail-info-label">著作权人</span><span class="detail-info-value">姓名或企业名称：王鑫<br>证件类型：身份证<br>证件号码：511623198610166361</span></div>
+        </div>
+        <div class="detail-info-group">
+          <div class="detail-info-title">证书信息</div>
+          <div class="detail-cert-card">
+            <div class="detail-cert-preview">
+              <div class="cert-sheet">
+                <div class="cert-sheet-title">电子数据存证证书</div>
+                <div class="cert-sheet-sub">DATA DEPOSIT CERTIFICATE</div>
+                <div class="cert-sheet-line">作品名称：${r.name}</div>
+                <div class="cert-sheet-line">证书编号：CWSP23420260424147DB</div>
+                <div class="cert-sheet-line">状态：已发放</div>
+                <div class="cert-sheet-footer"><span>可信时间戳</span><span>电子证书</span></div>
+              </div>
+            </div>
+            <div class="detail-cert-meta">
+              <div class="detail-cert-name">电子数据存证证书</div>
+              <div class="detail-cert-row">证书状态：已发放</div>
+              <div class="detail-cert-row">证书编号：CWSP23420260424147DB</div>
+              <div class="detail-cert-row">发放日期：2026-04-24 16:00:08</div>
+              <div class="detail-cert-actions">
+                <button class="detail-cert-btn" onclick="showToast('证书下载中...')">下载证书</button>
+                <button class="detail-cert-btn" onclick="showToast('可信时间戳下载中...')">下载可信时间戳</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+      document.getElementById('detailOverlay').classList.add('visible');
+      if (isInPrototypeFrame() && !fromPrototypePage && window.location.hash !== '#cert-record-detail') {
+        history.replaceState(null, '', window.location.pathname + '#cert-record-detail');
+      }
+      notifyPrototypeFrame('cert-record-detail');
+    }
+
+    function showRecordDetail(index, fromPrototypePage) {
+      showRegRecordDetail(index, fromPrototypePage);
+    }
+    function hideDetail(skipHistory) {
+      document.getElementById('detailOverlay').classList.remove('visible');
+      const returnPage = document.getElementById('detailOverlay').dataset.returnPage || 'cert-records';
+      if (isInPrototypeFrame() && !skipHistory && ['#reg-record-detail', '#reg-view-pending-upload', '#reg-view-no-chain', '#reg-view-full', '#reg-view-rejected', '#cert-record-detail'].includes(window.location.hash)) {
+        history.replaceState(null, '', window.location.pathname + '#' + returnPage);
+        notifyPrototypeFrame(returnPage);
+      }
+    }
+
+    // ===== v19：组合业务操作 =====
+
+    function submitExcelUpload() {
+      document.querySelectorAll('.excel-import-row').forEach(row => { row.style.display = ''; });
+      closeUploadModals();
+      showToast(window.currentExcelUploadMode === 'reg' ? 'Excel表格已提交解析，列表数据状态为待上传资料' : 'Excel表格已提交解析，列表数据状态为待上传作品');
+    }
+    function submitWorkUpload() {
+      document.querySelectorAll('.excel-import-row').forEach(row => {
+        row.style.display = '';
+        row.querySelectorAll('.upload-status').forEach(badge => {
+          badge.textContent = '待提交';
+          badge.className = 'table-badge badge-warning upload-status';
+        });
+      });
+      closeUploadModals();
+      showToast('资料已上传，相关记录状态更新为待提交');
+    }
+    function toggleAllRows(source) {
+      document.querySelectorAll('.record-check').forEach(cb => { cb.checked = source.checked; });
+    }
+    function batchSubmitSelected() {
+      const count = Array.from(document.querySelectorAll('.record-check')).filter(cb => cb.checked).length;
+      if (!count) { showToast('请先勾选需要提交的数据'); return; }
+      showConfirm('确认批量提交已勾选的 ' + count + ' 条数据？', function(){
+        showToast('已批量提交 ' + count + ' 条数据');
+      });
+    }
+
+    function setExcelUploadMode(mode) {
+      window.currentExcelUploadMode = mode;
+      const text = document.getElementById('excelUploadText');
+      const hint = document.getElementById('excelUploadHint');
+      if (text) text.textContent = '点击上传Excel表格文件';
+      if (hint) hint.textContent = mode === 'reg'
+        ? '仅支持.xlsx格式，提交后生成待上传资料记录。'
+        : '仅支持.xlsx格式，提交后生成待上传作品记录。';
+    }
+    function openExcelUploadModal() { openCertExcelUploadModal(); }
+    function openCertExcelUploadModal() {
+      setExcelUploadMode('cert');
+      document.getElementById('excelUploadOverlay').classList.add('visible');
+      if (isInPrototypeFrame()) {
+        history.replaceState(null, '', window.location.pathname + '#cert-excel-upload-modal');
+        notifyPrototypeFrame('cert-excel-upload-modal');
+      }
+    }
+    function openRegExcelUploadModal() {
+      setExcelUploadMode('reg');
+      document.getElementById('excelUploadOverlay').classList.add('visible');
+      if (isInPrototypeFrame()) {
+        history.replaceState(null, '', window.location.pathname + '#reg-excel-upload-modal');
+        notifyPrototypeFrame('reg-excel-upload-modal');
+      }
+    }
+    function setUploadMode(mode) {
+      window.currentUploadMode = mode;
+      const isCert = mode === 'cert';
+      const title = document.getElementById('workUploadTitle');
+      const hint = document.getElementById('workUploadHint');
+      const codeTitle = document.getElementById('workUploadCodeTitle');
+      const codeBody = document.getElementById('workUploadCodeBody');
+      const codeRule = document.getElementById('workUploadCodeRule');
+      const zoneText = document.getElementById('workUploadZoneText');
+      const zoneHint = document.getElementById('workUploadZoneHint');
+      const fileList = document.getElementById('workUploadFileList');
+      if (fileList) { fileList.style.display = 'none'; fileList.innerHTML = ''; }
+      if (title) title.textContent = isCert ? '上传作品' : '上传资料';
+      if (codeTitle) codeTitle.textContent = isCert ? '作品代码说明' : '资料类型代码表';
+      if (hint) hint.textContent = isCert
+        ? '区块链存证只需要上传作品文件。上传时使用作品代码 W 标识作品文件，文件命名建议为：W_作品名称_序号，例如：W_蜀道山水图_01.jpg。'
+        : '版权登记资料按四类统一管理。上传时需要在文件名中标注资料代码、资料名称、序号，例如：G_蜀道山水图_01.pdf。';
+      if (codeBody) codeBody.innerHTML = isCert
+        ? '<tr><td class="table-mono">W</td><td>作品文件</td><td>区块链存证唯一上传类型，用于生成文件 Hash 并上链</td><td>多文件按 01、02、03 递增</td></tr>'
+        : '<tr><td class="table-mono">W</td><td>作品文件</td><td>作品原始文件或作品样本</td><td>多文件按 01、02、03 递增</td></tr><tr><td class="table-mono">G</td><td>权利保证书文件</td><td>版权登记权利保证书</td><td>通常为 01，多份按序号递增</td></tr><tr><td class="table-mono">M</td><td>其他材料文件</td><td>授权材料、补充说明、证明材料等</td><td>多份材料按 01、02、03 递增</td></tr><tr><td class="table-mono">I</td><td>著作权人身份证或营业执照</td><td>自然人上传身份证，组织/企业上传营业执照</td><td>身份证正反面或多页材料按 01、02 递增</td></tr>';
+      if (codeRule) codeRule.textContent = isCert ? '仅使用 W，表示作品文件。' : '使用 W、G、M、I 四个大写字母。';
+      if (zoneText) zoneText.textContent = isCert ? '点击或拖拽作品文件至此处上传' : '点击或拖拽资料文件至此处上传';
+      if (zoneHint) zoneHint.textContent = isCert ? '仅上传作品文件，支持图片、文档、音视频、压缩包等格式' : '支持作品文件、权利保证书、其他材料、身份证或营业执照等资料';
+    }
+    function openWorkUploadModal() { openRegWorkUploadModal(); }
+    function openCertWorkUploadModal() {
+      setUploadMode('cert');
+      document.getElementById('workUploadOverlay').classList.add('visible');
+      if (isInPrototypeFrame()) {
+        history.replaceState(null, '', window.location.pathname + '#cert-work-upload-modal');
+        notifyPrototypeFrame('cert-work-upload-modal');
+      }
+    }
+    function openRegWorkUploadModal() {
+      setUploadMode('reg');
+      document.getElementById('workUploadOverlay').classList.add('visible');
+      if (isInPrototypeFrame()) {
+        history.replaceState(null, '', window.location.pathname + '#reg-work-upload-modal');
+        notifyPrototypeFrame('reg-work-upload-modal');
+      }
+    }
+    function closeUploadModals() {
+      const excel = document.getElementById('excelUploadOverlay');
+      const work = document.getElementById('workUploadOverlay');
+      if (excel) excel.classList.remove('visible');
+      if (work) work.classList.remove('visible');
+    }
+    function simulateWorkUpload() {
+      const list = document.getElementById('workUploadFileList');
+      const isCert = window.currentUploadMode === 'cert';
+      if (list) {
+        list.style.display = '';
+        list.innerHTML = isCert
+          ? '<div class="upload-file-row"><span><span class="table-mono">W</span> / 蜀道山水图 / 01 / W_蜀道山水图_01.jpg</span><span><span class="table-badge badge-success">已上传</span></span></div>'
+          : '<div class="upload-file-row"><span><span class="table-mono">W</span> / 蜀道山水图 / 01 / W_蜀道山水图_01.jpg</span><span><span class="table-badge badge-success">已上传</span></span></div><div class="upload-file-row"><span><span class="table-mono">G</span> / 蜀道山水图 / 01 / G_蜀道山水图_01.pdf</span><span><span class="table-badge badge-success">已上传</span></span></div><div class="upload-file-row"><span><span class="table-mono">I</span> / 张明远身份证 / 01 / I_张明远身份证_01.jpg</span><span><span class="table-badge badge-warning">校验中</span></span></div>';
+      }
+      showToast(isCert ? '作品文件已上传，正在校验作品代码和序号' : '资料文件已上传，正在校验四类资料代码、名称和序号');
+    }
+    function submitRegistrationAndCert() {
+      showConfirm('确认提交所选业务？', function(){
+        showToast('已提交，列表状态将根据业务类型更新');
+        navigateTo('cert-records');
+      });
+    }
+    function submitCertForRegistered() {
+      showConfirm('该作品已完成版权登记，是否直接提交区块链存证？', function(){
+        showToast('已提交，系统将根据类型发起存证流程');
+      });
+    }
+    function openRegistrationFromCert() {
+      navigateTo('new-registration-from-cert');
+      if (isInPrototypeFrame() && window.location.hash !== '#new-registration-from-cert') {
+        history.replaceState(null, '', window.location.pathname + '#new-registration-from-cert');
+      }
+      notifyPrototypeFrame('new-registration-from-cert');
+    }
+    // ===== v22：统一新增页面 =====
+    function toggleRegEnterpriseFields() {
+      const type = document.getElementById('regOwnerType')?.value;
+      document.querySelectorAll('.enterprise-field').forEach(el => {
+        el.style.display = type === '企业' ? '' : 'none';
+      });
+    }
+    function toggleAddRecordFields(trigger) {
+      const certBox = document.getElementById('addTypeCert');
+      const regBox = document.getElementById('addTypeReg');
+      const certSection = document.getElementById('certFieldSection');
+      const regSection = document.getElementById('regFieldSection');
+      if (!certBox || !regBox) return;
+
+      if (regBox.checked) {
+        certBox.checked = true;
+        certBox.disabled = true;
+      } else {
+        certBox.disabled = false;
+        if (!certBox.checked) certBox.checked = true;
+      }
+
+      if (certSection) certSection.style.display = certBox.checked ? '' : 'none';
+      if (regSection) regSection.style.display = regBox.checked ? '' : 'none';
+      toggleRegEnterpriseFields();
+    }
+    function getAddRecordTypeText() {
+      const regChecked = document.getElementById('addTypeReg')?.checked;
+      return regChecked ? '区块链存证+版权登记' : '区块链存证';
+    }
+    function submitAddRecord() {
+      const type = getAddRecordTypeText();
+      showConfirm('确认提交？系统将根据选择的类型提交对应数据。', function(){
+        showToast('已提交：' + type);
+        navigateTo('cert-records');
+      });
+    }
+    function setRegistrationFromCertMode(enabled) {
+      const tip = document.getElementById('fromCertReadonlyTip');
+      const certBox = document.getElementById('addTypeCert');
+      const regBox = document.getElementById('addTypeReg');
+      const workName = document.getElementById('addWorkName');
+      const ownerName = document.getElementById('certOwnerName');
+      const ownerNo = document.getElementById('certOwnerNo');
+      const regAuthorName = document.getElementById('regAuthorName');
+      const regOwnerName = document.getElementById('regCopyrightOwnerName');
+      const lockedFields = [workName, ownerName, ownerNo].filter(Boolean);
+      if (enabled) {
+        if (certBox) { certBox.checked = true; certBox.disabled = true; }
+        if (regBox) regBox.checked = true;
+        if (tip) tip.classList.add('visible');
+        if (workName) workName.value = '羌族刺绣纹样集';
+        if (ownerName) ownerName.value = '李秀芳';
+        if (ownerNo) ownerNo.value = '510***********7J';
+        if (regAuthorName) regAuthorName.value = '李秀芳';
+        if (regOwnerName) regOwnerName.value = '李秀芳';
+        lockedFields.forEach(el => el.disabled = true);
+      } else {
+        if (tip) tip.classList.remove('visible');
+        if (certBox) certBox.disabled = false;
+        lockedFields.forEach(el => el.disabled = false);
+      }
+      toggleAddRecordFields();
+    }
+
+
+    function toggleSingleRegEnterpriseFields() {
+      const isCompany = document.getElementById('regOwnerTypeSingle')?.value === '企业';
+      document.querySelectorAll('.single-reg-enterprise').forEach(el => {
+        el.style.display = isCompany ? '' : 'none';
+      });
+    }
+
+    // ===== 初始化 =====
+    bootPrototypeFrame();
+    toggleSingleRegEnterpriseFields();
+    toggleAddRecordFields();
+    renderRegRecords(regRecords);
+  </script>
+</body>
+</html>
