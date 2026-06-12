@@ -1257,50 +1257,6 @@
           </div>
         </div>
 
-        <!-- ===== 工作台页面 ===== -->
-        <div class="page active" id="page-dashboard">
-          <div class="stat-cards">
-            <div class="stat-card">
-              <div class="stat-card-label">总存证数</div>
-              <div class="stat-card-value">1,284</div>
-            </div>
-            <div class="stat-card">
-              <div class="stat-card-label">总登记数</div>
-              <div class="stat-card-value">876</div>
-            </div>
-            <div class="stat-card">
-              <div class="stat-card-label">本月新增</div>
-              <div class="stat-card-value">53</div>
-            </div>
-            <div class="stat-card">
-              <div class="stat-card-label">待处理</div>
-              <div class="stat-card-value">12</div>
-            </div>
-          </div>
-          <h3 class="section-title">最近记录</h3>
-          <div class="data-table-wrap" style="margin-bottom:24px;">
-            <table class="data-table">
-              <thead>
-                <tr><th>作品名称</th><th>类型</th><th>提交时间</th><th>状态</th><th>操作</th></tr>
-              </thead>
-              <tbody>
-                <tr><td>蜀道山水图</td><td>美术</td><td>2024-06-01 14:23</td><td><span class="table-badge badge-success">已发证</span></td><td><button class="table-btn" onclick="showRecordDetail(0)">查看</button></td></tr>
-                <tr><td>川剧变脸数字化影像</td><td>电影</td><td>2024-05-28 10:08</td><td><span class="table-badge badge-success">已发证</span></td><td><button class="table-btn" onclick="showRecordDetail(1)">查看</button></td></tr>
-                <tr><td>羌族刺绣纹样集</td><td>美术</td><td>2024-05-25 09:15</td><td><span class="table-badge badge-warning">办理中</span></td><td><button class="table-btn" onclick="showRecordDetail(2)">查看</button></td></tr>
-                <tr><td>三星堆数字文创方案</td><td>文字</td><td>2024-05-22 16:30</td><td><span class="table-badge badge-danger">已驳回</span></td><td><button class="table-btn" onclick="showRecordDetail(3)">查看</button></td></tr>
-                <tr><td>川西高原风光摄影集</td><td>摄影</td><td>2024-05-20 11:42</td><td><span class="table-badge badge-default">已提交</span></td><td><button class="table-btn" onclick="showRecordDetail(4)">查看</button></td></tr>
-              </tbody>
-            </table>
-          </div>
-          <h3 class="section-title">快速操作</h3>
-          <div class="quick-actions">
-            <button class="quick-action-btn" onclick="navigateTo('blockchain-cert')">新增存证</button>
-            <button class="quick-action-btn" onclick="navigateTo('new-registration')">新增登记</button>
-            <button class="quick-action-btn" onclick="openExcelUploadModal()">上传Excel表格</button><button class="list-action-btn" onclick="openWorkUploadModal()">批量上传资料</button>
-          </div>
-        </div>
-
-
         <!-- ===== 统一新增页面 ===== -->
         <div class="page" id="page-add-record">
           <div class="page-title-row">
@@ -1465,57 +1421,57 @@
               <thead>
                 <tr>
                   <th><input class="row-checkbox" type="checkbox" id="selectAllRowsCert" onclick="toggleAllRows(this)"></th>
-                  <th>序号</th><th>作品名称</th><th>作品类型</th><th>权利人</th><th>创作者</th><th>存证状态</th><th>存证编号</th><th>更新时间</th><th>操作</th>
+                  <th>序号</th><th>作品名称</th><th>存证方</th><th>作品文件</th><th>著作权人类型</th><th>著作权人姓名/组织名称</th><th>著作权人身份证号码/统一社会信用代码</th><th>存证状态</th><th>存证编号</th><th>更新时间</th><th>操作</th>
                 </tr>
               </thead>
               <tbody>
                 <tr>
                   <td><input class="row-checkbox record-check" type="checkbox"></td>
-                  <td>1</td><td>青羊宫古建筑摄影集</td><td>摄影</td><td>成都城市影像工作室</td><td>陈志强</td>
+                  <td>1</td><td>青羊宫古建筑摄影集</td><td>成都数字版权服务中心</td><td class="table-mono">—</td><td>组织</td><td>成都城市影像工作室</td><td class="table-mono">91510100MA6CWK3X3K</td>
                   <td><span class="table-badge badge-warning">待上传作品</span></td><td class="table-mono">—</td><td>2024-06-06 10:30</td>
                   <td><button class="table-btn" onclick="openCertWorkUploadModal()">上传作品</button><button class="table-btn" onclick="showToast('请先上传作品文件')">提交</button></td>
                 </tr>
                 <tr>
                   <td><input class="row-checkbox record-check" type="checkbox"></td>
-                  <td>2</td><td>蜀道山水图</td><td>美术</td><td>张明远</td><td>张明远</td>
+                  <td>2</td><td>蜀道山水图</td><td>四川省文化大数据有限责任公司</td><td class="table-mono">W_蜀道山水图_01.jpg</td><td>自然人</td><td>张明远</td><td class="table-mono">510***********3X</td>
                   <td><span class="table-badge badge-warning">待提交</span></td><td class="table-mono">—</td><td>2024-06-01 09:30</td>
                   <td><button class="table-btn">编辑</button><button class="table-btn" onclick="showToast('已提交区块链存证，状态更新为存证中')">提交</button><button class="table-btn" style="color:var(--color-danger);">删除</button></td>
                 </tr>
                 <tr>
                   <td><input class="row-checkbox record-check" type="checkbox"></td>
-                  <td>3</td><td>川剧变脸数字化影像</td><td>电影</td><td>四川文化传媒有限公司</td><td>四川文化传媒有限公司</td>
+                  <td>3</td><td>川剧变脸数字化影像</td><td>四川省文化大数据有限责任公司</td><td class="table-mono">W_川剧变脸数字化影像_01.mp4</td><td>组织</td><td>四川文化传媒有限公司</td><td class="table-mono">91510100MA6CWK3X3K</td>
                   <td><span class="table-badge badge-warning">存证中</span></td><td class="table-mono">—</td><td>2024-06-02 10:08</td>
-                  <td><button class="table-btn" onclick="showCertRecordDetail(0)">查看</button></td>
+                  <td><button class="table-btn" onclick="showCertRecordDetail(2)">查看</button></td>
                 </tr>
                 <tr>
                   <td><input class="row-checkbox record-check" type="checkbox"></td>
-                  <td>4</td><td>羌族刺绣纹样集</td><td>美术</td><td>李秀芳</td><td>李秀芳</td>
+                  <td>4</td><td>羌族刺绣纹样集</td><td>成都数字版权服务中心</td><td class="table-mono">W_羌族刺绣纹样集_01.jpg</td><td>自然人</td><td>李秀芳</td><td class="table-mono">510***********7J</td>
                   <td><span class="table-badge badge-success">已存证</span></td><td class="table-mono">BD-2024-SC-003891</td><td>2024-05-09 09:15</td>
-                  <td><button class="table-btn" onclick="showCertRecordDetail(0)">查看</button></td>
+                  <td><button class="table-btn" onclick="showCertRecordDetail(3)">查看</button></td>
                 </tr>
                 <tr>
                   <td><input class="row-checkbox record-check" type="checkbox"></td>
-                  <td>5</td><td>峨眉山云海摄影</td><td>摄影</td><td>陈志强</td><td>陈志强</td>
+                  <td>5</td><td>峨眉山云海摄影</td><td>四川省文化大数据有限责任公司</td><td class="table-mono">—</td><td>自然人</td><td>陈志强</td><td class="table-mono">510***********18</td>
                   <td><span class="table-badge badge-warning">待上传作品</span></td><td class="table-mono">—</td><td>2024-06-07 09:18</td>
                   <td><button class="table-btn" onclick="openCertWorkUploadModal()">上传作品</button><button class="table-btn" onclick="showToast('请先上传作品文件')">提交</button></td>
                 </tr>
                 <tr>
                   <td><input class="row-checkbox record-check" type="checkbox"></td>
-                  <td>6</td><td>龙纹样数字素材包</td><td>美术</td><td>四川博物院</td><td>四川博物院</td>
+                  <td>6</td><td>龙纹样数字素材包</td><td>四川省文化大数据有限责任公司</td><td class="table-mono">W_龙纹样数字素材包_01.zip</td><td>组织</td><td>四川博物院</td><td class="table-mono">91510100MA6CWK3X3K</td>
                   <td><span class="table-badge badge-warning">待提交</span></td><td class="table-mono">—</td><td>2024-06-07 12:10</td>
                   <td><button class="table-btn">编辑</button><button class="table-btn" onclick="showToast('已提交区块链存证，状态更新为存证中')">提交</button><button class="table-btn" style="color:var(--color-danger);">删除</button></td>
                 </tr>
                 <tr>
                   <td><input class="row-checkbox record-check" type="checkbox"></td>
-                  <td>7</td><td>巴蜀节庆影像志</td><td>电影</td><td>四川影像资料馆</td><td>四川影像资料馆</td>
+                  <td>7</td><td>巴蜀节庆影像志</td><td>成都数字版权服务中心</td><td class="table-mono">W_巴蜀节庆影像志_01.mp4</td><td>组织</td><td>四川影像资料馆</td><td class="table-mono">91510100MA6CWK3X3K</td>
                   <td><span class="table-badge badge-success">已存证</span></td><td class="table-mono">BD-2024-SC-007188</td><td>2024-06-07 15:00</td>
-                  <td><button class="table-btn" onclick="showCertRecordDetail(0)">查看</button></td>
+                  <td><button class="table-btn" onclick="showCertRecordDetail(6)">查看</button></td>
                 </tr>
                 <tr>
                   <td><input class="row-checkbox record-check" type="checkbox"></td>
-                  <td>8</td><td>川菜传统技艺视频</td><td>电影</td><td>四川美食文化中心</td><td>四川美食文化中心</td>
+                  <td>8</td><td>川菜传统技艺视频</td><td>四川省文化大数据有限责任公司</td><td class="table-mono">W_川菜传统技艺视频_01.mp4</td><td>组织</td><td>四川美食文化中心</td><td class="table-mono">91510100MA6CWK3X3K</td>
                   <td><span class="table-badge badge-warning">存证中</span></td><td class="table-mono">—</td><td>2024-06-07 10:22</td>
-                  <td><button class="table-btn" onclick="showCertRecordDetail(0)">查看</button></td>
+                  <td><button class="table-btn" onclick="showCertRecordDetail(7)">查看</button></td>
                 </tr>
               </tbody>
             </table>
@@ -1738,15 +1694,15 @@
           <h3 class="section-title">版权登记</h3>
           <div class="filter-bar">
             <input class="filter-input" placeholder="搜索作品名称、存证编号或登记编号">
-            <select class="filter-select">
-              <option>全部状态</option>
-              <option>待上传资料</option>
-              <option>待提交</option>
-              <option>办理中</option>
-              <option>已登记并存证</option>
-              <option>已驳回</option>
+            <select class="filter-select" id="statusFilter">
+              <option value="all">全部状态</option>
+              <option value="待上传资料">待上传资料</option>
+              <option value="待提交">待提交</option>
+              <option value="办理中">办理中</option>
+              <option value="已登记并存证">已登记并存证</option>
+              <option value="已驳回">已驳回</option>
             </select>
-            <button class="filter-btn">筛选</button>
+            <button class="filter-btn" onclick="filterRecords()">筛选</button>
           </div>
           <div class="list-actions">
             <button class="list-action-btn primary" onclick="navigateTo('new-registration')">新增登记</button>
@@ -1759,59 +1715,10 @@
               <thead>
                 <tr>
                   <th><input class="row-checkbox" type="checkbox" id="selectAllRowsReg" onclick="toggleAllRows(this)"></th>
-                  <th>序号</th><th>作品名称</th><th>作品类型</th><th>著作权人</th><th>作者</th><th>状态</th><th>存证编号</th><th>登记编号</th><th>更新时间</th><th>操作</th>
+                  <th>序号</th><th>作品名称</th><th>作品类型</th><th>著作权人</th><th>作者</th><th>状态</th><th>存证编号</th><th>登记编号</th><th>更新时间</th><th>备注</th><th>操作</th>
                 </tr>
               </thead>
-              <tbody>
-                <tr>
-                  <td><input class="row-checkbox record-check" type="checkbox"></td>
-                  <td>1</td><td>锦里古街摄影集</td><td>摄影</td><td>赵伟</td><td>赵伟</td>
-                  <td><span class="table-badge badge-warning">待上传资料</span></td><td class="table-mono">—</td><td class="table-mono">—</td><td>2024-06-08 09:35</td>
-                  <td><button class="table-btn" onclick="navigateTo('new-registration')">编辑</button><button class="table-btn" onclick="openRegWorkUploadModal()">上传资料</button></td>
-                </tr>
-                <tr>
-                  <td><input class="row-checkbox record-check" type="checkbox"></td>
-                  <td>2</td><td>蜀绣图案素材库</td><td>美术</td><td>四川非遗中心</td><td>四川非遗中心</td>
-                  <td><span class="table-badge badge-warning">待提交</span></td><td class="table-mono">—</td><td class="table-mono">—</td><td>2024-06-08 10:12</td>
-                  <td><button class="table-btn" onclick="navigateTo('new-registration')">编辑</button><button class="table-btn" onclick="showToast('已提交版权登记')">提交</button></td>
-                </tr>
-                <tr>
-                  <td><input class="row-checkbox record-check" type="checkbox"></td>
-                  <td>3</td><td>成都话方言词典</td><td>文字</td><td>刘小蓉</td><td>刘小蓉</td>
-                  <td><span class="table-badge badge-warning">办理中</span></td><td class="table-mono">—</td><td class="table-mono">—</td><td>2024-06-08 10:45</td>
-                  <td><button class="table-btn" onclick="showRegRecordDetail(2)">查看</button></td>
-                </tr>
-                <tr>
-                  <td><input class="row-checkbox record-check" type="checkbox"></td>
-                  <td>4</td><td>巴蜀节庆影像志</td><td>电影</td><td>四川影像资料馆</td><td>四川影像资料馆</td>
-                  <td><span class="table-badge badge-warning">办理中</span></td><td class="table-mono">—</td><td class="table-mono">—</td><td>2024-06-08 11:20</td>
-                  <td><button class="table-btn" onclick="showRegRecordDetail(3)">查看</button></td>
-                </tr>
-                <tr>
-                  <td><input class="row-checkbox record-check" type="checkbox"></td>
-                  <td>5</td><td>三星堆数字文创方案</td><td>文字</td><td>四川文创科技有限公司</td><td>赵启明</td>
-                  <td><span class="table-badge badge-success">已登记并存证</span></td><td class="table-mono">BD-2024-SC-004012</td><td class="table-mono">川作登字-2024-W-001128</td><td>2024-06-07 16:45</td>
-                  <td><button class="table-btn" onclick="showRegRecordDetail(4)">查看</button></td>
-                </tr>
-                <tr>
-                  <td><input class="row-checkbox record-check" type="checkbox"></td>
-                  <td>6</td><td>青城山水墨画</td><td>美术</td><td>刘芳</td><td>刘芳</td>
-                  <td><span class="table-badge badge-danger">已驳回</span></td><td class="table-mono">—</td><td class="table-mono">—</td><td>2024-06-07 15:20</td>
-                  <td><button class="table-btn" onclick="showRegRecordDetail(5)">查看</button><button class="table-btn" onclick="navigateTo('new-registration')">编辑</button><button class="table-btn" onclick="showToast('已重新提交登记')">重新提交</button></td>
-                </tr>
-                <tr>
-                  <td><input class="row-checkbox record-check" type="checkbox"></td>
-                  <td>7</td><td>竹编工艺图谱</td><td>图形</td><td>眉山非遗馆</td><td>周建</td>
-                  <td><span class="table-badge badge-warning">待上传资料</span></td><td class="table-mono">—</td><td class="table-mono">—</td><td>2024-06-07 14:10</td>
-                  <td><button class="table-btn" onclick="navigateTo('new-registration')">编辑</button><button class="table-btn" onclick="openRegWorkUploadModal()">上传资料</button></td>
-                </tr>
-                <tr>
-                  <td><input class="row-checkbox record-check" type="checkbox"></td>
-                  <td>8</td><td>川西民居建筑模型</td><td>模型</td><td>成都建筑设计院</td><td>成都建筑设计院</td>
-                  <td><span class="table-badge badge-warning">待提交</span></td><td class="table-mono">—</td><td class="table-mono">—</td><td>2024-06-07 11:35</td>
-                  <td><button class="table-btn" onclick="navigateTo('new-registration')">编辑</button><button class="table-btn" onclick="showToast('已提交版权登记')">提交</button></td>
-                </tr>
-              </tbody>
+              <tbody id="regRecordsBody"></tbody>
             </table>
           </div>
           <div class="pagination-bar">
@@ -2047,7 +1954,7 @@
         appLayout.classList.add('visible');
         document.getElementById('page-cert-records').classList.add('active');
         const navItem = document.querySelector('.nav-item[data-page="cert-records"]'); if (navItem) navItem.classList.add('active');
-        setTimeout(function(){ showCertRecordDetail(0, true); }, 0);
+        setTimeout(function(){ showCertRecordDetail(findCertRecordIndexByStatus(['已存证']), true); }, 0);
         return;
       }
       if (page === 'reg-record-detail') {
@@ -2287,61 +2194,72 @@
 
     // ===== 登记记录模拟数据 =====
     const certRecords = [
-      { id: 'BD-CERT-001', name: '蜀道山水图', category: '美术', creator: '张明远', certNo: 'BD-2024-SC-001287', time: '2024-03-16 10:23', status: '已存证', platform: '蜀信链', txHash: '0x7a3f8c2e1d4b5a6f9e0c3d8b7a2f1e4c5d6b9a0f3e8c7d6b5a4f3e2d1c0b9a' },
-      { id: 'BD-CERT-002', name: '川剧变脸数字化影像', category: '电影', creator: '四川文化传媒有限公司', certNo: 'BD-2024-SC-002543', time: '2024-01-21 14:08', status: '已存证', platform: '蜀信链', txHash: '0x2f8e4c7a9b1d3f5e8c0a6d4b2f7e9c1a3d5b8f0e2c4a6d8b0f3e5c7a9d1b4f' },
-      { id: 'BD-CERT-003', name: '羌族刺绣纹样集', category: '美术', creator: '李秀芳', certNo: 'BD-2024-SC-003891', time: '2024-05-09 09:15', status: '已存证', platform: '蜀信链', txHash: '0x5c9e2a7f4b1d8e3c6a0f2d8b4e7c9a1f3d5b8e0c2a4f6d8b0e3c5a7f9d1b4e6' }
+      { id: 'BD-CERT-001', name: '青羊宫古建筑摄影集', certifier: '成都数字版权服务中心', workFile: 'W_青羊宫古建筑摄影集_01.jpg', ownerType: '组织', ownerName: '成都城市影像工作室', ownerNo: '91510100MA6CWK3X3K', certNo: '', time: '2024-06-06 10:30', status: '待上传作品', platform: '蜀信链', txHash: '', blockHeight: '' },
+      { id: 'BD-CERT-002', name: '蜀道山水图', certifier: '四川省文化大数据有限责任公司', workFile: 'W_蜀道山水图_01.jpg', ownerType: '自然人', ownerName: '张明远', ownerNo: '510***********3X', certNo: '', time: '2024-06-01 09:30', status: '待提交', platform: '蜀信链', txHash: '', blockHeight: '' },
+      { id: 'BD-CERT-003', name: '川剧变脸数字化影像', certifier: '四川省文化大数据有限责任公司', workFile: 'W_川剧变脸数字化影像_01.mp4', ownerType: '组织', ownerName: '四川文化传媒有限公司', ownerNo: '91510100MA6CWK3X3K', certNo: '', time: '2024-06-02 10:08', status: '存证中', platform: '蜀信链', txHash: '0x2f8e4c7a9b1d3f5e8c0a6d4b2f7e9c1a3d5b8f0e2c4a6d8b0f3e5c7a9d1b4f', blockHeight: '' },
+      { id: 'BD-CERT-004', name: '羌族刺绣纹样集', certifier: '成都数字版权服务中心', workFile: 'W_羌族刺绣纹样集_01.jpg', ownerType: '自然人', ownerName: '李秀芳', ownerNo: '510***********7J', certNo: 'BD-2024-SC-003891', time: '2024-05-09 09:15', status: '已存证', platform: '蜀信链', txHash: '0x5c9e2a7f4b1d8e3c6a0f2d8b4e7c9a1f3d5b8e0c2a4f6d8b0e3c5a7f9d1b4e6', blockHeight: '12,815,422' },
+      { id: 'BD-CERT-005', name: '峨眉山云海摄影', certifier: '四川省文化大数据有限责任公司', workFile: 'W_峨眉山云海摄影_01.jpg', ownerType: '自然人', ownerName: '陈志强', ownerNo: '510***********18', certNo: '', time: '2024-06-07 09:18', status: '待上传作品', platform: '蜀信链', txHash: '', blockHeight: '' },
+      { id: 'BD-CERT-006', name: '龙纹样数字素材包', certifier: '四川省文化大数据有限责任公司', workFile: 'W_龙纹样数字素材包_01.zip', ownerType: '组织', ownerName: '四川博物院', ownerNo: '91510100MA6CWK3X3K', certNo: '', time: '2024-06-07 12:10', status: '待提交', platform: '蜀信链', txHash: '', blockHeight: '' },
+      { id: 'BD-CERT-007', name: '巴蜀节庆影像志', certifier: '成都数字版权服务中心', workFile: 'W_巴蜀节庆影像志_01.mp4', ownerType: '组织', ownerName: '四川影像资料馆', ownerNo: '91510100MA6CWK3X3K', certNo: 'BD-2024-SC-007188', time: '2024-06-07 15:00', status: '已存证', platform: '蜀信链', txHash: '0x7a3f8c2e1d4b5a6f9e0c3d8b7a2f1e4c5d6b9a0f3e8c7d6b5a4f3e2d1c0b9a', blockHeight: '12,847,563' },
+      { id: 'BD-CERT-008', name: '川菜传统技艺视频', certifier: '四川省文化大数据有限责任公司', workFile: 'W_川菜传统技艺视频_01.mp4', ownerType: '组织', ownerName: '四川美食文化中心', ownerNo: '91510100MA6CWK3X3K', certNo: '', time: '2024-06-07 10:22', status: '存证中', platform: '蜀信链', txHash: '0x8b1f6d4a9c3e5b7d1f2a4c6e8d0b2f4a6c8e1d3f5a7b9c1d3e5f7a9b1c3d5e7', blockHeight: '' }
     ];
 
     const regRecords = [
-      { id: 'BD-REG-001', name: '锦里古街摄影集', category: '摄影', holder: '赵伟', author: '赵伟', certifier: '成都数字版权服务中心', time: '2024-06-08 09:35', status: '待上传资料', certNo: '', regNo: '', rejectReason: '', platform: '蜀信链', txHash: '' },
+      { id: 'BD-REG-001', name: '锦里古街摄影集', category: '摄影', holder: '赵伟', author: '赵伟', certifier: '成都数字版权服务中心', time: '2024-06-08 09:35', status: '待上传资料', remark: '待上传：权利保证书文件', certNo: '', regNo: '', rejectReason: '', platform: '蜀信链', txHash: '' },
       { id: 'BD-REG-002', name: '蜀绣图案素材库', category: '美术', holder: '四川非遗中心', author: '四川非遗中心', certifier: '四川省文化大数据有限责任公司', time: '2024-06-08 10:12', status: '待提交', certNo: '', regNo: '', rejectReason: '', platform: '蜀信链', txHash: '' },
       { id: 'BD-REG-003', name: '成都话方言词典', category: '文字', holder: '刘小蓉', author: '刘小蓉', certifier: '四川省文化大数据有限责任公司', time: '2024-06-08 10:45', status: '办理中', certNo: '', regNo: '', rejectReason: '', platform: '蜀信链', txHash: '' },
       { id: 'BD-REG-004', name: '巴蜀节庆影像志', category: '电影', holder: '四川影像资料馆', author: '四川影像资料馆', certifier: '四川省文化大数据有限责任公司', time: '2024-06-08 11:20', status: '办理中', certNo: '', regNo: '', rejectReason: '', platform: '蜀信链', txHash: '' },
       { id: 'BD-REG-005', name: '三星堆数字文创方案', category: '文字', holder: '四川文创科技有限公司', author: '赵启明', certifier: '四川省文化大数据有限责任公司', time: '2024-06-07 16:45', status: '已登记并存证', certNo: 'BD-2024-SC-004012', regNo: '川作登字-2024-W-001128', rejectReason: '', platform: '蜀信链', txHash: '0x130b34383cc86504fff0d425248badf5d29bb68c457815df8b9eb9c9dfc9d843', blockHeight: '12,847,563', certTime: '2024-06-07 16:50' },
       { id: 'BD-REG-006', name: '青城山水墨画', category: '美术', holder: '刘芳', author: '刘芳', certifier: '四川省文化大数据有限责任公司', time: '2024-06-07 15:20', status: '已驳回', certNo: '', regNo: '', rejectReason: '作品创作说明不完整，请补充权利来源与创作过程后重新提交。', platform: '蜀信链', txHash: '' },
-      { id: 'BD-REG-007', name: '竹编工艺图谱', category: '图形', holder: '眉山非遗馆', author: '周建', certifier: '四川省文化大数据有限责任公司', time: '2024-06-07 14:10', status: '待上传资料', certNo: '', regNo: '', rejectReason: '', platform: '蜀信链', txHash: '' },
+      { id: 'BD-REG-007', name: '竹编工艺图谱', category: '图形', holder: '眉山非遗馆', author: '周建', certifier: '四川省文化大数据有限责任公司', time: '2024-06-07 14:10', status: '待上传资料', remark: '待上传：权利保证书文件', certNo: '', regNo: '', rejectReason: '', platform: '蜀信链', txHash: '' },
       { id: 'BD-REG-008', name: '川西民居建筑模型', category: '模型', holder: '成都建筑设计院', author: '成都建筑设计院', certifier: '四川省文化大数据有限责任公司', time: '2024-06-07 11:35', status: '待提交', certNo: '', regNo: '', rejectReason: '', platform: '蜀信链', txHash: '' }
     ];
 
     function renderRegRecords(data) {
       const tbody = document.getElementById('regRecordsBody');
+      if (!tbody) return;
       const statusMap = {
-        draft: { label: '草稿', cls: 'badge-default' },
-        issued: { label: '已发证', cls: 'badge-success' },
-        processing: { label: '办理中', cls: 'badge-warning' },
-        rejected: { label: '已驳回', cls: 'badge-danger' },
-        submitted: { label: '已提交', cls: 'badge-default' }
+        '待上传资料': { label: '待上传资料', cls: 'badge-warning' },
+        '待提交': { label: '待提交', cls: 'badge-warning' },
+        '办理中': { label: '办理中', cls: 'badge-warning' },
+        '已登记并存证': { label: '已登记并存证', cls: 'badge-success' },
+        '已驳回': { label: '已驳回', cls: 'badge-danger' }
       };
-      tbody.innerHTML = data.map((r, i) => {
-        const st = statusMap[r.status];
-        const rejectCol = r.status === 'rejected'
+      tbody.innerHTML = data.map((r) => {
+        const originalIndex = regRecords.indexOf(r);
+        const st = statusMap[r.status] || { label: r.status, cls: 'badge-default' };
+        const rejectCol = r.status === '已驳回'
           ? `<div class="tooltip-wrap"><span class="table-badge ${st.cls}">${st.label}</span><span class="tooltip-text">${r.rejectReason}</span></div>`
           : `<span class="table-badge ${st.cls}">${st.label}</span>`;
         return `<tr>
-          <td>${i + 1}</td>
-          <td>${r.id}</td>
+          <td><input class="row-checkbox record-check" type="checkbox"></td>
+          <td>${originalIndex + 1}</td>
           <td>${r.name}</td>
           <td>${r.category}</td>
           <td>${r.holder}</td>
-          <td>${r.certifier}</td>
-          <td>${r.time}</td>
+          <td>${r.author}</td>
           <td>${rejectCol}</td>
           <td>${r.certNo ? `<span class="table-mono">${r.certNo}</span>` : '—'}</td>
           <td>${r.regNo ? `<span class="table-mono">${r.regNo}</span>` : '—'}</td>
+          <td>${r.time}</td>
+          <td>${r.remark ? r.remark : '—'}</td>
           <td>
             ${r.status === '待上传资料'
               ? `<button class="table-btn" onclick="navigateTo('new-registration')">编辑</button><button class="table-btn" onclick="openRegWorkUploadModal()">上传资料</button>`
               : (r.status === '待提交'
                 ? `<button class="table-btn" onclick="navigateTo('new-registration')">编辑</button><button class="table-btn" onclick="showToast('已提交版权登记')">提交</button>`
-                : `<button class="table-btn" onclick="showRecordDetail(${i})">查看</button>`)}
-            ${r.status === 'issued' ? '<button class="table-btn">下载证书</button>' : ''}
+                : (r.status === '已驳回'
+                  ? `<button class="table-btn" onclick="showRecordDetail(${originalIndex})">查看</button><button class="table-btn" onclick="navigateTo('new-registration')">编辑</button><button class="table-btn" onclick="showToast('已重新提交登记')">重新提交</button>`
+                  : `<button class="table-btn" onclick="showRecordDetail(${originalIndex})">查看</button>`))}
           </td>
         </tr>`;
       }).join('');
     }
 
     function filterRecords() {
-      const statusVal = document.getElementById('statusFilter').value;
+      const statusSelect = document.getElementById('statusFilter');
+      if (!statusSelect) return;
+      const statusVal = statusSelect.value;
       if (statusVal === 'all') {
         renderRegRecords(regRecords);
       } else {
@@ -2356,6 +2274,10 @@
       if (status === '已登记并存证') return 'reg-view-full';
       if (status === '已驳回') return 'reg-view-rejected';
       return 'reg-record-detail';
+    }
+    function findCertRecordIndexByStatus(statuses) {
+      const idx = certRecords.findIndex(r => statuses.includes(r.status));
+      return idx >= 0 ? idx : 0;
     }
     function findRegRecordIndexByStatus(statuses) {
       const idx = regRecords.findIndex(r => statuses.includes(r.status));
@@ -2504,9 +2426,11 @@
           <div class="detail-info-title">作品与文件信息</div>
           <div class="detail-info-row"><span class="detail-info-label">本地编号</span><span class="detail-info-value">${r.id}</span></div>
           <div class="detail-info-row"><span class="detail-info-label">作品名称</span><span class="detail-info-value">${r.name}</span></div>
-          <div class="detail-info-row"><span class="detail-info-label">作品类别</span><span class="detail-info-value">${r.category}</span></div>
-          <div class="detail-info-row"><span class="detail-info-label">创作者</span><span class="detail-info-value">${r.creator}</span></div>
-          <div class="detail-info-row"><span class="detail-info-label">文件列表</span><span class="detail-info-value">${r.name}.jpg（0.41M）</span></div>
+          <div class="detail-info-row"><span class="detail-info-label">存证方</span><span class="detail-info-value">${r.certifier}</span></div>
+          <div class="detail-info-row"><span class="detail-info-label">作品文件</span><span class="detail-info-value">${r.workFile || '—'}</span></div>
+          <div class="detail-info-row"><span class="detail-info-label">著作权人类型</span><span class="detail-info-value">${r.ownerType}</span></div>
+          <div class="detail-info-row"><span class="detail-info-label">著作权人姓名/组织名称</span><span class="detail-info-value">${r.ownerName}</span></div>
+          <div class="detail-info-row"><span class="detail-info-label">著作权人身份证号码/统一社会信用代码</span><span class="detail-info-value table-mono">${r.ownerNo}</span></div>
           <div class="detail-info-row"><span class="detail-info-label">文件Hash</span><span class="detail-info-value table-mono" style="word-break:break-all;">SHA256-${(r.txHash || '').slice(2, 34).toUpperCase()}</span></div>
         </div>
         <div class="detail-info-group">
@@ -2520,7 +2444,7 @@
           <div class="detail-info-row"><span class="detail-info-label">授时时间</span><span class="detail-info-value">2026-04-24 16:00:06（UTC/GMT+08:00）</span></div>
           <div class="detail-info-row"><span class="detail-info-label">TxHash</span><span class="detail-info-value table-mono" style="word-break:break-all;">${r.txHash || '—'}</span></div>
           <div class="detail-info-row"><span class="detail-info-label">区块高度</span><span class="detail-info-value">${r.blockHeight || '—'}</span></div>
-          <div class="detail-info-row"><span class="detail-info-label">著作权人</span><span class="detail-info-value">姓名或企业名称：王鑫<br>证件类型：身份证<br>证件号码：511623198610166361</span></div>
+          <div class="detail-info-row"><span class="detail-info-label">著作权人</span><span class="detail-info-value">类型：${r.ownerType}<br>姓名或企业名称：${r.ownerName}<br>证件号码：${r.ownerNo}</span></div>
         </div>
         <div class="detail-info-group">
           <div class="detail-info-title">证书信息</div>
