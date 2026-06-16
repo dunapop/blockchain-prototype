@@ -1,0 +1,995 @@
+<!DOCTYPE html>
+
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>区块链版权登记查询</title>
+<!-- 设计系统：区块链版权登记 - 公开查询页 -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400&amp;display=swap" rel="stylesheet"/>
+<link href="../../assets/css/style.css" rel="stylesheet"/></head>
+<body class="public-prototype-page"><script>
+(function(){
+  var target = 'idcard-query';
+  if (location.hash !== '#' + target) { history.replaceState(null, '', '#' + target); }
+  window.addEventListener('load', function() {
+    if (location.hash !== '#' + target) history.replaceState(null, '', '#' + target);
+    window.dispatchEvent(new HashChangeEvent('hashchange'));
+  });
+})();
+</script>
+<!-- 顶部导航栏 -->
+<nav class="navbar">
+<div class="navbar-left">
+<div class="navbar-logo">
+<svg fill="none" viewbox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+<rect fill="white" height="5" rx="1" width="5" x="2" y="2"></rect>
+<rect fill="white" height="5" opacity="0.6" rx="1" width="5" x="9" y="2"></rect>
+<rect fill="white" height="5" opacity="0.6" rx="1" width="5" x="2" y="9"></rect>
+<rect fill="white" height="5" opacity="0.3" rx="1" width="5" x="9" y="9"></rect>
+</svg>
+</div>
+<span class="navbar-title">区块链版权登记查询</span>
+</div>
+<div class="navbar-right">
+<a href="admin-system-framed-v38.html#login">管理入口</a>
+<svg class="link-icon" fill="none" stroke="currentColor" stroke-width="1.5" viewbox="0 0 16 16">
+<path d="M6 3h7v7M13 3L6 10"></path>
+</svg>
+</div>
+</nav>
+<!-- 前端查询端业务流程图 -->
+<section class="flow-page" id="publicFlowPage">
+<h1 class="flow-title">前端查询端业务流程图</h1>
+<p class="flow-desc">前端查询端只负责公开查询和详情核验，不产生新增、上传、提交或修改数据。查询结果列表展示版权登记核心信息与登记状态；证件号码与证件附件在公众端脱敏与受限展示。</p>
+<div class="flow-section">
+<h3>一、身份证查询流程</h3>
+<div class="flow-steps">
+<div class="flow-node"><strong>输入身份信息</strong><span>用户输入姓名、身份证号。</span></div>
+<div class="flow-arrow">→</div>
+<div class="flow-node"><strong>查询本人作品</strong><span>系统按证件号检索名下版权作品。</span></div>
+<div class="flow-arrow">→</div>
+<div class="flow-node"><strong>展示结果列表</strong><span>列表展示作品名称、作品类型、作者、著作权人、受理号、登记状态、登记证书编号与操作。</span></div>
+<div class="flow-arrow">→</div>
+<div class="flow-node"><strong>查看详情</strong><span>如记录为版权登记业务，打开“版权登记详情”；如仅为区块链存证业务，打开“存证详情”。</span></div>
+</div>
+</div>
+<div class="flow-section">
+<h3>二、证书 / 存证查询流程</h3>
+<div class="flow-steps">
+<div class="flow-node"><strong>输入信息</strong><span>输入受理号、证书编号或权利人信息。</span></div>
+<div class="flow-arrow">→</div>
+<div class="flow-node"><strong>匹配记录</strong><span>系统匹配版权登记记录或区块链存证记录。</span></div>
+<div class="flow-arrow">→</div>
+<div class="flow-node"><strong>返回结果</strong><span>返回列表结果，点击“查看详情”进入对应详情弹窗。</span></div>
+<div class="flow-arrow">→</div>
+<div class="flow-node"><strong>核验信息</strong><span>可核验登记进度、证书编号、存证哈希与时间戳等信息。</span></div>
+</div>
+</div>
+<div class="flow-section">
+<h3>三、查询结果列表字段</h3>
+<table class="flow-table">
+<thead><tr><th>字段</th><th>说明</th></tr></thead>
+<tbody>
+<tr><td>作品名称 / 作品类型</td><td>展示登记作品基础信息。</td></tr>
+<tr><td>作者 / 著作权人</td><td>支持多人简要展示。</td></tr>
+<tr><td>受理号</td><td>未生成受理号时显示“—”。</td></tr>
+<tr><td>登记状态</td><td>统一展示完整业务状态，仅显示中文名称。</td></tr>
+<tr><td>登记证书编号</td><td>登记完成后展示，未完成显示“—”。</td></tr>
+<tr><td>操作</td><td>统一为“查看详情”。</td></tr>
+</tbody>
+</table>
+</div>
+<div class="flow-section">
+<h3>四、详情弹窗规则</h3>
+<table class="flow-table">
+<thead><tr><th>详情页面</th><th>触发条件</th><th>展示内容</th></tr></thead>
+<tbody>
+<tr><td>版权登记详情</td><td>记录为版权登记业务</td><td>展示登记进度与六节点时间线、作品/作者/著作权人/权利信息、登记结果与区块链存证结果（按状态动态展示）。</td></tr>
+<tr><td>存证详情</td><td>记录仅为区块链存证业务</td><td>仅展示区块链存证相关内容，不混入版权登记信息。</td></tr>
+</tbody>
+</table>
+</div>
+</section>
+<!-- Hero 区域 -->
+<main class="hero" id="heroSection">
+<h1 class="hero-title">版权作品查询</h1>
+<p class="hero-subtitle">基于区块链技术的版权存证与登记查询系统</p>
+<div class="search-card">
+<!-- 搜索 Tab -->
+<div class="search-tabs">
+<button class="search-tab active" data-tab="idcard" onclick="switchTab('idcard')">身份证查询</button>
+<button class="search-tab" data-tab="cert" onclick="switchTab('cert')">证书/存证查询</button>
+</div>
+<div class="search-body">
+<!-- Tab1：身份证查询 -->
+<div class="search-form active" id="tab-idcard">
+<div class="search-row">
+<div class="search-field">
+<label>姓名</label>
+<input id="inputName" placeholder="请输入姓名" type="text"/>
+</div>
+<div class="search-field">
+<label>身份证号</label>
+<input id="inputIdcard" placeholder="请输入身份证号码" type="text"/>
+</div>
+<button class="search-btn" onclick="doSearch()">查询</button>
+</div>
+</div>
+<!-- Tab2：证书/存证查询 -->
+<div class="search-form" id="tab-cert">
+<div class="search-row">
+<div class="search-field">
+<label>受理号 / 证书编号 / 权利人信息</label>
+<input id="inputCertNo" placeholder="请输入受理号、证书编号或权利人信息" type="text"/>
+</div>
+<button class="search-btn" onclick="doSearch()">查询</button>
+</div>
+</div>
+<p class="search-hint">请输入完整的身份证号码，系统将返回该证件人名下所有登记作品</p>
+</div>
+</div>
+</main>
+<!-- 查询结果区 -->
+<section class="results-section" id="resultsSection">
+<p class="results-header">共找到 <span id="resultCount">0</span> 条版权记录</p>
+<div class="results-table-wrap">
+<table class="results-table">
+<thead>
+<tr>
+<th>作品名称</th>
+<th>作品类型</th>
+<th>著作权人</th>
+<th>作者</th>
+<th>登记证书号</th>
+<th>登记完成时间</th>
+<th>上链时间</th>
+<th>操作</th>
+</tr>
+</thead>
+<tbody id="resultsBody"></tbody>
+</table>
+</div>
+</section>
+<!-- 无结果状态 -->
+<div class="no-results" id="noResults">
+<div class="no-results-icon">
+<svg fill="none" viewbox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+<circle cx="32" cy="32" fill="none" r="28" stroke="currentColor" stroke-width="2"></circle>
+<path d="M22 28h20M22 36h14" stroke="currentColor" stroke-linecap="round" stroke-width="2"></path>
+<circle cx="44" cy="44" fill="white" r="12" stroke="currentColor" stroke-width="2"></circle>
+<path d="M40 44h8M44 40v8" stroke="currentColor" stroke-linecap="round" stroke-width="2"></path>
+</svg>
+</div>
+<p class="no-results-text">未找到相关版权记录</p>
+</div>
+<!-- 详情弹窗 -->
+<div class="modal-overlay" id="modalOverlay" onclick="closeModalOutside(event)">
+<div class="modal">
+<div class="modal-header">
+<h2 class="modal-title" id="modalTitle">作品详情</h2>
+<button class="modal-close" onclick="closeModal()">
+<svg fill="none" height="16" stroke="currentColor" stroke-width="2" viewbox="0 0 16 16" width="16">
+<path d="M4 4l8 8M12 4l-8 8"></path>
+</svg>
+</button>
+</div>
+<div class="modal-body" id="modalBody"></div>
+</div>
+</div>
+<!-- Toast -->
+<div class="toast" id="toast">已复制</div>
+<!-- 底部 Footer -->
+<footer class="footer">
+    四川省文化大数据有限责任公司 技术支持 | © 2024
+  </footer>
+<script>
+
+    // ===== 原型框架联动：支持左侧页面树控制 =====
+    function isInPrototypeFrame() {
+      return window.self !== window.top;
+    }
+    function getPrototypeTargetPage() {
+      const params = new URLSearchParams(window.location.search);
+      return params.get('page') || (window.location.hash ? window.location.hash.replace('#', '') : 'public-flow');
+    }
+    function notifyPrototypeFrame(page) {
+      if (isInPrototypeFrame()) {
+        window.parent.postMessage({ type: 'prototype:navigate', file: 'public-query.html', page: page }, '*');
+      }
+    }
+    function navigatePublicPrototype(page) {
+      const heroSection = document.getElementById('heroSection');
+      const resultsSection = document.getElementById('resultsSection');
+      const noResults = document.getElementById('noResults');
+      const flowPage = document.getElementById('publicFlowPage');
+      closeModal(true);
+      if (flowPage) flowPage.classList.remove('visible');
+      resultsSection.classList.remove('visible');
+      noResults.classList.remove('visible');
+      heroSection.style.display = '';
+      heroSection.style.flex = '1';
+      heroSection.style.padding = '80px 24px 60px';
+      if (page === 'public-flow') {
+        heroSection.style.display = 'none';
+        if (flowPage) flowPage.classList.add('visible');
+      }
+      if (page === 'cert-query') switchTab('cert');
+      if (page === 'idcard-query') switchTab('idcard');
+      if (page === 'results') { closeModal(true); doSearch(); }
+      if (page === 'results-detail-registered') { closeModal(true); doSearch(); setTimeout(function(){ openDetail(3, true); }, 0); }
+      if (page === 'results-detail-certified') { closeModal(true); doSearch(); setTimeout(function(){ openDetail(4, true); }, 0); }
+      if (isInPrototypeFrame() && window.location.hash !== '#' + page) {
+        history.replaceState(null, '', window.location.pathname + '#' + page);
+      }
+      notifyPrototypeFrame(page);
+    }
+    function bootPrototypeFrame() {
+      if (!isInPrototypeFrame()) return;
+      setTimeout(function(){ navigatePublicPrototype(getPrototypeTargetPage()); }, 0);
+    }
+    window.addEventListener('hashchange', function(){
+      if (isInPrototypeFrame()) navigatePublicPrototype(getPrototypeTargetPage());
+    });
+
+    // ===== 模拟数据 =====
+    const mockData = [
+      {
+        id: 1,
+        kind: 'registration',
+        acceptNo: 'SC-CR-20240601001',
+        workName: '蜀道山水图',
+        workTypeCd: 'F',
+        workDesc: '水墨山水作品，作品创作说明为示例文本。',
+        workFiles: [
+          { name: '蜀道山水图_高清版.jpg', size: 3284121, mime: 'image/jpeg' },
+          { name: '蜀道山水图_说明.txt', size: 1240, mime: 'text/plain' }
+        ],
+        authors: [
+          { authorName: '张明远', authorSign: '张明远' }
+        ],
+        holders: [
+          {
+            holderTypeCd: 'person',
+            holderName: '张明远',
+            idTypeCd: 'idcard',
+            idNo: '51010519920315123X',
+            signCd: '1',
+            country: '中国',
+            province: '四川省',
+            city: '成都市',
+            attachments: {
+              idFront: { name: '身份证正面.jpg' },
+              idBack: { name: '身份证背面.jpg' }
+            }
+          }
+        ],
+        rights: {
+          acquireCd: 'A',
+          ownCds: ['1'],
+          attributionCd: '1'
+        },
+        creation: {
+          natureCd: 'original',
+          completeTime: '2024-03-15',
+          completePlace: '成都市',
+          publishedCd: '1',
+          firstPublishTime: '2024-04-01',
+          firstPublishPlace: '成都市'
+        },
+        materials: {
+          guarantee: { name: '权利保证书.pdf' },
+          others: [
+            { name: '其他证明材料_1.pdf' }
+          ]
+        },
+        progress: {
+          statusCd: 1100,
+          msg: '初审中',
+          updatedAt: '2024-06-01 10:12:30',
+          rejectReason: ''
+        },
+        result: {
+          regCertNo: '',
+          issuedAt: '',
+          regCertFile: null
+        },
+        evidence: null
+      },
+      {
+        id: 2,
+        kind: 'registration',
+        acceptNo: 'SC-CR-20240601002',
+        workName: '川剧变脸数字化影像',
+        workTypeCd: 'I',
+        workDesc: '影像作品，作品创作说明为示例文本。',
+        workFiles: [
+          { name: '川剧变脸_片段.mp4', size: 184234234, mime: 'video/mp4' }
+        ],
+        authors: [
+          { authorName: '四川文化传媒有限公司', authorSign: '四川文化传媒' },
+          { authorName: '王小明', authorSign: '王小明' }
+        ],
+        holders: [
+          {
+            holderTypeCd: 'org',
+            holderName: '四川文化传媒有限公司',
+            idTypeCd: 'credit',
+            idNo: '91510100MA6XXXXX3K',
+            signCd: '1',
+            country: '中国',
+            province: '四川省',
+            city: '成都市',
+            attachments: {
+              license: { name: '营业执照.pdf' }
+            }
+          }
+        ],
+        rights: {
+          acquireCd: 'A',
+          ownCds: ['2'],
+          attributionCd: '3'
+        },
+        creation: {
+          natureCd: 'original',
+          completeTime: '2024-01-20',
+          completePlace: '成都市',
+          publishedCd: '1',
+          firstPublishTime: '2024-02-15',
+          firstPublishPlace: '成都市'
+        },
+        materials: {
+          guarantee: { name: '权利保证书.pdf' },
+          others: []
+        },
+        progress: {
+          statusCd: 2300,
+          msg: '存证失败',
+          updatedAt: '2024-06-03 15:40:10',
+          rejectReason: ''
+        },
+        result: {
+          regCertNo: '',
+          issuedAt: '',
+          regCertFile: null
+        },
+        evidence: {
+          workHash: 'a1b2c3d4e5f6...',
+          wclHash: '',
+          tpHash: '',
+          onChainTime: '',
+          tsaTimestamp: '',
+          tsaMsg: '',
+          evidenceCertFile: null
+        }
+      },
+      {
+        id: 3,
+        kind: 'registration',
+        acceptNo: 'SC-CR-20240601003',
+        workName: '羌族刺绣纹样集',
+        workTypeCd: 'F',
+        workDesc: '美术作品，作品创作说明为示例文本。',
+        workFiles: [
+          { name: '羌绣纹样集_01.png', size: 2453120, mime: 'image/png' },
+          { name: '羌绣纹样集_02.png', size: 1984120, mime: 'image/png' }
+        ],
+        authors: [
+          { authorName: '李秀芳', authorSign: '李秀芳' }
+        ],
+        holders: [
+          {
+            holderTypeCd: 'person',
+            holderName: '李秀芳',
+            idTypeCd: 'idcard',
+            idNo: '51010519880508123X',
+            signCd: '1',
+            country: '中国',
+            province: '四川省',
+            city: '阿坝州',
+            attachments: {
+              idFront: { name: '身份证正面.jpg' },
+              idBack: { name: '身份证背面.jpg' }
+            }
+          }
+        ],
+        rights: {
+          acquireCd: 'A',
+          ownCds: ['1'],
+          attributionCd: '1'
+        },
+        creation: {
+          natureCd: 'compile',
+          completeTime: '2024-05-08',
+          completePlace: '阿坝州',
+          publishedCd: '0',
+          firstPublishTime: '',
+          firstPublishPlace: ''
+        },
+        materials: {
+          guarantee: { name: '权利保证书.pdf' },
+          others: [
+            { name: '其他证明材料_1.pdf' },
+            { name: '其他证明材料_2.pdf' }
+          ]
+        },
+        progress: {
+          statusCd: 1000,
+          msg: '登记完成',
+          updatedAt: '2024-06-10 09:20:00',
+          rejectReason: ''
+        },
+        result: {
+          regCertNo: '川作登字-2024-F-003452',
+          issuedAt: '2024-06-10',
+          regCertFile: { name: '登记证书.pdf' }
+        },
+        evidence: {
+          workHash: '9f86d081884c7d659a2feaa0c55ad015...',
+          wclHash: '0x7a3f8c2e1d4b5a6f9e0c3d8b7a2f1e4c...',
+          tpHash: '0x2f8e4c7a9b1d3f5e8c0a6d4b2f7e9c1a...',
+          onChainTime: '2024-06-08 10:23:45',
+          tsaTimestamp: '2024-06-08 10:24:12',
+          tsaMsg: '时间戳授时成功',
+          evidenceCertFile: { name: '存证证书.pdf' }
+        }
+      },
+      {
+        id: 4,
+        kind: 'evidence',
+        workName: '蜀道山水图（仅存证）',
+        workTypeCd: 'F',
+        workFiles: [
+          { name: '蜀道山水图_高清版.jpg', size: 3284121, mime: 'image/jpeg' }
+        ],
+        evidence: {
+          workHash: 'a1b2c3d4e5f6...',
+          wclHash: '0x5c9e2a7f4b1d8e3c6a0f2d8b4e7c9a1f...',
+          tpHash: '0x2f8e4c7a9b1d3f5e8c0a6d4b2f7e9c1a...',
+          onChainTime: '2024-05-09 09:15:33',
+          tsaTimestamp: '2024-05-09 09:16:00',
+          tsaMsg: '时间戳授时成功',
+          evidenceCertFile: { name: '存证证书.pdf' }
+        }
+      }
+    ];
+
+    const REG_STATUS_MAP = {
+      1100: { name: '初审中', type: 'processing' },
+      1200: { name: '复审中', type: 'processing' },
+      1300: { name: '存证中', type: 'processing' },
+      1400: { name: '版权局审核中', type: 'processing' },
+      1000: { name: '登记完成', type: 'done' },
+      2100: { name: '初审驳回', type: 'rejected' },
+      2200: { name: '复审驳回', type: 'rejected' },
+      2300: { name: '存证失败', type: 'exception' },
+      2400: { name: '版权局审核驳回', type: 'rejected' }
+    };
+
+    const WORK_TYPE_MAP = {
+      F: '美术',
+      I: '电影',
+      W: '文字',
+      M: '音乐',
+      P: '摄影',
+      S: '软件'
+    };
+
+    const HOLDER_TYPE_MAP = {
+      person: '自然人',
+      org: '非自然人'
+    };
+
+    const ID_TYPE_MAP = {
+      idcard: '身份证',
+      credit: '统一社会信用代码'
+    };
+
+    const SIGN_MAP = {
+      1: '署名',
+      0: '不署名'
+    };
+
+    const RIGHT_ACQUIRE_MAP = {
+      A: '原始取得',
+      B: '继受取得'
+    };
+
+    const RIGHT_OWN_MAP = {
+      1: '单独拥有',
+      2: '共同拥有'
+    };
+
+    const ATTRIBUTION_MAP = {
+      1: '个人作品',
+      2: '合作作品',
+      3: '职务作品'
+    };
+
+    const CREATION_NATURE_MAP = {
+      original: '原创',
+      compile: '整理',
+      adapt: '改编'
+    };
+
+    const PUBLISHED_MAP = {
+      1: '已发表',
+      0: '未发表'
+    };
+
+    function escapeHtml(str) {
+      return String(str ?? '')
+        .replaceAll('&', '&amp;')
+        .replaceAll('<', '&lt;')
+        .replaceAll('>', '&gt;')
+        .replaceAll('"', '&quot;')
+        .replaceAll("'", '&#039;');
+    }
+
+    function mapBy(map, value, fallback = '—') {
+      const v = value === undefined || value === null || value === '' ? undefined : String(value);
+      if (!v) return fallback;
+      return map[v] || fallback;
+    }
+
+    function formatSize(bytes) {
+      const n = Number(bytes);
+      if (!Number.isFinite(n) || n <= 0) return '—';
+      const units = ['B', 'KB', 'MB', 'GB'];
+      let v = n;
+      let i = 0;
+      while (v >= 1024 && i < units.length - 1) {
+        v /= 1024;
+        i += 1;
+      }
+      return (i === 0 ? String(Math.round(v)) : v.toFixed(1)) + ' ' + units[i];
+    }
+
+    function joinNameList(list, key) {
+      const arr = Array.isArray(list) ? list : [];
+      const names = arr.map(x => (x && x[key] ? String(x[key]).trim() : '')).filter(Boolean);
+      if (!names.length) return '—';
+      if (names.length <= 2) return names.join('、');
+      return names.slice(0, 2).join('、') + ' 等';
+    }
+
+    function maskIdNo(idNo) {
+      const s = String(idNo || '').trim();
+      if (!s) return '—';
+      if (s.length <= 10) return s[0] + '****' + s[s.length - 1];
+      return s.slice(0, 6) + '********' + s.slice(-4);
+    }
+
+    function maskCreditCode(code) {
+      const s = String(code || '').trim();
+      if (!s) return '—';
+      if (s.length <= 8) return s[0] + '****' + s[s.length - 1];
+      return s.slice(0, 4) + '********' + s.slice(-4);
+    }
+
+    function getRegStatusInfo(item) {
+      const statusCd = item?.progress?.statusCd;
+      if (!statusCd) return { name: '—', type: 'pending' };
+      const mapped = REG_STATUS_MAP[statusCd] || { name: '—', type: 'pending' };
+      const msg = (item?.progress?.msg || '').trim();
+      return { name: msg || mapped.name, type: mapped.type };
+    }
+
+    function getBadgeClass(type) {
+      if (type === 'done') return 'badge-done';
+      if (type === 'processing') return 'badge-processing';
+      if (type === 'rejected') return 'badge-rejected';
+      if (type === 'exception') return 'badge-exception';
+      return 'badge-pending';
+    }
+
+    function getTimelineSteps(item) {
+      const steps = [
+        { key: 'submit', title: '提交登记' },
+        { key: 'first', title: '初审' },
+        { key: 'second', title: '复审' },
+        { key: 'evidence', title: '区块链存证' },
+        { key: 'authority', title: '版权局审核' },
+        { key: 'done', title: '登记完成' }
+      ].map(s => ({ ...s, state: 'todo', label: '未开始' }));
+
+      const statusCd = item?.progress?.statusCd;
+      const setState = (key, state, label) => {
+        const idx = steps.findIndex(s => s.key === key);
+        if (idx >= 0) steps[idx] = { ...steps[idx], state, label };
+      };
+
+      if (!statusCd) return steps;
+
+      if (statusCd === 1100) {
+        setState('submit', 'done', '已完成');
+        setState('first', 'doing', '初审中');
+        return steps;
+      }
+      if (statusCd === 1200) {
+        setState('submit', 'done', '已完成');
+        setState('first', 'done', '已完成');
+        setState('second', 'doing', '复审中');
+        return steps;
+      }
+      if (statusCd === 1300) {
+        setState('submit', 'done', '已完成');
+        setState('first', 'done', '已完成');
+        setState('second', 'done', '已完成');
+        setState('evidence', 'doing', '存证中');
+        return steps;
+      }
+      if (statusCd === 1400) {
+        setState('submit', 'done', '已完成');
+        setState('first', 'done', '已完成');
+        setState('second', 'done', '已完成');
+        setState('evidence', 'done', '已完成');
+        setState('authority', 'doing', '审核中');
+        return steps;
+      }
+      if (statusCd === 1000) {
+        steps.forEach(s => { s.state = 'done'; s.label = '已完成'; });
+        return steps;
+      }
+      if (statusCd === 2100) {
+        setState('submit', 'done', '已完成');
+        setState('first', 'rejected', '驳回');
+        return steps;
+      }
+      if (statusCd === 2200) {
+        setState('submit', 'done', '已完成');
+        setState('first', 'done', '已完成');
+        setState('second', 'rejected', '驳回');
+        return steps;
+      }
+      if (statusCd === 2400) {
+        setState('submit', 'done', '已完成');
+        setState('first', 'done', '已完成');
+        setState('second', 'done', '已完成');
+        setState('evidence', 'done', '已完成');
+        setState('authority', 'rejected', '驳回');
+        return steps;
+      }
+      if (statusCd === 2300) {
+        setState('submit', 'done', '已完成');
+        setState('first', 'done', '已完成');
+        setState('second', 'done', '已完成');
+        setState('evidence', 'failed', '处理失败');
+        return steps;
+      }
+      return steps;
+    }
+
+    function renderTimeline(steps) {
+      return `
+        <div class="reg-timeline">
+          ${steps.map(s => `
+            <div class="reg-step">
+              <div class="reg-step-title">${escapeHtml(s.title)}</div>
+              <span class="reg-step-state ${escapeHtml(s.state)}">${escapeHtml(s.label)}</span>
+            </div>
+          `).join('')}
+        </div>
+      `;
+    }
+
+    function openPdfPreview(name) {
+      showToast('打开证书预览（PDF）：' + name);
+    }
+
+    function triggerDownload(name) {
+      showToast('已触发下载：' + name);
+    }
+
+    function renderFileList(files, opts) {
+      const allowView = !!opts?.allowView;
+      const allowDownload = !!opts?.allowDownload;
+      const items = Array.isArray(files) ? files : [];
+      if (!items.length) return '—';
+      return `
+        <div class="file-list">
+          ${items.map(f => {
+            const mime = (f?.mime || '').toLowerCase();
+            const isImage = mime.startsWith('image/');
+            const thumb = isImage ? 'IMG' : 'FILE';
+            const name = f?.name || '—';
+            const size = formatSize(f?.size);
+            const viewBtn = `<button class="mini-btn" ${allowView ? '' : 'disabled'} onclick="${allowView ? `showToast('查看：${escapeHtml(name)}')` : ''}">查看</button>`;
+            const downBtn = `<button class="mini-btn" ${allowDownload ? '' : 'disabled'} onclick="${allowDownload ? `triggerDownload('${escapeHtml(name)}')` : ''}">下载</button>`;
+            return `
+              <div class="file-item">
+                <div class="file-item-left">
+                  <div class="file-thumb">${thumb}</div>
+                  <div class="file-meta">
+                    <div class="file-name" title="${escapeHtml(name)}">${escapeHtml(name)}</div>
+                    <div class="file-sub">${escapeHtml(size)}${mime ? ' · ' + escapeHtml(mime) : ''}</div>
+                  </div>
+                </div>
+                <div class="file-actions">
+                  ${viewBtn}
+                  ${downBtn}
+                </div>
+              </div>
+            `;
+          }).join('')}
+        </div>
+      `;
+    }
+
+    function renderRegistrationDetail(item) {
+      const workTypeName = mapBy(WORK_TYPE_MAP, item?.workTypeCd);
+
+      const authorsTable = Array.isArray(item?.authors) && item.authors.length ? `
+        <table class="detail-table">
+          <thead>
+            <tr>
+              <th>作者姓名或名称</th>
+              <th>作者署名</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${item.authors.map(a => `
+              <tr>
+                <td>${escapeHtml(a?.authorName || '—')}</td>
+                <td>${escapeHtml(a?.authorSign || '—')}</td>
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>
+      ` : '—';
+
+      const holdersCards = Array.isArray(item?.holders) && item.holders.length ? `
+        <div class="holder-cards">
+          ${item.holders.map((h, idx) => {
+            const holderTypeName = mapBy(HOLDER_TYPE_MAP, h?.holderTypeCd);
+            const idTypeName = mapBy(ID_TYPE_MAP, h?.idTypeCd);
+            const rawIdNo = (h?.idNo || '').trim();
+            const maskedNo = h?.idTypeCd === 'credit' ? maskCreditCode(rawIdNo) : maskIdNo(rawIdNo);
+            const signName = mapBy(SIGN_MAP, h?.signCd);
+            const areaText = [h?.country, h?.province, h?.city].filter(Boolean).join(' / ') || '—';
+            return `
+              <div class="holder-card">
+                <div class="holder-card-title">著作权人 ${idx + 1}</div>
+                <div class="info-row"><span class="info-label">著作权人类型</span><span class="info-value">${escapeHtml(holderTypeName)}</span></div>
+                <div class="info-row"><span class="info-label">著作权人名称</span><span class="info-value">${escapeHtml(h?.holderName || '—')}</span></div>
+                <div class="info-row"><span class="info-label">证件类型</span><span class="info-value">${escapeHtml(idTypeName)}</span></div>
+                <div class="info-row"><span class="info-label">证件号码</span><span class="info-value info-mono">${escapeHtml(maskedNo)}</span></div>
+                <div class="info-row"><span class="info-label">署名情况</span><span class="info-value">${escapeHtml(signName)}</span></div>
+                <div class="info-row"><span class="info-label">国家/省/市</span><span class="info-value">${escapeHtml(areaText)}</span></div>
+                <div class="detail-note">证件附件不向公众展示</div>
+              </div>
+            `;
+          }).join('')}
+        </div>
+      ` : '—';
+
+      const registrationResultHtml = `
+        <div class="info-row"><span class="info-label">登记证书号</span><span class="info-value info-mono">${escapeHtml(item?.result?.regCertNo || '—')}</span></div>
+        <div class="info-row"><span class="info-label">登记完成时间</span><span class="info-value">${escapeHtml(item?.result?.issuedAt || '—')}</span></div>
+        <div class="info-row">
+          <span class="info-label">登记证书</span>
+          <span class="info-value">
+            ${item?.result?.regCertFile?.name ? `
+              <button class="mini-btn" onclick="openPdfPreview('${escapeHtml(item.result.regCertFile.name)}')">查看证书</button>
+              <button class="mini-btn" onclick="triggerDownload('${escapeHtml(item.result.regCertFile.name)}')">下载证书</button>
+            ` : '—'}
+          </span>
+        </div>
+      `;
+
+      const evidenceHtml = `
+        <div class="info-row"><span class="info-label">上链时间</span><span class="info-value">${escapeHtml(item?.evidence?.onChainTime || '—')}</span></div>
+        <div class="info-row"><span class="info-label">文创链上链哈希</span><span class="info-value info-mono" style="word-break:break-all;">${escapeHtml(item?.evidence?.wclHash || '—')}</span></div>
+        <div class="info-row"><span class="info-label">天平链存证哈希</span><span class="info-value info-mono" style="word-break:break-all;">${escapeHtml(item?.evidence?.tpHash || '—')}</span></div>
+        <div class="info-row"><span class="info-label">授时时间戳</span><span class="info-value">${escapeHtml(item?.evidence?.tsaTimestamp || '—')}</span></div>
+        <div class="info-row">
+          <span class="info-label">存证证书</span>
+          <span class="info-value">
+            ${item?.evidence?.evidenceCertFile?.name ? `
+              <button class="mini-btn" onclick="openPdfPreview('${escapeHtml(item.evidence.evidenceCertFile.name)}')">查看证书</button>
+              <button class="mini-btn" onclick="triggerDownload('${escapeHtml(item.evidence.evidenceCertFile.name)}')">下载证书</button>
+            ` : '—'}
+          </span>
+        </div>
+      `;
+
+      return `
+        <div class="info-group">
+          <div class="info-group-title">作品基本信息</div>
+          <div class="info-row"><span class="info-label">作品名称</span><span class="info-value">${escapeHtml(item?.workName || '—')}</span></div>
+          <div class="info-row"><span class="info-label">作品类型</span><span class="info-value">${escapeHtml(workTypeName)}</span></div>
+          <div style="margin-top: 10px;">
+            <div class="file-preview-label">作品文件</div>
+            ${renderFileList(item?.workFiles, { allowView: true, allowDownload: true })}
+          </div>
+        </div>
+
+        <div class="info-group">
+          <div class="info-group-title">作者信息</div>
+          ${authorsTable}
+        </div>
+
+        <div class="info-group">
+          <div class="info-group-title">著作权人信息</div>
+          ${holdersCards}
+        </div>
+
+        <div class="info-group">
+          <div class="info-group-title">版权登记结果</div>
+          ${registrationResultHtml}
+        </div>
+
+        <div class="info-group">
+          <div class="info-group-title">区块链存证结果</div>
+          ${evidenceHtml}
+        </div>
+      `;
+    }
+
+    function renderEvidenceOnlyDetail(item) {
+      const workTypeName = mapBy(WORK_TYPE_MAP, item?.workTypeCd);
+      const ev = item?.evidence || {};
+      return `
+        <div class="info-group">
+          <div class="info-group-title">作品信息</div>
+          <div class="info-row"><span class="info-label">作品名称</span><span class="info-value">${escapeHtml(item?.workName || '—')}</span></div>
+          <div class="info-row"><span class="info-label">作品类型</span><span class="info-value">${escapeHtml(workTypeName)}</span></div>
+          <div style="margin-top: 10px;">
+            <div class="file-preview-label">作品文件</div>
+            ${renderFileList(item?.workFiles, { allowView: true, allowDownload: true })}
+          </div>
+        </div>
+
+        <div class="info-group">
+          <div class="info-group-title">区块链存证信息</div>
+          <div class="info-row"><span class="info-label">上链时间</span><span class="info-value">${escapeHtml(ev?.onChainTime || '—')}</span></div>
+          <div class="info-row"><span class="info-label">文创链上链哈希</span><span class="info-value info-mono" style="word-break:break-all;">${escapeHtml(ev?.wclHash || '—')}</span></div>
+          <div class="info-row"><span class="info-label">天平链存证哈希</span><span class="info-value info-mono" style="word-break:break-all;">${escapeHtml(ev?.tpHash || '—')}</span></div>
+          <div class="info-row"><span class="info-label">授时时间戳</span><span class="info-value">${escapeHtml(ev?.tsaTimestamp || '—')}</span></div>
+          <div class="info-row"><span class="info-label">时间戳返回信息</span><span class="info-value">${escapeHtml(ev?.tsaMsg || '—')}</span></div>
+          <div class="info-row">
+            <span class="info-label">存证证书</span>
+            <span class="info-value">
+              ${ev?.evidenceCertFile?.name ? `
+                <button class="mini-btn" onclick="openPdfPreview('${escapeHtml(ev.evidenceCertFile.name)}')">查看证书</button>
+                <button class="mini-btn" onclick="triggerDownload('${escapeHtml(ev.evidenceCertFile.name)}')">下载证书</button>
+              ` : '—'}
+            </span>
+          </div>
+        </div>
+      `;
+    }
+
+    // ===== Tab 切换 =====
+    function switchTab(tab) {
+      document.querySelectorAll('.search-tab').forEach(el => el.classList.remove('active'));
+      document.querySelectorAll('.search-form').forEach(el => el.classList.remove('active'));
+      document.querySelector(`.search-tab[data-tab="${tab}"]`).classList.add('active');
+      document.getElementById(`tab-${tab}`).classList.add('active');
+      const hint = document.querySelector('.search-hint');
+      if (hint) {
+        hint.textContent = tab === 'idcard'
+          ? '请输入完整的身份证号码，系统将返回该证件人名下所有登记作品'
+          : '请输入受理号、证书编号或权利人信息';
+      }
+      notifyPrototypeFrame(tab === 'cert' ? 'cert-query' : 'idcard-query');
+    }
+
+    // ===== 查询操作 =====
+    function doSearch() {
+      const heroSection = document.getElementById('heroSection');
+      const resultsSection = document.getElementById('resultsSection');
+      const noResults = document.getElementById('noResults');
+
+      // 重置状态
+      heroSection.style.flex = '0 0 auto';
+      heroSection.style.padding = '40px 24px 32px';
+      noResults.classList.remove('visible');
+
+      const completed = mockData.filter(item => {
+        if (item?.kind === 'registration') return item?.progress?.statusCd === 1000;
+        if (item?.kind === 'evidence') return !!(item?.evidence?.onChainTime);
+        return false;
+      });
+
+      if (!completed.length) {
+        resultsSection.classList.remove('visible');
+        noResults.classList.add('visible');
+        notifyPrototypeFrame('results');
+        return;
+      }
+
+      renderResults(completed);
+      resultsSection.classList.add('visible');
+      notifyPrototypeFrame('results');
+    }
+
+    // ===== 渲染结果表格 =====
+    function renderResults(data) {
+      const tbody = document.getElementById('resultsBody');
+      document.getElementById('resultCount').textContent = data.length;
+
+      tbody.innerHTML = data.map((item) => {
+        const workTypeName = mapBy(WORK_TYPE_MAP, item?.workTypeCd);
+        const authorsText = item?.kind === 'registration' ? joinNameList(item?.authors, 'authorName') : '—';
+        const holdersText = item?.kind === 'registration' ? joinNameList(item?.holders, 'holderName') : '—';
+        const regCertNo = item?.kind === 'registration' ? (item?.result?.regCertNo || '—') : '—';
+        const regDoneTime = item?.kind === 'registration' ? (item?.result?.issuedAt || '—') : '—';
+        const onChainTime = item?.kind === 'registration' ? (item?.evidence?.onChainTime || '—') : (item?.evidence?.onChainTime || '—');
+        return `
+          <tr>
+            <td>${escapeHtml(item?.workName || '—')}</td>
+            <td>${escapeHtml(workTypeName)}</td>
+            <td>${escapeHtml(holdersText)}</td>
+            <td>${escapeHtml(authorsText)}</td>
+            <td><span class="info-mono">${escapeHtml(regCertNo)}</span></td>
+            <td>${escapeHtml(regDoneTime)}</td>
+            <td>${escapeHtml(onChainTime)}</td>
+            <td><button class="detail-btn" onclick="openDetail(${Number(item?.id)})">查看详情</button></td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    // ===== 打开详情弹窗 =====
+    function openDetail(id, fromPrototypePage) {
+      const item = mockData.find(d => d.id === id);
+      if (!item) return;
+      const body = document.getElementById('modalBody');
+      const isRegistration = item?.kind === 'registration';
+      document.getElementById('modalTitle').textContent = isRegistration ? '版权登记详情' : '存证详情';
+      body.innerHTML = isRegistration ? renderRegistrationDetail(item) : renderEvidenceOnlyDetail(item);
+
+      document.getElementById('modalOverlay').classList.add('visible');
+      document.body.style.overflow = 'hidden';
+      const detailPage = isRegistration ? 'results-detail-registered' : 'results-detail-certified';
+      document.getElementById('modalOverlay').dataset.returnPage = 'results';
+      if (isInPrototypeFrame() && !fromPrototypePage && window.location.hash !== '#' + detailPage) {
+        history.replaceState(null, '', window.location.pathname + '#' + detailPage);
+      }
+      notifyPrototypeFrame(detailPage);
+    }
+
+    // ===== 关闭弹窗 =====
+    function closeModal(skipHistory) {
+      document.getElementById('modalOverlay').classList.remove('visible');
+      document.body.style.overflow = '';
+      if (isInPrototypeFrame() && !skipHistory && ['#results-detail-registered', '#results-detail-certified'].includes(window.location.hash)) {
+        history.replaceState(null, '', window.location.pathname + '#results');
+        notifyPrototypeFrame('results');
+      }
+    }
+    function closeModalOutside(e) {
+      if (e.target === document.getElementById('modalOverlay')) closeModal();
+    }
+
+    // ===== 复制功能 =====
+    function copyText(text) {
+      navigator.clipboard.writeText(text).then(() => {
+        showToast('已复制');
+      }).catch(() => {
+        // 降级方案
+        const ta = document.createElement('textarea');
+        ta.value = text;
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand('copy');
+        document.body.removeChild(ta);
+        showToast('已复制');
+      });
+    }
+
+    // ===== Toast 提示 =====
+    function showToast(msg) {
+      const toast = document.getElementById('toast');
+      toast.textContent = msg;
+      toast.classList.add('visible');
+      setTimeout(() => toast.classList.remove('visible'), 2000);
+    }
+    // ===== 初始化 =====
+    bootPrototypeFrame();
+  </script>
+</body>
+</html>
