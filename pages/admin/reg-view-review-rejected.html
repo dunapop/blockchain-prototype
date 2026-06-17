@@ -51,6 +51,11 @@
 <svg class="nav-icon" fill="none" height="16" viewbox="0 0 16 16" width="16"><rect height="11" rx="2" stroke="currentColor" stroke-width="1.4" width="10" x="3" y="2.5"></rect><path d="M5.5 5.5h5M5.5 8h5M5.5 10.5h3.5" stroke="currentColor" stroke-linecap="round" stroke-width="1.2"></path></svg> 版权登记
           </button>
 </div>
+<div class="nav-group">
+<button class="nav-item" data-page="owner-management" onclick="navigateTo('owner-management')">
+<svg class="nav-icon" fill="none" height="16" viewbox="0 0 16 16" width="16"><circle cx="8" cy="5" r="2.5" stroke="currentColor" stroke-width="1.4"></circle><path d="M3.5 13c.7-2.3 2.2-3.5 4.5-3.5s3.8 1.2 4.5 3.5" stroke="currentColor" stroke-linecap="round" stroke-width="1.4"></path></svg> 著作权人管理
+          </button>
+</div>
 </nav>
 </aside>
 <!-- 主内容 -->
@@ -467,7 +472,10 @@
 <div class="form-card-title">著作权人信息</div>
 <div id="nrHoldersContainer"></div>
 <div class="form-error" id="nrHoldersError"></div>
-<button class="add-holder-btn" onclick="nrAddHolderCard()">+ 添加著作权人</button>
+<div style="display:flex;gap:16px;align-items:center;flex-wrap:wrap;">
+<button class="add-holder-btn" onclick="nrAddHolderCard()">+ 添加一行选择</button>
+<button class="add-holder-btn" onclick="nrCreateOwnerFromRegistration()">+ 新增著作权人</button>
+</div>
 </div>
 <div class="form-card">
 <div class="form-card-title">权利信息</div>
@@ -588,6 +596,147 @@
 <button class="btn-secondary" onclick="nrCancel()">取消</button>
 <button class="btn-secondary" onclick="nrSave()">保存</button>
 <button class="btn-primary-sm" onclick="nrSubmit()">提交</button>
+</div>
+</div>
+<!-- ===== 著作权人管理列表页面 ===== -->
+<div class="page" id="page-owner-management">
+<div class="page-title-row">
+<div class="page-title-left">
+<h3 class="section-title">著作权人管理</h3>
+</div>
+<div class="page-title-actions">
+<button class="list-action-btn primary" onclick="ownerAdd()">新增著作权人</button>
+</div>
+</div>
+<div class="filter-bar">
+<input class="filter-input sm" id="ownerFilterName" placeholder="著作权人名称"/>
+<input class="filter-input sm" id="ownerFilterIdNo" placeholder="证件号码"/>
+<select class="filter-select" id="ownerFilterType">
+<option value="all">全部类型</option>
+<option>自然人</option>
+<option>企业法人</option>
+<option>机关法人</option>
+<option>事业单位法人</option>
+<option>社会团体法人</option>
+<option>其他组织</option>
+</select>
+<button class="filter-btn" onclick="filterOwners()">查询</button>
+<button class="filter-btn secondary" onclick="resetOwnerFilters()">重置</button>
+</div>
+<div class="data-card">
+<table class="data-table">
+<thead>
+<tr><th>著作权人名称</th><th>著作权人类型</th><th>证件类型</th><th>证件号码</th><th>署名情况</th><th>所在地区</th><th>更新时间</th><th>操作</th></tr>
+</thead>
+<tbody id="ownerTableBody"></tbody>
+</table>
+<div class="pagination-bar">
+<span id="ownerTableCount">共 0 条</span>
+<div class="pagination-actions"><button class="page-btn">上一页</button><button class="page-btn active">1</button><button class="page-btn">下一页</button></div>
+</div>
+</div>
+</div>
+<!-- ===== 新增 / 编辑著作权人页面 ===== -->
+<div class="page nr-page" id="page-owner-edit">
+<div class="page-title-row">
+<div class="page-title-left">
+<button class="page-back-btn" onclick="navigateTo('owner-management')">返回</button>
+<h3 class="section-title" id="ownerEditTitle">新增著作权人</h3>
+</div>
+<div class="page-title-actions"></div>
+</div>
+<div class="form-card">
+<div class="form-card-title">著作权人信息</div>
+<div class="form-grid">
+<div class="form-group-inline">
+<label>著作权人类型 <span class="required">*</span></label>
+<select id="ownerEditType" onchange="ownerChangeType(this.value)">
+<option>自然人</option>
+<option>企业法人</option>
+<option>机关法人</option>
+<option>事业单位法人</option>
+<option>社会团体法人</option>
+<option>其他组织</option>
+</select>
+</div>
+<div class="form-group-inline owner-person-field">
+<label>著作权人姓名 <span class="required">*</span></label>
+<input id="ownerPersonName" placeholder="请输入著作权人姓名" type="text"/>
+</div>
+<div class="form-group-inline owner-person-field">
+<label>身份证号码 <span class="required">*</span></label>
+<input id="ownerPersonIdNo" placeholder="请输入身份证号码" type="text"/>
+</div>
+<div class="form-group-inline owner-org-field">
+<label>著作权人名称 <span class="required">*</span></label>
+<input id="ownerOrgName" placeholder="请输入著作权人名称" type="text"/>
+</div>
+<div class="form-group-inline owner-org-field">
+<label>统一社会信用代码或登记证件号码 <span class="required">*</span></label>
+<input id="ownerOrgIdNo" placeholder="请输入证件号码" type="text"/>
+</div>
+<div class="form-group-inline owner-org-field">
+<label>法定代表人或负责人姓名 <span class="required">*</span></label>
+<input id="ownerOrgRepName" placeholder="请输入法定代表人或负责人姓名" type="text"/>
+</div>
+<div class="form-group-inline full-width owner-person-field">
+<label>身份证正面 <span class="required">*</span></label>
+<div class="upload-zone" onclick="showToast('上传身份证正面（模拟）')">
+<div class="upload-zone-text">上传身份证正面</div>
+<div class="upload-zone-hint">字段口径同新增登记页面</div>
+</div>
+<div class="file-list visible" id="ownerPersonIdFrontList"></div>
+</div>
+<div class="form-group-inline full-width owner-person-field">
+<label>身份证背面 <span class="required">*</span></label>
+<div class="upload-zone" onclick="showToast('上传身份证背面（模拟）')">
+<div class="upload-zone-text">上传身份证背面</div>
+<div class="upload-zone-hint">字段口径同新增登记页面</div>
+</div>
+<div class="file-list visible" id="ownerPersonIdBackList"></div>
+</div>
+<div class="form-group-inline full-width owner-org-field">
+<label id="ownerLicenseLabel">营业执照 <span class="required">*</span></label>
+<div class="upload-zone" onclick="showToast('上传证件文件（模拟）')">
+<div class="upload-zone-text">上传证件文件</div>
+<div class="upload-zone-hint" id="ownerLicenseHint">营业执照</div>
+</div>
+<div class="file-list visible" id="ownerOrgLicenseList"></div>
+</div>
+<div class="form-group-inline">
+<label>署名情况 <span class="required">*</span></label>
+<input id="ownerSign" placeholder="请输入该著作权人在作品中的署名" type="text"/>
+</div>
+<div class="form-group-inline">
+<label>所在国家 <span class="required">*</span></label>
+<input id="ownerCountry" type="text" value="中国"/>
+</div>
+<div class="form-group-inline">
+<label>所在省 <span class="required">*</span></label>
+<select id="ownerProvince" onchange="ownerRenderCityOptions(this.value)">
+<option value="">请选择所在省</option>
+<option>四川省</option>
+<option>重庆市</option>
+<option>北京市</option>
+</select>
+</div>
+<div class="form-group-inline">
+<label>所在市 <span class="required">*</span></label>
+<select id="ownerCity"><option value="">请选择所在市</option></select>
+</div>
+<div class="form-group-inline full-width">
+<label>其他文件</label>
+<div class="upload-zone" onclick="showToast('上传其他文件（模拟）')">
+<div class="upload-zone-text">上传其他文件</div>
+<div class="upload-zone-hint">支持多个文件上传</div>
+</div>
+<div class="file-list visible" id="ownerOtherFilesList"></div>
+</div>
+</div>
+</div>
+<div class="page-fixed-actions">
+<button class="btn-secondary" onclick="navigateTo('owner-management')">取消</button>
+<button class="btn-primary-sm" onclick="ownerSave()">保存</button>
 </div>
 </div>
 <!-- ===== 登记记录页面 ===== -->
@@ -815,6 +964,8 @@
         'reg-records': 'pages/admin/reg-records.html',
         'new-registration': 'pages/admin/new-registration.html',
         'new-registration-from-cert': 'pages/admin/new-registration.html',
+        'owner-management': 'pages/admin/owner-management.html',
+        'owner-edit': 'pages/admin/owner-edit.html',
         'reg-record-detail': 'pages/admin/reg-view.html',
         'reg-view-pending-upload': 'pages/admin/reg-view.html',
         'reg-view-initial-reviewing': 'pages/admin/reg-view-initial-reviewing.html',
@@ -990,6 +1141,8 @@
       const target = document.getElementById('page-' + page);
       if (target) target.classList.add('active');
       if (page === 'add-record') setTimeout(function(){ setRegistrationFromCertMode(false); toggleAddRecordFields(); }, 0);
+      if (page === 'owner-management') setTimeout(function(){ renderOwners(); }, 0);
+      if (page === 'owner-edit') setTimeout(function(){ renderOwnerEdit(); }, 0);
 
       const pageToMenu = {
         'admin-flow': 'cert-records',
@@ -1001,6 +1154,8 @@
         'cert-work-upload-modal': 'cert-records',
         'new-registration': 'reg-records',
         'new-registration-from-cert': 'reg-records',
+        'owner-management': 'owner-management',
+        'owner-edit': 'owner-management',
         'reg-records': 'reg-records',
         'reg-record-detail': 'reg-records',
         'reg-view-pending-upload': 'reg-records',
@@ -1325,180 +1480,109 @@
       nrRenderAuthors();
     }
 
+    function ownerRecordToNrHolder(owner) {
+      const o = owner || {};
+      const isPerson = (o.type || '自然人') === '自然人';
+      return {
+        ownerKey: o.idNo || o.name || '',
+        type: o.type || '自然人',
+        person: {
+          name: isPerson ? (o.name || '') : '',
+          idNo: isPerson ? (o.idNo || '') : '',
+          idFront: isPerson ? (o.idFront || null) : null,
+          idBack: isPerson ? (o.idBack || null) : null,
+          sign: isPerson ? (o.sign || o.name || '') : '',
+          country: o.country || '中国',
+          province: o.province || '',
+          city: o.city || '',
+          otherFiles: isPerson ? (o.otherFiles || []) : []
+        },
+        org: {
+          name: isPerson ? '' : (o.name || ''),
+          idNo: isPerson ? '' : (o.idNo || ''),
+          repName: isPerson ? '' : (o.repName || ''),
+          licenseFile: isPerson ? null : (o.licenseFile || null),
+          sign: isPerson ? '' : (o.sign || o.name || ''),
+          country: o.country || '中国',
+          province: o.province || '',
+          city: o.city || '',
+          otherFiles: isPerson ? [] : (o.otherFiles || [])
+        }
+      };
+    }
+
+    function nrGetHolderKey(holder) {
+      if (!holder) return '';
+      if (holder.ownerKey) return holder.ownerKey;
+      if (holder.type === '自然人') return holder.person && (holder.person.idNo || holder.person.name) || '';
+      return holder.org && (holder.org.idNo || holder.org.name) || '';
+    }
+
+    function nrHolderSummary(holder) {
+      if (!holder || !nrGetHolderKey(holder)) return '<div class="readonly-tip visible" style="margin:12px 0 0;">请选择著作权人；如果没有可选项，请点击“新增著作权人”。</div>';
+      const isPerson = holder.type === '自然人';
+      const data = isPerson ? holder.person : holder.org;
+      const files = [];
+      if (isPerson) {
+        if (data.idFront) files.push('身份证正面：' + data.idFront.name);
+        if (data.idBack) files.push('身份证背面：' + data.idBack.name);
+      } else if (data.licenseFile) {
+        files.push('证件文件：' + data.licenseFile.name);
+      }
+      return `<div class="detail-info-group" style="margin:12px 0 0;">
+        <div class="detail-info-row"><span class="detail-info-label">著作权人类型</span><span class="detail-info-value">${holder.type || '—'}</span></div>
+        <div class="detail-info-row"><span class="detail-info-label">著作权人名称</span><span class="detail-info-value">${escapeHtml(data.name || '—')}</span></div>
+        <div class="detail-info-row"><span class="detail-info-label">证件号码</span><span class="detail-info-value table-mono">${escapeHtml(data.idNo || '—')}</span></div>
+        ${!isPerson ? `<div class="detail-info-row"><span class="detail-info-label">法定代表人或负责人</span><span class="detail-info-value">${escapeHtml(data.repName || '—')}</span></div>` : ''}
+        <div class="detail-info-row"><span class="detail-info-label">署名情况</span><span class="detail-info-value">${escapeHtml(data.sign || '—')}</span></div>
+        <div class="detail-info-row"><span class="detail-info-label">所在地区</span><span class="detail-info-value">${escapeHtml([data.country, data.province, data.city].filter(Boolean).join(' / ') || '—')}</span></div>
+        <div class="detail-info-row"><span class="detail-info-label">附件</span><span class="detail-info-value">${files.length ? files.map(escapeHtml).join('<br>') : '—'}</span></div>
+      </div>`;
+    }
+
     function nrRenderHolders() {
+      ensureOwnerRecords();
       const container = document.getElementById('nrHoldersContainer');
       if (!container) return;
-      if (!nrState.holders || nrState.holders.length === 0) {
-        nrState.holders = [
-          {
-            type: '自然人',
-            person: { name: '', idNo: '', idFront: null, idBack: null, sign: '', country: '中国', province: '', city: '', otherFiles: [] },
-            org: { name: '', idNo: '', repName: '', licenseFile: null, sign: '', country: '中国', province: '', city: '', otherFiles: [] }
-          }
-        ];
-      }
+      if (!nrState.holders || nrState.holders.length === 0) nrState.holders = [{ ownerKey: '', type: '自然人', person: {}, org: {} }];
+      const options = ownerRecords.map(o => {
+        const key = o.idNo || o.name || '';
+        const label = [o.name, o.type, o.idNo].filter(Boolean).join(' / ');
+        return { key, label };
+      });
       container.innerHTML = nrState.holders.map((h, idx) => {
-        const isPerson = h.type === '自然人';
-        const licenseLabelMap = {
-          '企业法人': '营业执照',
-          '机关法人': '机关法人证明',
-          '事业单位法人': '事业单位法人证书',
-          '社会团体法人': '社会团体法人登记证书',
-          '其他组织': '其他组织有效登记证书'
-        };
-        const licenseLabel = licenseLabelMap[h.type] || '证件文件';
-        const provinceOptions = ['','四川省','重庆市','北京市'].map(p => `<option value="${p}" ${((isPerson ? h.person.province : h.org.province) === p) ? 'selected' : ''}>${p || '请选择所在省'}</option>`).join('');
-        const currentProvince = isPerson ? h.person.province : h.org.province;
-        const cityList = currentProvince && regionData[currentProvince] ? regionData[currentProvince] : [];
-        const currentCity = isPerson ? h.person.city : h.org.city;
-        const cityOptions = [''].concat(cityList).map(c => `<option value="${c}" ${(currentCity === c) ? 'selected' : ''}>${c || '请选择所在市'}</option>`).join('');
-        const otherFiles = isPerson ? h.person.otherFiles : h.org.otherFiles;
+        const selectedKey = nrGetHolderKey(h);
+        const selectOptions = '<option value="">请选择著作权人</option>' + options.map(o => `<option value="${escapeHtml(o.key)}" ${selectedKey === o.key ? 'selected' : ''}>${escapeHtml(o.label)}</option>`).join('');
         return `<div class="nr-card">
           <div class="nr-card-head">
             <div class="nr-card-title">著作权人${idx + 1}</div>
             <button class="nr-card-remove" onclick="nrRemoveHolderCard(${idx})">删除</button>
           </div>
           <div class="form-grid">
-            <div class="form-group-inline">
-              <label>著作权人类型 <span class="required">*</span></label>
-              <select onchange="nrChangeHolderType(${idx}, this.value)">
-                <option ${h.type === '自然人' ? 'selected' : ''}>自然人</option>
-                <option ${h.type === '企业法人' ? 'selected' : ''}>企业法人</option>
-                <option ${h.type === '机关法人' ? 'selected' : ''}>机关法人</option>
-                <option ${h.type === '事业单位法人' ? 'selected' : ''}>事业单位法人</option>
-                <option ${h.type === '社会团体法人' ? 'selected' : ''}>社会团体法人</option>
-                <option ${h.type === '其他组织' ? 'selected' : ''}>其他组织</option>
-              </select>
-              <div class="form-error" id="nrHolderTypeError${idx}"></div>
+            <div class="form-group-inline full-width">
+              <label>选择著作权人 <span class="required">*</span></label>
+              <select onchange="nrSelectHolder(${idx}, this.value)">${selectOptions}</select>
+              <div class="form-error" id="nrHolderSelectError${idx}"></div>
             </div>
-            ${isPerson
-              ? `<div class="form-group-inline">
-                  <label>著作权人姓名 <span class="required">*</span></label>
-                  <input type="text" value="${(h.person.name || '').replaceAll('"','&quot;')}" placeholder="请输入著作权人姓名" oninput="nrUpdateHolder(${idx}, 'person', 'name', this.value)">
-                  <div class="form-error" id="nrHolderPersonNameError${idx}"></div>
-                </div>
-                <div class="form-group-inline">
-                  <label>身份证号码 <span class="required">*</span></label>
-                  <input type="text" value="${(h.person.idNo || '').replaceAll('"','&quot;')}" placeholder="请输入身份证号码" oninput="nrUpdateHolder(${idx}, 'person', 'idNo', this.value)">
-                  <div class="form-error" id="nrHolderPersonIdNoError${idx}"></div>
-                </div>
-                <div class="form-group-inline full-width">
-                  <label>身份证正面 <span class="required">*</span></label>
-                  <div class="upload-zone" onclick="document.getElementById('nrHolder${idx}IdFront').click()">
-                    <div class="upload-zone-text">上传身份证正面</div>
-                    <div class="upload-zone-hint">支持图片或文件上传</div>
-                    <input type="file" id="nrHolder${idx}IdFront" style="display:none" onchange="nrHolderAddFile(${idx}, 'person', 'idFront', this.files)">
-                  </div>
-                  <div class="form-error" id="nrHolderPersonIdFrontError${idx}"></div>
-                  <div class="file-list" id="nrHolder${idx}IdFrontList" style="display:none;"></div>
-                </div>
-                <div class="form-group-inline full-width">
-                  <label>身份证背面 <span class="required">*</span></label>
-                  <div class="upload-zone" onclick="document.getElementById('nrHolder${idx}IdBack').click()">
-                    <div class="upload-zone-text">上传身份证背面</div>
-                    <div class="upload-zone-hint">支持图片或文件上传</div>
-                    <input type="file" id="nrHolder${idx}IdBack" style="display:none" onchange="nrHolderAddFile(${idx}, 'person', 'idBack', this.files)">
-                  </div>
-                  <div class="form-error" id="nrHolderPersonIdBackError${idx}"></div>
-                  <div class="file-list" id="nrHolder${idx}IdBackList" style="display:none;"></div>
-                </div>
-                <div class="form-group-inline">
-                  <label>署名情况 <span class="required">*</span></label>
-                  <input type="text" value="${(h.person.sign || '').replaceAll('"','&quot;')}" placeholder="请输入该著作权人在作品中的署名" oninput="nrUpdateHolder(${idx}, 'person', 'sign', this.value)">
-                  <div class="form-error" id="nrHolderPersonSignError${idx}"></div>
-                </div>
-                <div class="form-group-inline">
-                  <label>所在国家 <span class="required">*</span></label>
-                  <input type="text" value="${(h.person.country || '中国').replaceAll('"','&quot;')}" oninput="nrUpdateHolder(${idx}, 'person', 'country', this.value)">
-                  <div class="form-error" id="nrHolderPersonCountryError${idx}"></div>
-                </div>
-                <div class="form-group-inline">
-                  <label>所在省 <span class="required">*</span></label>
-                  <select onchange="nrUpdateHolderProvince(${idx}, 'person', this.value)">${provinceOptions}</select>
-                  <div class="form-error" id="nrHolderPersonProvinceError${idx}"></div>
-                </div>
-                <div class="form-group-inline">
-                  <label>所在市 <span class="required">*</span></label>
-                  <select onchange="nrUpdateHolder(${idx}, 'person', 'city', this.value)">${cityOptions}</select>
-                  <div class="form-error" id="nrHolderPersonCityError${idx}"></div>
-                </div>
-                <div class="form-group-inline full-width">
-                  <label>其他文件</label>
-                  <div class="upload-zone" onclick="document.getElementById('nrHolder${idx}OtherFiles').click()">
-                    <div class="upload-zone-text">上传其他文件</div>
-                    <div class="upload-zone-hint">支持多个文件上传</div>
-                    <input type="file" id="nrHolder${idx}OtherFiles" multiple style="display:none" onchange="nrHolderAddFiles(${idx}, 'person', 'otherFiles', this.files)">
-                  </div>
-                  <div class="file-list" id="nrHolder${idx}OtherFilesList" style="display:none;"></div>
-                </div>`
-              : `<div class="form-group-inline">
-                  <label>著作权人名称 <span class="required">*</span></label>
-                  <input type="text" value="${(h.org.name || '').replaceAll('"','&quot;')}" placeholder="请输入著作权人名称" oninput="nrUpdateHolder(${idx}, 'org', 'name', this.value)">
-                  <div class="form-error" id="nrHolderOrgNameError${idx}"></div>
-                </div>
-                <div class="form-group-inline">
-                  <label>统一社会信用代码或登记证件号码 <span class="required">*</span></label>
-                  <input type="text" value="${(h.org.idNo || '').replaceAll('"','&quot;')}" placeholder="请输入证件号码" oninput="nrUpdateHolder(${idx}, 'org', 'idNo', this.value)">
-                  <div class="form-error" id="nrHolderOrgIdNoError${idx}"></div>
-                </div>
-                <div class="form-group-inline">
-                  <label>法定代表人或负责人姓名 <span class="required">*</span></label>
-                  <input type="text" value="${(h.org.repName || '').replaceAll('"','&quot;')}" placeholder="请输入法定代表人或负责人姓名" oninput="nrUpdateHolder(${idx}, 'org', 'repName', this.value)">
-                  <div class="form-error" id="nrHolderOrgRepNameError${idx}"></div>
-                </div>
-                <div class="form-group-inline full-width">
-                  <label>${licenseLabel} <span class="required">*</span></label>
-                  <div class="upload-zone" onclick="document.getElementById('nrHolder${idx}License').click()">
-                    <div class="upload-zone-text">上传证件文件</div>
-                    <div class="upload-zone-hint">${licenseLabel}</div>
-                    <input type="file" id="nrHolder${idx}License" style="display:none" onchange="nrHolderAddFile(${idx}, 'org', 'licenseFile', this.files)">
-                  </div>
-                  <div class="form-error" id="nrHolderOrgLicenseError${idx}"></div>
-                  <div class="file-list" id="nrHolder${idx}LicenseList" style="display:none;"></div>
-                </div>
-                <div class="form-group-inline">
-                  <label>署名情况 <span class="required">*</span></label>
-                  <input type="text" value="${(h.org.sign || '').replaceAll('"','&quot;')}" placeholder="请输入该著作权人在作品中的署名" oninput="nrUpdateHolder(${idx}, 'org', 'sign', this.value)">
-                  <div class="form-error" id="nrHolderOrgSignError${idx}"></div>
-                </div>
-                <div class="form-group-inline">
-                  <label>所在国家 <span class="required">*</span></label>
-                  <input type="text" value="${(h.org.country || '中国').replaceAll('"','&quot;')}" oninput="nrUpdateHolder(${idx}, 'org', 'country', this.value)">
-                  <div class="form-error" id="nrHolderOrgCountryError${idx}"></div>
-                </div>
-                <div class="form-group-inline">
-                  <label>所在省 <span class="required">*</span></label>
-                  <select onchange="nrUpdateHolderProvince(${idx}, 'org', this.value)">${provinceOptions}</select>
-                  <div class="form-error" id="nrHolderOrgProvinceError${idx}"></div>
-                </div>
-                <div class="form-group-inline">
-                  <label>所在市 <span class="required">*</span></label>
-                  <select onchange="nrUpdateHolder(${idx}, 'org', 'city', this.value)">${cityOptions}</select>
-                  <div class="form-error" id="nrHolderOrgCityError${idx}"></div>
-                </div>
-                <div class="form-group-inline full-width">
-                  <label>其他文件</label>
-                  <div class="upload-zone" onclick="document.getElementById('nrHolder${idx}OtherFiles').click()">
-                    <div class="upload-zone-text">上传其他文件</div>
-                    <div class="upload-zone-hint">支持多个文件上传</div>
-                    <input type="file" id="nrHolder${idx}OtherFiles" multiple style="display:none" onchange="nrHolderAddFiles(${idx}, 'org', 'otherFiles', this.files)">
-                  </div>
-                  <div class="file-list" id="nrHolder${idx}OtherFilesList" style="display:none;"></div>
-                </div>`}
           </div>
+          ${nrHolderSummary(h)}
         </div>`;
       }).join('');
+    }
 
-      nrState.holders.forEach((h, idx) => {
-        if (h.type === '自然人') {
-          nrRenderFileList(`nrHolder${idx}IdFrontList`, h.person.idFront ? [h.person.idFront] : [], () => `nrHolderRemoveFile(${idx},'person','idFront')`);
-          nrRenderFileList(`nrHolder${idx}IdBackList`, h.person.idBack ? [h.person.idBack] : [], () => `nrHolderRemoveFile(${idx},'person','idBack')`);
-          nrRenderFileList(`nrHolder${idx}OtherFilesList`, h.person.otherFiles || [], (fileIdx) => `nrHolderRemoveOtherFile(${idx},'person',${fileIdx})`);
-        } else {
-          nrRenderFileList(`nrHolder${idx}LicenseList`, h.org.licenseFile ? [h.org.licenseFile] : [], () => `nrHolderRemoveFile(${idx},'org','licenseFile')`);
-          nrRenderFileList(`nrHolder${idx}OtherFilesList`, h.org.otherFiles || [], (fileIdx) => `nrHolderRemoveOtherFile(${idx},'org',${fileIdx})`);
-        }
-      });
+    function nrSelectHolder(idx, key) {
+      ensureOwnerRecords();
+      const owner = ownerRecords.find(o => (o.idNo || o.name || '') === key);
+      nrState.holders[idx] = owner ? ownerRecordToNrHolder(owner) : { ownerKey: '', type: '自然人', person: {}, org: {} };
+      setError('nrHoldersError', '');
+      setError(`nrHolderSelectError${idx}`, '');
+      nrRenderHolders();
+    }
+
+    function nrCreateOwnerFromRegistration() {
+      ownerEditIndex = -1;
+      window.__ownerReturnToRegistration = true;
+      navigateTo('owner-edit');
     }
 
     function nrChangeHolderType(idx, val) {
@@ -1557,11 +1641,7 @@
     }
 
     function nrAddHolderCard() {
-      nrState.holders.push({
-        type: '自然人',
-        person: { name: '', idNo: '', idFront: null, idBack: null, sign: '', country: '中国', province: '', city: '', otherFiles: [] },
-        org: { name: '', idNo: '', repName: '', licenseFile: null, sign: '', country: '中国', province: '', city: '', otherFiles: [] }
-      });
+      nrState.holders.push({ ownerKey: '', type: '自然人', person: {}, org: {} });
       nrRenderHolders();
     }
 
@@ -1629,9 +1709,7 @@
       const clearAll = () => {
         ['nrWorkNameError','nrWorkTypeError','nrCertifierError','nrWorkFilesError','nrCreateDescError','nrRightAcquireError','nrBelongError','nrRightsOwnError','nrCreationNatureError','nrCompletionTimeError','nrCompletionPlaceError','nrFirstPublishTimeError','nrFirstPublishPlaceError','nrGuaranteeFileError','nrAuthorsError','nrHoldersError'].forEach(id => setError(id,''));
         nrState.authors.forEach((_, idx) => { setError(`nrAuthorNameError${idx}`,''); setError(`nrAuthorSignError${idx}`,''); });
-        nrState.holders.forEach((_, idx) => {
-          ['nrHolderTypeError','nrHolderPersonNameError','nrHolderPersonIdNoError','nrHolderPersonIdFrontError','nrHolderPersonIdBackError','nrHolderPersonSignError','nrHolderPersonCountryError','nrHolderPersonProvinceError','nrHolderPersonCityError','nrHolderOrgNameError','nrHolderOrgIdNoError','nrHolderOrgRepNameError','nrHolderOrgLicenseError','nrHolderOrgSignError','nrHolderOrgCountryError','nrHolderOrgProvinceError','nrHolderOrgCityError'].forEach(prefix => setError(`${prefix}${idx}`,''));
-        });
+        nrState.holders.forEach((_, idx) => setError(`nrHolderSelectError${idx}`,''));
       };
       if (showErrors) clearAll();
 
@@ -1660,26 +1738,12 @@
 
       if (!nrState.holders || nrState.holders.length === 0) { ok = false; if (showErrors) setError('nrHoldersError', '请添加著作权人'); }
       nrState.holders.forEach((h, idx) => {
-        if (h.type === '自然人') {
-          const p = h.person;
-          if (!(p.name || '').trim()) { ok = false; if (showErrors) setError(`nrHolderPersonNameError${idx}`, '请填写著作权人姓名'); }
-          if (!(p.idNo || '').trim()) { ok = false; if (showErrors) setError(`nrHolderPersonIdNoError${idx}`, '请填写身份证号码'); }
-          if (!p.idFront) { ok = false; if (showErrors) setError(`nrHolderPersonIdFrontError${idx}`, '请上传身份证正面'); }
-          if (!p.idBack) { ok = false; if (showErrors) setError(`nrHolderPersonIdBackError${idx}`, '请上传身份证背面'); }
-          if (!(p.sign || '').trim()) { ok = false; if (showErrors) setError(`nrHolderPersonSignError${idx}`, '请填写署名情况'); }
-          if (!(p.country || '').trim()) { ok = false; if (showErrors) setError(`nrHolderPersonCountryError${idx}`, '请填写所在国家'); }
-          if (!(p.province || '').trim()) { ok = false; if (showErrors) setError(`nrHolderPersonProvinceError${idx}`, '请选择所在省'); }
-          if (!(p.city || '').trim()) { ok = false; if (showErrors) setError(`nrHolderPersonCityError${idx}`, '请选择所在市'); }
-        } else {
-          const o = h.org;
-          if (!(o.name || '').trim()) { ok = false; if (showErrors) setError(`nrHolderOrgNameError${idx}`, '请填写著作权人名称'); }
-          if (!(o.idNo || '').trim()) { ok = false; if (showErrors) setError(`nrHolderOrgIdNoError${idx}`, '请填写证件号码'); }
-          if (!(o.repName || '').trim()) { ok = false; if (showErrors) setError(`nrHolderOrgRepNameError${idx}`, '请填写法定代表人或负责人姓名'); }
-          if (!o.licenseFile) { ok = false; if (showErrors) setError(`nrHolderOrgLicenseError${idx}`, '请上传证件文件'); }
-          if (!(o.sign || '').trim()) { ok = false; if (showErrors) setError(`nrHolderOrgSignError${idx}`, '请填写署名情况'); }
-          if (!(o.country || '').trim()) { ok = false; if (showErrors) setError(`nrHolderOrgCountryError${idx}`, '请填写所在国家'); }
-          if (!(o.province || '').trim()) { ok = false; if (showErrors) setError(`nrHolderOrgProvinceError${idx}`, '请选择所在省'); }
-          if (!(o.city || '').trim()) { ok = false; if (showErrors) setError(`nrHolderOrgCityError${idx}`, '请选择所在市'); }
+        if (!nrGetHolderKey(h)) {
+          ok = false;
+          if (showErrors) {
+            setError(`nrHolderSelectError${idx}`, '请选择著作权人');
+            setError('nrHoldersError', '请选择著作权人；如无可选项，请先新增著作权人');
+          }
         }
       });
 
@@ -3145,11 +3209,256 @@
       });
     }
 
+    // ===== 著作权人管理 =====
+    let ownerRecords = [];
+    let ownerEditIndex = -1;
+    function escapeHtml(value) {
+      return String(value ?? '').replace(/[&<>"']/g, s => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[s]));
+    }
+    function cloneOwnerFromHolder(holder, sourceWork) {
+      const isPerson = holder.type === '自然人';
+      return {
+        type: holder.type || '自然人',
+        name: holder.name || '',
+        idType: holder.idType || (isPerson ? '身份证' : '统一社会信用代码'),
+        idNo: holder.idNo || '',
+        repName: holder.repName || '',
+        sign: holder.sign || holder.name || '',
+        country: holder.country || '中国',
+        province: holder.province || '',
+        city: holder.city || '',
+        idFront: holder.idFront || null,
+        idBack: holder.idBack || null,
+        licenseFile: holder.licenseFile || null,
+        otherFiles: holder.otherFiles || [],
+        relatedWorks: sourceWork ? [sourceWork] : [],
+        updatedAt: '2024-06-12 10:30'
+      };
+    }
+    function ensureOwnerRecords() {
+      if (ownerRecords.length) return;
+      const seen = new Set();
+      ownerRecords = [];
+      (regRecords || []).forEach(r => {
+        (r.holders || []).forEach(h => {
+          const key = `${h.type || ''}-${h.idNo || h.name || ''}`;
+          if (seen.has(key)) return;
+          seen.add(key);
+          ownerRecords.push(cloneOwnerFromHolder(h, r.name));
+        });
+      });
+      if (!ownerRecords.length) {
+        ownerRecords.push({
+          type: '自然人',
+          name: '李秀芳',
+          idType: '身份证',
+          idNo: '510104198706017890',
+          repName: '',
+          sign: '李秀芳',
+          country: '中国',
+          province: '四川省',
+          city: '成都市',
+          idFront: { name: '身份证正面.jpg', size: 234567, mime: 'image/jpeg' },
+          idBack: { name: '身份证背面.jpg', size: 198765, mime: 'image/jpeg' },
+          licenseFile: null,
+          otherFiles: [],
+          relatedWorks: ['羌族刺绣纹样集'],
+          updatedAt: '2024-06-12 10:30'
+        });
+      }
+    }
+    function renderOwnerActions(index) {
+      return `<button class="table-btn" onclick="ownerEdit(${index})">编辑</button><button class="table-btn danger" onclick="ownerDelete(${index})">删除</button>`;
+    }
+    function renderOwners(list) {
+      ensureOwnerRecords();
+      const data = list || ownerRecords;
+      const tbody = document.getElementById('ownerTableBody');
+      if (!tbody) return;
+      tbody.innerHTML = data.map((o, idx) => `<tr>
+        <td>${escapeHtml(o.name || '—')}</td>
+        <td>${escapeHtml(o.type || '—')}</td>
+        <td>${escapeHtml(o.idType || (o.type === '自然人' ? '身份证' : '统一社会信用代码'))}</td>
+        <td class="table-mono">${escapeHtml(o.idNo || '—')}</td>
+        <td>${escapeHtml(o.sign || '—')}</td>
+        <td>${escapeHtml([o.country, o.province, o.city].filter(Boolean).join(' / ') || '—')}</td>
+        <td>${escapeHtml(o.updatedAt || '—')}</td>
+        <td>${renderOwnerActions(ownerRecords.indexOf(o) >= 0 ? ownerRecords.indexOf(o) : idx)}</td>
+      </tr>`).join('') || '<tr><td colspan="8">暂无著作权人数据</td></tr>';
+      const count = document.getElementById('ownerTableCount');
+      if (count) count.textContent = `共 ${data.length} 条`;
+    }
+    function filterOwners() {
+      ensureOwnerRecords();
+      const name = (document.getElementById('ownerFilterName')?.value || '').trim();
+      const idNo = (document.getElementById('ownerFilterIdNo')?.value || '').trim();
+      const type = document.getElementById('ownerFilterType')?.value || 'all';
+      const filtered = ownerRecords.filter(o =>
+        includesText(o.name, name)
+        && includesText(o.idNo, idNo)
+        && (type === 'all' || o.type === type)
+      );
+      renderOwners(filtered);
+    }
+    function resetOwnerFilters() {
+      const name = document.getElementById('ownerFilterName');
+      const idNo = document.getElementById('ownerFilterIdNo');
+      const type = document.getElementById('ownerFilterType');
+      if (name) name.value = '';
+      if (idNo) idNo.value = '';
+      if (type) type.value = 'all';
+      renderOwners(ownerRecords);
+    }
+    function ownerAdd() {
+      ownerEditIndex = -1;
+      navigateTo('owner-edit');
+    }
+    function ownerEdit(index) {
+      ownerEditIndex = index;
+      navigateTo('owner-edit');
+    }
+    function ownerDelete(index) {
+      const item = ownerRecords[index];
+      showConfirm(`确认删除“${item ? item.name : '该著作权人'}”？`, function(){
+        ownerRecords.splice(index, 1);
+        renderOwners();
+        showToast('已删除著作权人');
+      }, { title: '删除著作权人', okText: '删除' });
+    }
+    function ownerLicenseLabel(type) {
+      const map = {
+        '企业法人': '营业执照',
+        '机关法人': '机关法人证明',
+        '事业单位法人': '事业单位法人证书',
+        '社会团体法人': '社会团体法人登记证书',
+        '其他组织': '其他组织有效登记证书'
+      };
+      return map[type] || '证件文件';
+    }
+    function ownerFileText(file) {
+      if (!file) return '<span style="color:var(--color-text-tertiary);font-size:13px;">暂未上传</span>';
+      return `<div class="file-item"><div class="file-item-left"><span>${escapeHtml(file.name)}</span><span class="file-size">${typeof file.size === 'number' ? fmtFileSize(file.size) : ''}</span></div></div>`;
+    }
+    function ownerFilesText(files) {
+      const list = files || [];
+      if (!list.length) return '<span style="color:var(--color-text-tertiary);font-size:13px;">暂未上传</span>';
+      return list.map(f => ownerFileText(f)).join('');
+    }
+    function ownerRenderCityOptions(province, selectedCity) {
+      const city = document.getElementById('ownerCity');
+      if (!city) return;
+      const cities = province && regionData[province] ? regionData[province] : [];
+      city.innerHTML = [''].concat(cities).map(c => `<option value="${c}" ${(selectedCity === c) ? 'selected' : ''}>${c || '请选择所在市'}</option>`).join('');
+    }
+    function ownerChangeType(type) {
+      const isPerson = type === '自然人';
+      document.querySelectorAll('.owner-person-field').forEach(el => el.style.display = isPerson ? '' : 'none');
+      document.querySelectorAll('.owner-org-field').forEach(el => el.style.display = isPerson ? 'none' : '');
+      const label = ownerLicenseLabel(type);
+      const labelEl = document.getElementById('ownerLicenseLabel');
+      const hintEl = document.getElementById('ownerLicenseHint');
+      if (labelEl) labelEl.innerHTML = `${label} <span class="required">*</span>`;
+      if (hintEl) hintEl.textContent = label;
+    }
+    function renderOwnerEdit() {
+      ensureOwnerRecords();
+      const existing = ownerEditIndex >= 0 ? ownerRecords[ownerEditIndex] : null;
+      const o = existing || {
+        type: '自然人',
+        name: '',
+        idType: '身份证',
+        idNo: '',
+        repName: '',
+        sign: '',
+        country: '中国',
+        province: '',
+        city: '',
+        idFront: null,
+        idBack: null,
+        licenseFile: null,
+        otherFiles: [],
+        relatedWorks: [],
+        updatedAt: ''
+      };
+      const title = document.getElementById('ownerEditTitle');
+      if (title) title.textContent = existing ? '编辑著作权人' : '新增著作权人';
+      const type = document.getElementById('ownerEditType');
+      const personName = document.getElementById('ownerPersonName');
+      const personIdNo = document.getElementById('ownerPersonIdNo');
+      const orgName = document.getElementById('ownerOrgName');
+      const orgIdNo = document.getElementById('ownerOrgIdNo');
+      const orgRep = document.getElementById('ownerOrgRepName');
+      const sign = document.getElementById('ownerSign');
+      const country = document.getElementById('ownerCountry');
+      const province = document.getElementById('ownerProvince');
+      if (type) type.value = o.type || '自然人';
+      if (personName) personName.value = o.type === '自然人' ? (o.name || '') : '';
+      if (personIdNo) personIdNo.value = o.type === '自然人' ? (o.idNo || '') : '';
+      if (orgName) orgName.value = o.type !== '自然人' ? (o.name || '') : '';
+      if (orgIdNo) orgIdNo.value = o.type !== '自然人' ? (o.idNo || '') : '';
+      if (orgRep) orgRep.value = o.repName || '';
+      if (sign) sign.value = o.sign || '';
+      if (country) country.value = o.country || '中国';
+      if (province) province.value = o.province || '';
+      ownerRenderCityOptions(o.province || '', o.city || '');
+      const idFront = document.getElementById('ownerPersonIdFrontList');
+      const idBack = document.getElementById('ownerPersonIdBackList');
+      const license = document.getElementById('ownerOrgLicenseList');
+      const others = document.getElementById('ownerOtherFilesList');
+      if (idFront) idFront.innerHTML = ownerFileText(o.idFront);
+      if (idBack) idBack.innerHTML = ownerFileText(o.idBack);
+      if (license) license.innerHTML = ownerFileText(o.licenseFile);
+      if (others) others.innerHTML = ownerFilesText(o.otherFiles);
+      ownerChangeType(o.type || '自然人');
+    }
+    function ownerSave() {
+      const type = document.getElementById('ownerEditType')?.value || '自然人';
+      const isPerson = type === '自然人';
+      const name = isPerson ? document.getElementById('ownerPersonName')?.value : document.getElementById('ownerOrgName')?.value;
+      const idNo = isPerson ? document.getElementById('ownerPersonIdNo')?.value : document.getElementById('ownerOrgIdNo')?.value;
+      if (!(name || '').trim()) { showToast(isPerson ? '请填写著作权人姓名' : '请填写著作权人名称'); return; }
+      if (!(idNo || '').trim()) { showToast(isPerson ? '请填写身份证号码' : '请填写证件号码'); return; }
+      const existing = ownerEditIndex >= 0 ? ownerRecords[ownerEditIndex] : {};
+      const next = {
+        ...existing,
+        type,
+        name: (name || '').trim(),
+        idType: isPerson ? '身份证' : (type === '企业法人' ? '统一社会信用代码' : '登记证件号码'),
+        idNo: (idNo || '').trim(),
+        repName: isPerson ? '' : (document.getElementById('ownerOrgRepName')?.value || '').trim(),
+        sign: (document.getElementById('ownerSign')?.value || '').trim(),
+        country: (document.getElementById('ownerCountry')?.value || '').trim(),
+        province: document.getElementById('ownerProvince')?.value || '',
+        city: document.getElementById('ownerCity')?.value || '',
+        idFront: isPerson ? (existing.idFront || { name: '身份证正面.jpg', size: 234567, mime: 'image/jpeg' }) : null,
+        idBack: isPerson ? (existing.idBack || { name: '身份证背面.jpg', size: 198765, mime: 'image/jpeg' }) : null,
+        licenseFile: isPerson ? null : (existing.licenseFile || { name: `${ownerLicenseLabel(type)}.pdf`, size: 567890, mime: 'application/pdf' }),
+        otherFiles: existing.otherFiles || [],
+        relatedWorks: existing.relatedWorks || [],
+        updatedAt: '2024-06-12 16:20'
+      };
+      if (ownerEditIndex >= 0) ownerRecords[ownerEditIndex] = next;
+      else ownerRecords.unshift(next);
+      showToast(ownerEditIndex >= 0 ? '已保存著作权人' : '已新增著作权人');
+      if (window.__ownerReturnToRegistration) {
+        const selected = ownerRecordToNrHolder(next);
+        const blankIndex = (nrState.holders || []).findIndex(h => !nrGetHolderKey(h));
+        if (blankIndex >= 0) nrState.holders[blankIndex] = selected;
+        else nrState.holders.push(selected);
+        window.__ownerReturnToRegistration = false;
+        navigateTo('new-registration');
+        setTimeout(function(){ nrRenderHolders(); }, 0);
+        return;
+      }
+      navigateTo('owner-management');
+    }
+
     // ===== 初始化 =====
     bootPrototypeFrame();
     toggleSingleRegEnterpriseFields();
     toggleAddRecordFields();
     renderRegRecords(regRecords);
+    renderOwners();
     nrInit();
     ncInit();
   </script>
