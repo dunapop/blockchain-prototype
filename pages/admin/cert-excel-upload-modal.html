@@ -989,8 +989,7 @@
       }
     }
     function bootPrototypeFrame() {
-      if (!isInPrototypeFrame()) return;
-      document.body.classList.add('prototype-embedded');
+      if (isInPrototypeFrame()) document.body.classList.add('prototype-embedded');
       const page = getPrototypeTargetPage();
       setTimeout(function(){ navigateTo(page); }, 0);
     }
