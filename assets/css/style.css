@@ -16,7 +16,7 @@
   .tn:hover{background:#f4f4f5;color:#18181b}.tn.act{background:var(--tree-act-bg);color:var(--tree-act-text);box-shadow:var(--shadow)}.tn[data-d="2"]{padding-left:24px;font-size:12px}.tn[data-d="3"]{padding-left:38px;font-size:12px}
   .ti{width:18px;text-align:center;flex:0 0 18px}.tl{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.tree-row{display:flex;align-items:center;gap:4px}.tree-row .tn{flex:1;min-width:0}
   .toggle-mini{width:28px;height:34px;border:0;border-radius:8px;background:transparent;color:#a1a1aa;cursor:pointer;flex:0 0 28px}.toggle-mini:hover{background:#f4f4f5;color:#18181b}.toggle-mini .tc{display:inline-block;font-size:10px;transition:transform .15s}.toggle-mini.open .tc{transform:rotate(90deg)}
-  .tg{overflow:hidden;transition:max-height .2s ease}.tg.open{max-height:320px!important}
+  .tg{overflow:hidden;transition:max-height .2s ease}.tg.open{max-height:none!important}
   .tb{margin-left:auto;font-size:10px;padding:1px 6px;border-radius:999px;background:#f4f4f5;color:#a1a1aa}.act .tb{background:rgba(255,255,255,.16);color:#fff}
   .tree-foot{position:absolute;left:10px;bottom:18px;padding:0;border-top:0;flex-shrink:0;display:flex;justify-content:flex-start;z-index:20}
   .collapse-btn{width:36px;height:36px;border:1px solid var(--tree-border);border-radius:10px;background:#fff;color:#52525b;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .14s ease;box-shadow:0 6px 18px rgba(15,23,42,.14)}.collapse-btn:hover{border-color:#a1a1aa;color:#09090b;background:#fafafa}.collapse-btn .arrow{display:inline-block;transition:transform .18s ease}.nav-shell.tree-collapsed .collapse-btn .arrow{transform:rotate(180deg)}
@@ -314,11 +314,11 @@
       font-size: 12px;
       font-weight: 500;
     }
-    .badge-pending { background: var(--color-surface-raised); color: var(--color-text-secondary); border: 1px solid var(--color-border); }
-    .badge-processing { background: var(--color-bg); color: var(--color-text-secondary); border: 1px solid var(--color-border-strong); }
-    .badge-done { background: var(--color-surface-raised); color: var(--color-text-primary); border: 1px solid var(--color-border-strong); }
-    .badge-rejected { background: var(--color-bg); color: var(--color-text-secondary); border: 1px dashed var(--color-border-strong); }
-    .badge-exception { background: var(--color-bg); color: var(--color-text-secondary); border: 1px solid var(--color-border-strong); }
+    .badge-pending { background: #fff7ed; color: #9a3412; border: 1px solid #fed7aa; }
+    .badge-processing { background: #eff6ff; color: #1d4ed8; border: 1px solid #bfdbfe; }
+    .badge-done { background: #ecfdf5; color: #047857; border: 1px solid #a7f3d0; }
+    .badge-rejected { background: #fff1f2; color: #be123c; border: 1px solid #fecdd3; }
+    .badge-exception { background: #fef2f2; color: #b91c1c; border: 1px solid #fecaca; }
     .detail-btn {
       font-size: 13px;
       color: var(--color-primary);
@@ -1417,11 +1417,11 @@
     .badge-warning { background: var(--color-warning-bg); color: var(--color-warning); }
     .badge-danger { background: var(--color-danger-bg); color: var(--color-danger); }
     .badge-default { background: var(--color-surface-raised); color: var(--color-text-secondary); }
-    .badge-pending { background: #f4f4f5; color: #3f3f46; border: 1px solid #d4d4d8; }
-    .badge-processing { background: #fafafa; color: #27272a; border: 1px solid #a1a1aa; }
-    .badge-done { background: #f4f4f5; color: #18181b; border: 1px solid #3f3f46; }
-    .badge-rejected { background: #fafafa; color: #18181b; border: 1px solid #52525b; }
-    .badge-exception { background: #fafafa; color: #27272a; border: 1px dashed #71717a; }
+    .badge-pending { background: #fff7ed; color: #9a3412; border: 1px solid #fed7aa; }
+    .badge-processing { background: #eff6ff; color: #1d4ed8; border: 1px solid #bfdbfe; }
+    .badge-done { background: #ecfdf5; color: #047857; border: 1px solid #a7f3d0; }
+    .badge-rejected { background: #fff1f2; color: #be123c; border: 1px solid #fecdd3; }
+    .badge-exception { background: #fef2f2; color: #b91c1c; border: 1px solid #fecaca; }
     .table-btn {
       font-size: 13px;
       color: var(--color-primary);

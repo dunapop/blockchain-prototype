@@ -92,7 +92,7 @@
 <div class="flow-arrow">→</div>
 <div class="flow-node"><strong>待提交</strong><span>作品上传完成，可单条或批量提交。</span></div>
 <div class="flow-arrow">→</div>
-<div class="flow-node"><strong>存证中 / 已存证</strong><span>上链处理并返回存证编号、TxHash、区块高度。</span></div>
+<div class="flow-node"><strong>存证中 / 已存证</strong><span>上链处理成功后返回存证编号、TxHash、区块高度。</span></div>
 </div>
 </div>
 <div class="flow-card">
@@ -104,9 +104,9 @@
 <div class="flow-arrow">→</div>
 <div class="flow-node"><strong>待提交</strong><span>材料齐全后提交登记申请。</span></div>
 <div class="flow-arrow">→</div>
-<div class="flow-node"><strong>初审中 / 复审中 / 存证中 / 版权局审核中</strong><span>登记流程处理中，按进度接口返回当前状态。</span></div>
+<div class="flow-node"><strong>初审中 / 复审中 / 版权局审核中</strong><span>登记流程处理中，按进度接口返回当前状态。</span></div>
 <div class="flow-arrow">→</div>
-<div class="flow-node"><strong>登记完成 / 驳回 / 存证失败</strong><span>登记完成后可下载登记证书与存证证书；驳回支持编辑并重新提交；存证失败请联系平台处理。</span></div>
+<div class="flow-node"><strong>登记完成 / 驳回</strong><span>登记完成后可下载登记证书与存证证书；驳回支持查看、编辑、重新提交。</span></div>
 </div>
 </div>
 <div class="flow-card">
@@ -282,49 +282,49 @@
 <tr>
 <td><input class="row-checkbox record-check" type="checkbox"/></td>
 <td>1</td><td>青羊宫古建筑摄影集</td><td>成都数字版权服务中心</td><td class="table-mono">—</td><td>组织</td><td>成都城市影像工作室</td><td class="table-mono">91510100MA6CWK3X3K</td>
-<td><span class="table-badge badge-warning">待上传作品</span></td><td class="table-mono">—</td><td>2024-06-06 10:30</td>
+<td><span class="table-badge badge-pending">待上传作品</span></td><td class="table-mono">—</td><td>2024-06-06 10:30</td>
 <td><button class="table-btn" onclick="openCertWorkUploadModal()">上传作品</button><button class="table-btn" onclick="showToast('请先上传作品文件')">提交</button></td>
 </tr>
 <tr>
 <td><input class="row-checkbox record-check" type="checkbox"/></td>
 <td>2</td><td>蜀道山水图</td><td>四川省文化大数据有限责任公司</td><td class="table-mono">W_蜀道山水图_01.jpg</td><td>自然人</td><td>张明远</td><td class="table-mono">510***********3X</td>
-<td><span class="table-badge badge-warning">待提交</span></td><td class="table-mono">—</td><td>2024-06-01 09:30</td>
+<td><span class="table-badge badge-pending">待提交</span></td><td class="table-mono">—</td><td>2024-06-01 09:30</td>
 <td><button class="table-btn">编辑</button><button class="table-btn" onclick="showToast('已提交区块链存证，状态更新为存证中')">提交</button><button class="table-btn" style="color:var(--color-danger);">删除</button></td>
 </tr>
 <tr>
 <td><input class="row-checkbox record-check" type="checkbox"/></td>
 <td>3</td><td>川剧变脸数字化影像</td><td>四川省文化大数据有限责任公司</td><td class="table-mono">W_川剧变脸数字化影像_01.mp4</td><td>组织</td><td>四川文化传媒有限公司</td><td class="table-mono">91510100MA6CWK3X3K</td>
-<td><span class="table-badge badge-warning">存证中</span></td><td class="table-mono">—</td><td>2024-06-02 10:08</td>
+<td><span class="table-badge badge-processing">存证中</span></td><td class="table-mono">—</td><td>2024-06-02 10:08</td>
 <td><button class="table-btn" onclick="showCertRecordDetail(2)">查看</button></td>
 </tr>
 <tr>
 <td><input class="row-checkbox record-check" type="checkbox"/></td>
 <td>4</td><td>羌族刺绣纹样集</td><td>成都数字版权服务中心</td><td class="table-mono">W_羌族刺绣纹样集_01.jpg</td><td>自然人</td><td>李秀芳</td><td class="table-mono">510***********7J</td>
-<td><span class="table-badge badge-success">已存证</span></td><td class="table-mono">BD-2024-SC-003891</td><td>2024-05-09 09:15</td>
+<td><span class="table-badge badge-done">已存证</span></td><td class="table-mono">BD-2024-SC-003891</td><td>2024-05-09 09:15</td>
 <td><button class="table-btn" onclick="showCertRecordDetail(3)">查看</button></td>
 </tr>
 <tr>
 <td><input class="row-checkbox record-check" type="checkbox"/></td>
 <td>5</td><td>峨眉山云海摄影</td><td>四川省文化大数据有限责任公司</td><td class="table-mono">—</td><td>自然人</td><td>陈志强</td><td class="table-mono">510***********18</td>
-<td><span class="table-badge badge-warning">待上传作品</span></td><td class="table-mono">—</td><td>2024-06-07 09:18</td>
+<td><span class="table-badge badge-pending">待上传作品</span></td><td class="table-mono">—</td><td>2024-06-07 09:18</td>
 <td><button class="table-btn" onclick="openCertWorkUploadModal()">上传作品</button><button class="table-btn" onclick="showToast('请先上传作品文件')">提交</button></td>
 </tr>
 <tr>
 <td><input class="row-checkbox record-check" type="checkbox"/></td>
 <td>6</td><td>龙纹样数字素材包</td><td>四川省文化大数据有限责任公司</td><td class="table-mono">W_龙纹样数字素材包_01.zip</td><td>组织</td><td>四川博物院</td><td class="table-mono">91510100MA6CWK3X3K</td>
-<td><span class="table-badge badge-warning">待提交</span></td><td class="table-mono">—</td><td>2024-06-07 12:10</td>
+<td><span class="table-badge badge-pending">待提交</span></td><td class="table-mono">—</td><td>2024-06-07 12:10</td>
 <td><button class="table-btn">编辑</button><button class="table-btn" onclick="showToast('已提交区块链存证，状态更新为存证中')">提交</button><button class="table-btn" style="color:var(--color-danger);">删除</button></td>
 </tr>
 <tr>
 <td><input class="row-checkbox record-check" type="checkbox"/></td>
 <td>7</td><td>巴蜀节庆影像志</td><td>成都数字版权服务中心</td><td class="table-mono">W_巴蜀节庆影像志_01.mp4</td><td>组织</td><td>四川影像资料馆</td><td class="table-mono">91510100MA6CWK3X3K</td>
-<td><span class="table-badge badge-success">已存证</span></td><td class="table-mono">BD-2024-SC-007188</td><td>2024-06-07 15:00</td>
+<td><span class="table-badge badge-done">已存证</span></td><td class="table-mono">BD-2024-SC-007188</td><td>2024-06-07 15:00</td>
 <td><button class="table-btn" onclick="showCertRecordDetail(6)">查看</button></td>
 </tr>
 <tr>
 <td><input class="row-checkbox record-check" type="checkbox"/></td>
 <td>8</td><td>川菜传统技艺视频</td><td>四川省文化大数据有限责任公司</td><td class="table-mono">W_川菜传统技艺视频_01.mp4</td><td>组织</td><td>四川美食文化中心</td><td class="table-mono">91510100MA6CWK3X3K</td>
-<td><span class="table-badge badge-warning">存证中</span></td><td class="table-mono">—</td><td>2024-06-07 10:22</td>
+<td><span class="table-badge badge-processing">存证中</span></td><td class="table-mono">—</td><td>2024-06-07 10:22</td>
 <td><button class="table-btn" onclick="showCertRecordDetail(7)">查看</button></td>
 </tr>
 </tbody>
@@ -605,12 +605,10 @@
 <option value="待提交">待提交</option>
 <option value="初审中">初审中</option>
 <option value="复审中">复审中</option>
-<option value="存证中">存证中</option>
 <option value="版权局审核中">版权局审核中</option>
 <option value="登记完成">登记完成</option>
 <option value="初审驳回">初审驳回</option>
 <option value="复审驳回">复审驳回</option>
-<option value="存证失败">存证失败</option>
 <option value="版权局审核驳回">版权局审核驳回</option>
 </select>
 <select class="filter-select" id="regFilterCertifier">
@@ -805,9 +803,38 @@
       const params = new URLSearchParams(window.location.search);
       return params.get('page') || (window.location.hash ? window.location.hash.replace('#', '') : 'login');
     }
+    function getAdminPrototypeFile(page) {
+      const pageFiles = {
+        'admin-flow': 'pages/admin/flow.html',
+        'login': 'pages/admin/login.html',
+        'cert-records': 'pages/admin/cert-records.html',
+        'blockchain-cert': 'pages/admin/blockchain-cert.html',
+        'cert-record-detail': 'pages/admin/cert-record-detail.html',
+        'cert-excel-upload-modal': 'pages/admin/cert-excel-upload-modal.html',
+        'cert-work-upload-modal': 'pages/admin/cert-work-upload-modal.html',
+        'reg-records': 'pages/admin/reg-records.html',
+        'new-registration': 'pages/admin/new-registration.html',
+        'new-registration-from-cert': 'pages/admin/new-registration.html',
+        'reg-record-detail': 'pages/admin/reg-view.html',
+        'reg-view-pending-upload': 'pages/admin/reg-view.html',
+        'reg-view-initial-reviewing': 'pages/admin/reg-view-initial-reviewing.html',
+        'reg-view-reviewing': 'pages/admin/reg-view-reviewing.html',
+        'reg-view-copyright-reviewing': 'pages/admin/reg-view-copyright-reviewing.html',
+        'reg-view-initial-rejected': 'pages/admin/reg-view-initial-rejected.html',
+        'reg-view-review-rejected': 'pages/admin/reg-view-review-rejected.html',
+        'reg-view-copyright-rejected': 'pages/admin/reg-view-copyright-rejected.html',
+        'reg-view-completed': 'pages/admin/reg-view-completed.html',
+        'reg-view-no-chain': 'pages/admin/reg-view-reviewing.html',
+        'reg-view-full': 'pages/admin/reg-view-completed.html',
+        'reg-view-rejected': 'pages/admin/reg-view-rejected.html',
+        'reg-excel-upload-modal': 'pages/admin/reg-excel-upload-modal.html',
+        'reg-work-upload-modal': 'pages/admin/reg-work-upload-modal.html',
+      };
+      return pageFiles[page] || 'pages/admin/cert-records.html';
+    }
     function notifyPrototypeFrame(page) {
       if (isInPrototypeFrame()) {
-        window.parent.postMessage({ type: 'prototype:navigate', file: 'admin-system.html', page: page }, '*');
+        window.parent.postMessage({ type: 'prototype:navigate', file: getAdminPrototypeFile(page), page: page }, '*');
       }
     }
     function bootPrototypeFrame() {
@@ -876,6 +903,23 @@
         document.getElementById('page-reg-records').classList.add('active');
         const navItem = document.querySelector('.nav-item[data-page="reg-records"]'); if (navItem) navItem.classList.add('active');
         setTimeout(function(){ showRegRecordDetail(findRegRecordIndexByStatus(['待上传资料']), true); }, 0);
+        return;
+      }
+      const regViewStatusMap = {
+        'reg-view-initial-reviewing': ['初审中'],
+        'reg-view-reviewing': ['复审中'],
+        'reg-view-copyright-reviewing': ['版权局审核中'],
+        'reg-view-initial-rejected': ['初审驳回'],
+        'reg-view-review-rejected': ['复审驳回'],
+        'reg-view-copyright-rejected': ['版权局审核驳回'],
+        'reg-view-completed': ['登记完成'],
+      };
+      if (regViewStatusMap[page]) {
+        loginPage.style.display = 'none';
+        appLayout.classList.add('visible');
+        document.getElementById('page-reg-records').classList.add('active');
+        const navItem = document.querySelector('.nav-item[data-page="reg-records"]'); if (navItem) navItem.classList.add('active');
+        setTimeout(function(){ showRegRecordDetail(findRegRecordIndexByStatus(regViewStatusMap[page]), true); }, 0);
         return;
       }
       if (page === 'reg-view-no-chain') {
@@ -960,6 +1004,13 @@
         'reg-records': 'reg-records',
         'reg-record-detail': 'reg-records',
         'reg-view-pending-upload': 'reg-records',
+        'reg-view-initial-reviewing': 'reg-records',
+        'reg-view-reviewing': 'reg-records',
+        'reg-view-copyright-reviewing': 'reg-records',
+        'reg-view-initial-rejected': 'reg-records',
+        'reg-view-review-rejected': 'reg-records',
+        'reg-view-copyright-rejected': 'reg-records',
+        'reg-view-completed': 'reg-records',
         'reg-view-no-chain': 'reg-records',
         'reg-view-full': 'reg-records',
         'reg-view-rejected': 'reg-records',
@@ -2033,7 +2084,7 @@
         localStatus: '',
         acceptNo: 'SL202406070001',
         regCertNo: '',
-        statusCd: 1300,
+        statusCd: 1400,
         msg: '',
         submitTime: '2024-06-07 16:45',
         updatedAt: '2024-06-07 16:50',
@@ -2057,7 +2108,7 @@
         creation: { nature: '原创', completionTime: '2024-06-01 10:30', completionPlace: '成都', published: '是', firstPublishTime: '2024-06-05 09:00', firstPublishPlace: '成都' },
         workFiles: [{ name: '三星堆数字文创方案.pdf', size: 2312233, mime: 'application/pdf', hash: 'SHA256-13A0...D843' }],
         materials: { guarantee: { name: '权利保证书.pdf', size: 311222, mime: 'application/pdf' }, others: [] },
-        audit: { rejectReason: '', statusRemark: '区块链存证处理中', lastQueryTime: '2024-06-07 16:50' },
+        audit: { rejectReason: '', statusRemark: '版权局审核中', lastQueryTime: '2024-06-07 16:50' },
         blockchain: { workHash: 'SHA256-13A0...D843', wenchuangHash: '0x130b3438...d843', tianpingHash: '0x9c2b11aa...52fe', chainTime: '', timestamp: '', evidenceCertNo: '', evidenceCertFile: null },
         result: { issuedAt: '', regCertFile: null }
       },
@@ -2109,7 +2160,7 @@
         localStatus: '',
         acceptNo: 'SL202406070003',
         regCertNo: '',
-        statusCd: 2300,
+        statusCd: 2200,
         msg: '',
         submitTime: '2024-06-07 14:10',
         updatedAt: '2024-06-07 15:10',
@@ -2133,7 +2184,7 @@
         creation: { nature: '整理', completionTime: '2024-06-03 10:00', completionPlace: '眉山', published: '否', firstPublishTime: '', firstPublishPlace: '' },
         workFiles: [{ name: '竹编工艺图谱.zip', size: 6021333, mime: 'application/zip', hash: 'SHA256-3A9B...9921' }],
         materials: { guarantee: { name: '权利保证书.pdf', size: 212345, mime: 'application/pdf' }, others: [] },
-        audit: { rejectReason: '', statusRemark: '区块链存证处理失败，请联系平台处理。', lastQueryTime: '2024-06-07 15:10' },
+        audit: { rejectReason: '复审材料需补充权利归属说明，请编辑后重新提交。', statusRemark: '复审驳回', lastQueryTime: '2024-06-07 15:10' },
         blockchain: { workHash: 'SHA256-3A9B...9921', wenchuangHash: '0x7a11...cc10', tianpingHash: '', chainTime: '', timestamp: '', evidenceCertNo: '', evidenceCertFile: null },
         result: { issuedAt: '', regCertFile: null }
       },
@@ -2256,12 +2307,10 @@
     const REG_STATUS_MAP = {
       1100: { name: '初审中', type: 'processing' },
       1200: { name: '复审中', type: 'processing' },
-      1300: { name: '存证中', type: 'processing' },
       1400: { name: '版权局审核中', type: 'processing' },
       1000: { name: '登记完成', type: 'done' },
       2100: { name: '初审驳回', type: 'rejected' },
       2200: { name: '复审驳回', type: 'rejected' },
-      2300: { name: '存证失败', type: 'exception' },
       2400: { name: '版权局审核驳回', type: 'rejected' }
     };
 
@@ -2278,6 +2327,13 @@
       if (type === 'done') return 'badge-done';
       if (type === 'rejected') return 'badge-rejected';
       if (type === 'exception') return 'badge-exception';
+      return 'badge-default';
+    }
+
+    function getCertBadgeClass(status) {
+      if (status === '待上传作品' || status === '待提交') return 'badge-pending';
+      if (status === '存证中') return 'badge-processing';
+      if (status === '已存证') return 'badge-done';
       return 'badge-default';
     }
 
@@ -2365,7 +2421,16 @@
     }
 
     // ===== 记录详情弹窗 =====
-    function getRegViewPageByStatus() {
+    function getRegViewPageByStatus(r) {
+      const statusName = getRegStatusInfo(r).name;
+      if (statusName === '初审中') return 'reg-view-initial-reviewing';
+      if (statusName === '复审中') return 'reg-view-reviewing';
+      if (statusName === '版权局审核中') return 'reg-view-copyright-reviewing';
+      if (statusName === '初审驳回') return 'reg-view-initial-rejected';
+      if (statusName === '复审驳回') return 'reg-view-review-rejected';
+      if (statusName === '版权局审核驳回') return 'reg-view-copyright-rejected';
+      if (statusName === '登记完成') return 'reg-view-completed';
+      if (statusName === '待上传资料') return 'reg-view-pending-upload';
       return 'reg-record-detail';
     }
     function findCertRecordIndexByStatus(statuses) {
@@ -2384,7 +2449,6 @@
         node('提交登记', 'pending', '未开始'),
         node('初审', 'pending', '未开始'),
         node('复审', 'pending', '未开始'),
-        node('区块链存证', 'pending', '未开始'),
         node('版权局审核', 'pending', '未开始'),
         node('登记完成', 'pending', '未开始')
       ];
@@ -2397,13 +2461,11 @@
       if (statusName === '待提交') { setDoing(0, '待提交'); return steps; }
       if (statusName === '初审中') { setDoneTo(0); setDoing(1); return steps; }
       if (statusName === '复审中') { setDoneTo(1); setDoing(2); return steps; }
-      if (statusName === '存证中') { setDoneTo(2); setDoing(3); return steps; }
-      if (statusName === '版权局审核中') { setDoneTo(3); setDoing(4); return steps; }
-      if (statusName === '登记完成') { setDoneTo(5); return steps; }
+      if (statusName === '版权局审核中') { setDoneTo(2); setDoing(3); return steps; }
+      if (statusName === '登记完成') { setDoneTo(4); return steps; }
       if (statusName === '初审驳回') { setDoneTo(0); setRejected(1); return steps; }
       if (statusName === '复审驳回') { setDoneTo(1); setRejected(2); return steps; }
-      if (statusName === '版权局审核驳回') { setDoneTo(3); setRejected(4); return steps; }
-      if (statusName === '存证失败') { setDoneTo(2); setFailed(3); return steps; }
+      if (statusName === '版权局审核驳回') { setDoneTo(2); setRejected(3); return steps; }
       return steps;
     }
 
@@ -2420,10 +2482,7 @@
         return btn('查看', `showRecordDetail(${index})`) + btn('下载登记证书', `regDownloadRegistrationCert(${index})`) + btn('下载存证证书', `regDownloadEvidenceCert(${index})`);
       }
       if (statusName === '初审驳回' || statusName === '复审驳回' || statusName === '版权局审核驳回') {
-        return btn('查看', `showRecordDetail(${index})`) + btn('编辑并重新提交', `regResubmit(${index})`);
-      }
-      if (statusName === '存证失败') {
-        return btn('查看', `showRecordDetail(${index})`);
+        return btn('查看', `showRecordDetail(${index})`) + btn('编辑', `regEdit(${index})`) + btn('重新提交', `regResubmit(${index})`);
       }
       return btn('查看', `showRecordDetail(${index})`);
     }
@@ -2438,24 +2497,21 @@
       if (statusName === '待提交') {
         return btnSecondary('返回', `hideDetail()`) + btnSecondary('编辑', `regEdit(${index})`) + btnPrimary('提交', `regSubmit(${index})`);
       }
-      if (statusName === '初审中' || statusName === '复审中' || statusName === '存证中' || statusName === '版权局审核中') {
+      if (statusName === '初审中' || statusName === '复审中' || statusName === '版权局审核中') {
         return btnSecondary('返回', `hideDetail()`) + btnPrimary('刷新进度', `regRefreshProgress(${index})`);
       }
       if (statusName === '登记完成') {
         return btnSecondary('返回', `hideDetail()`) + btnSecondary('下载登记证书', `regDownloadRegistrationCert(${index})`) + btnPrimary('下载存证证书', `regDownloadEvidenceCert(${index})`);
       }
       if (statusName === '初审驳回' || statusName === '复审驳回' || statusName === '版权局审核驳回') {
-        return btnSecondary('返回', `hideDetail()`) + btnPrimary('编辑并重新提交', `regResubmit(${index})`);
-      }
-      if (statusName === '存证失败') {
-        return btnSecondary('返回', `hideDetail()`) + btnPrimary('刷新进度', `regRefreshProgress(${index})`);
+        return btnSecondary('返回', `hideDetail()`) + btnSecondary('编辑', `regEdit(${index})`) + btnPrimary('重新提交', `regResubmit(${index})`);
       }
       return btnSecondary('返回', `hideDetail()`);
     }
 
     function showRegRecordDetail(index, fromPrototypePage) {
       const r = regRecords[index] || regRecords[0];
-      const viewPage = getRegViewPageByStatus();
+      const viewPage = getRegViewPageByStatus(r);
       document.getElementById('detailOverlay').dataset.returnPage = 'reg-records';
       document.getElementById('detailTitle').textContent = '查看登记';
 
@@ -2475,14 +2531,9 @@
       `).join('')}</div>`;
 
       const showRejectOpinion = st.name === '初审驳回' || st.name === '复审驳回' || st.name === '版权局审核驳回';
-      const isCertFailed = st.name === '存证失败';
 
       const rejectOpinion = showRejectOpinion
         ? `<div class="detail-info-row"><span class="detail-info-label">驳回意见</span><span class="detail-info-value">${(r.audit && r.audit.rejectReason) ? r.audit.rejectReason : '—'}</span></div>`
-        : '';
-
-      const progressExtra = isCertFailed
-        ? `<div class="detail-info-row"><span class="detail-info-label">异常提示</span><span class="detail-info-value">区块链存证处理失败，请联系业务受理方处理。</span></div>`
         : '';
 
       const publishInfo = (r.creation && r.creation.published === '是')
@@ -2549,8 +2600,6 @@
       const blockchainInfo = (() => {
         if (r.localStatus) return `<div class="detail-info-row"><span class="detail-info-label">说明</span><span class="detail-info-value">尚未进入区块链存证环节。</span></div>`;
         if (r.statusCd === 1100 || r.statusCd === 1200) return `<div class="detail-info-row"><span class="detail-info-label">说明</span><span class="detail-info-value">尚未进入区块链存证环节。</span></div>`;
-        if (r.statusCd === 1300) return `<div class="detail-info-row"><span class="detail-info-label">存证状态</span><span class="detail-info-value">存证中</span></div><div class="detail-info-row"><span class="detail-info-label">提示</span><span class="detail-info-value">区块链存证正在处理中</span></div>`;
-        if (r.statusCd === 2300) return `<div class="detail-info-row"><span class="detail-info-label">存证状态</span><span class="detail-info-value">存证失败</span></div><div class="detail-info-row"><span class="detail-info-label">提示</span><span class="detail-info-value">区块链存证处理失败，请联系业务受理方处理</span></div>`;
         if (r.blockchain && (r.blockchain.wenchuangHash || r.blockchain.tianpingHash || r.blockchain.chainTime)) {
           return `
             <div class="detail-info-row"><span class="detail-info-label">作品哈希</span><span class="detail-info-value table-mono">${r.blockchain.workHash || '—'}</span></div>
@@ -2622,7 +2671,6 @@
           <div class="detail-info-row"><span class="detail-info-label">当前状态说明</span><span class="detail-info-value">${(r.audit && r.audit.statusRemark) ? r.audit.statusRemark : '—'}</span></div>
           ${rejectOpinion}
           <div class="detail-info-row"><span class="detail-info-label">状态更新时间</span><span class="detail-info-value">${r.updatedAt || '—'}</span></div>
-          ${progressExtra}
           ${timelineHtml}
         </div>
 
@@ -2755,7 +2803,7 @@
 
     function regResubmit(index) {
       showConfirm(
-        '确认编辑并重新提交？',
+        '确认重新提交？',
         function() {
           const r = regRecords[index];
           if (!r) return;
@@ -2771,7 +2819,6 @@
           r.audit.lastQueryTime = r.updatedAt;
           renderRegRecords(regRecords);
           showToast('已重新提交，状态更新为初审中');
-          regEdit(index);
         },
         { title: '确认重新提交', okText: '确认提交' }
       );
@@ -2780,7 +2827,7 @@
     function regRefreshProgress(index) {
       const r = regRecords[index];
       if (!r || r.localStatus) { showToast('当前状态无法刷新进度'); return; }
-      const flow = [1100, 1200, 1300, 1400, 1000];
+      const flow = [1100, 1200, 1400, 1000];
       const i = flow.indexOf(r.statusCd);
       if (i < 0) { showToast('当前状态无法刷新进度'); return; }
       const next = flow[Math.min(i + 1, flow.length - 1)];
@@ -2789,7 +2836,7 @@
       r.msg = '';
       r.updatedAt = new Date().toISOString().slice(0, 19).replace('T', ' ');
       r.audit = r.audit || {};
-      const mapRemark = { 1100: '登记机构初审中', 1200: '登记机构复审中', 1300: '区块链存证处理中', 1400: '版权局审核中', 1000: '登记完成' };
+      const mapRemark = { 1100: '登记机构初审中', 1200: '登记机构复审中', 1400: '版权局审核中', 1000: '登记完成' };
       r.audit.statusRemark = mapRemark[next] || r.audit.statusRemark || '';
       r.audit.lastQueryTime = r.updatedAt;
       if (next === 1000) {
@@ -2831,6 +2878,7 @@
           <div class="detail-info-row"><span class="detail-info-label">作品名称</span><span class="detail-info-value">${r.name}</span></div>
           <div class="detail-info-row"><span class="detail-info-label">存证方</span><span class="detail-info-value">${r.certifier}</span></div>
           <div class="detail-info-row"><span class="detail-info-label">作品文件</span><span class="detail-info-value">${r.workFile || '—'}</span></div>
+          <div class="detail-info-row"><span class="detail-info-label">存证说明</span><span class="detail-info-value">${r.remark || '—'}</span></div>
           <div class="detail-info-row"><span class="detail-info-label">著作权人类型</span><span class="detail-info-value">${r.ownerType}</span></div>
           <div class="detail-info-row"><span class="detail-info-label">著作权人姓名/组织名称</span><span class="detail-info-value">${r.ownerName}</span></div>
           <div class="detail-info-row"><span class="detail-info-label">著作权人身份证号码/统一社会信用代码</span><span class="detail-info-value table-mono">${r.ownerNo}</span></div>
@@ -2838,7 +2886,7 @@
         </div>
         <div class="detail-info-group">
           <div class="detail-info-title">区块链存证信息</div>
-          <div class="detail-info-row"><span class="detail-info-label">存证状态</span><span class="detail-info-value">${r.status}</span></div>
+          <div class="detail-info-row"><span class="detail-info-label">存证状态</span><span class="detail-info-value"><span class="table-badge ${getCertBadgeClass(r.status)}">${r.status}</span></span></div>
           <div class="detail-info-row"><span class="detail-info-label">存证编号</span><span class="detail-info-value table-mono">${r.certNo || '—'}</span></div>
           <div class="detail-info-row"><span class="detail-info-label">区块链平台</span><span class="detail-info-value">${r.platform || '—'}</span></div>
           <div class="detail-info-row"><span class="detail-info-label">Hash算法</span><span class="detail-info-value">SHA-256</span></div>
@@ -2857,19 +2905,18 @@
                 <div class="cert-sheet-title">电子数据存证证书</div>
                 <div class="cert-sheet-sub">DATA DEPOSIT CERTIFICATE</div>
                 <div class="cert-sheet-line">作品名称：${r.name}</div>
-                <div class="cert-sheet-line">证书编号：CWSP23420260424147DB</div>
-                <div class="cert-sheet-line">状态：已发放</div>
+                <div class="cert-sheet-line">证书编号：${r.status === '已存证' ? 'CWSP23420260424147DB' : '—'}</div>
+                <div class="cert-sheet-line">状态：${r.status === '已存证' ? '已发放' : '未发放'}</div>
                 <div class="cert-sheet-footer"><span>可信时间戳</span><span>电子证书</span></div>
               </div>
             </div>
             <div class="detail-cert-meta">
               <div class="detail-cert-name">电子数据存证证书</div>
-              <div class="detail-cert-row">证书状态：已发放</div>
-              <div class="detail-cert-row">证书编号：CWSP23420260424147DB</div>
-              <div class="detail-cert-row">发放日期：2026-04-24 16:00:08</div>
+              <div class="detail-cert-row">证书状态：${r.status === '已存证' ? '已发放' : '未发放'}</div>
+              <div class="detail-cert-row">证书编号：${r.status === '已存证' ? 'CWSP23420260424147DB' : '—'}</div>
+              <div class="detail-cert-row">发放日期：${r.status === '已存证' ? '2026-04-24 16:00:08' : '—'}</div>
               <div class="detail-cert-actions">
-                <button class="detail-cert-btn" onclick="showToast('证书下载中...')">下载证书</button>
-                <button class="detail-cert-btn" onclick="showToast('可信时间戳下载中...')">下载可信时间戳</button>
+                ${r.status === '已存证' ? `<button class="detail-cert-btn" onclick="showToast('证书下载中...')">下载证书</button><button class="detail-cert-btn" onclick="showToast('可信时间戳下载中...')">下载可信时间戳</button>` : `<span style="font-size:13px;color:var(--color-text-tertiary);">暂无可下载证书</span>`}
               </div>
             </div>
           </div>
@@ -2888,7 +2935,7 @@
     function hideDetail(skipHistory) {
       document.getElementById('detailOverlay').classList.remove('visible');
       const returnPage = document.getElementById('detailOverlay').dataset.returnPage || 'cert-records';
-      if (isInPrototypeFrame() && !skipHistory && ['#reg-record-detail', '#reg-view-pending-upload', '#reg-view-no-chain', '#reg-view-full', '#reg-view-rejected', '#cert-record-detail'].includes(window.location.hash)) {
+      if (isInPrototypeFrame() && !skipHistory && ['#reg-record-detail', '#reg-view-pending-upload', '#reg-view-initial-reviewing', '#reg-view-reviewing', '#reg-view-copyright-reviewing', '#reg-view-initial-rejected', '#reg-view-review-rejected', '#reg-view-copyright-rejected', '#reg-view-completed', '#reg-view-no-chain', '#reg-view-full', '#reg-view-rejected', '#cert-record-detail'].includes(window.location.hash)) {
         history.replaceState(null, '', window.location.pathname + '#' + returnPage);
         notifyPrototypeFrame(returnPage);
       }

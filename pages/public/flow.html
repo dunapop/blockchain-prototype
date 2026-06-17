@@ -51,19 +51,19 @@
 <div class="flow-arrow">→</div>
 <div class="flow-node"><strong>查询本人作品</strong><span>系统按证件号检索名下版权作品。</span></div>
 <div class="flow-arrow">→</div>
-<div class="flow-node"><strong>展示结果列表</strong><span>列表展示作品名称、作品类型、作者、著作权人、受理号、登记状态、登记证书编号与操作。</span></div>
+<div class="flow-node"><strong>展示结果列表</strong><span>列表展示作品名称、作品类型、作者、著作权人、受理号、登记状态、登记证书编号与操作，左侧页面树定位到“查询结果示例”。</span></div>
 <div class="flow-arrow">→</div>
-<div class="flow-node"><strong>查看详情</strong><span>如记录为版权登记业务，打开“版权登记详情”；如仅为区块链存证业务，打开“存证详情”。</span></div>
+<div class="flow-node"><strong>查看详情</strong><span>如记录为版权登记业务，打开“查看详情弹窗-已登记”；如仅为区块链存证业务，打开“查看详情弹窗-已存证”。</span></div>
 </div>
 </div>
 <div class="flow-section">
-<h3>二、证书 / 存证查询流程</h3>
+<h3>二、作品 / 著作权人查询流程</h3>
 <div class="flow-steps">
-<div class="flow-node"><strong>输入信息</strong><span>输入受理号、证书编号或权利人信息。</span></div>
+<div class="flow-node"><strong>输入信息</strong><span>输入作品名称或著作权人信息。</span></div>
 <div class="flow-arrow">→</div>
-<div class="flow-node"><strong>匹配记录</strong><span>系统匹配版权登记记录或区块链存证记录。</span></div>
+<div class="flow-node"><strong>匹配记录</strong><span>系统按作品名称或著作权人信息匹配版权登记记录或区块链存证记录。</span></div>
 <div class="flow-arrow">→</div>
-<div class="flow-node"><strong>返回结果</strong><span>返回列表结果，点击“查看详情”进入对应详情弹窗。</span></div>
+<div class="flow-node"><strong>返回结果</strong><span>返回列表结果，左侧页面树定位到“查询结果示例”；点击“查看详情”进入对应详情弹窗。</span></div>
 <div class="flow-arrow">→</div>
 <div class="flow-node"><strong>核验信息</strong><span>可核验登记进度、证书编号、存证哈希与时间戳等信息。</span></div>
 </div>
@@ -87,8 +87,8 @@
 <table class="flow-table">
 <thead><tr><th>详情页面</th><th>触发条件</th><th>展示内容</th></tr></thead>
 <tbody>
-<tr><td>版权登记详情</td><td>记录为版权登记业务</td><td>展示登记进度与六节点时间线、作品/作者/著作权人/权利信息、登记结果与区块链存证结果（按状态动态展示）。</td></tr>
-<tr><td>存证详情</td><td>记录仅为区块链存证业务</td><td>仅展示区块链存证相关内容，不混入版权登记信息。</td></tr>
+<tr><td>查看详情弹窗-已登记</td><td>记录为版权登记业务</td><td>展示登记进度与六节点时间线、作品/作者/著作权人/权利信息、登记结果与区块链存证结果（按状态动态展示）；作品文件仅展示一个。</td></tr>
+<tr><td>查看详情弹窗-已存证</td><td>记录仅为区块链存证业务</td><td>仅展示区块链存证相关内容，不混入版权登记信息。</td></tr>
 </tbody>
 </table>
 </div>
@@ -101,7 +101,7 @@
 <!-- 搜索 Tab -->
 <div class="search-tabs">
 <button class="search-tab active" data-tab="idcard" onclick="switchTab('idcard')">身份证查询</button>
-<button class="search-tab" data-tab="cert" onclick="switchTab('cert')">证书/存证查询</button>
+<button class="search-tab" data-tab="cert" onclick="switchTab('cert')">作品/著作权人查询</button>
 </div>
 <div class="search-body">
 <!-- Tab1：身份证查询 -->
@@ -118,12 +118,12 @@
 <button class="search-btn" onclick="doSearch()">查询</button>
 </div>
 </div>
-<!-- Tab2：证书/存证查询 -->
+<!-- Tab2：作品/著作权人查询 -->
 <div class="search-form" id="tab-cert">
 <div class="search-row">
 <div class="search-field">
-<label>受理号 / 证书编号 / 权利人信息</label>
-<input id="inputCertNo" placeholder="请输入受理号、证书编号或权利人信息" type="text"/>
+<label>作品名称 / 著作权人信息</label>
+<input id="inputCertNo" placeholder="请输入作品名称、著作权人信息查询" type="text"/>
 </div>
 <button class="search-btn" onclick="doSearch()">查询</button>
 </div>
@@ -197,7 +197,15 @@
     }
     function notifyPrototypeFrame(page) {
       if (isInPrototypeFrame()) {
-        window.parent.postMessage({ type: 'prototype:navigate', file: 'public-query.html', page: page }, '*');
+        const pageFiles = {
+          'public-flow': 'pages/public/flow.html',
+          'idcard-query': 'pages/public/idcard-query.html',
+          'cert-query': 'pages/public/cert-query.html',
+          'results': 'pages/public/results.html',
+          'results-detail-registered': 'pages/public/results-detail-registered.html',
+          'results-detail-certified': 'pages/public/results-detail-certified.html',
+        };
+        window.parent.postMessage({ type: 'prototype:navigate', file: pageFiles[page] || 'pages/public/idcard-query.html', page: page }, '*');
       }
     }
     function navigatePublicPrototype(page) {
@@ -374,7 +382,6 @@
         workDesc: '美术作品，作品创作说明为示例文本。',
         workFiles: [
           { name: '羌绣纹样集_01.png', size: 2453120, mime: 'image/png' },
-          { name: '羌绣纹样集_02.png', size: 1984120, mime: 'image/png' }
         ],
         authors: [
           { authorName: '李秀芳', authorSign: '李秀芳' }
@@ -872,7 +879,7 @@
       if (hint) {
         hint.textContent = tab === 'idcard'
           ? '请输入完整的身份证号码，系统将返回该证件人名下所有登记作品'
-          : '请输入受理号、证书编号或权利人信息';
+          : '请输入作品名称、著作权人信息查询';
       }
       notifyPrototypeFrame(tab === 'cert' ? 'cert-query' : 'idcard-query');
     }
