@@ -1788,6 +1788,11 @@
     }
     .upload-zone-text { font-size: 14px; color: var(--color-text-secondary); }
     .upload-zone-hint { font-size: 12px; color: var(--color-text-tertiary); margin-top: 4px; }
+    .upload-zone-hint.left-aligned {
+      display: inline-block;
+      text-align: left;
+      line-height: 1.7;
+    }
 
     /* 表单底部 */
     .form-actions {

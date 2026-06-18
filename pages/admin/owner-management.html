@@ -217,8 +217,8 @@
 <label>作品文件 <span class="required">*</span></label>
 <div class="upload-zone" onclick="document.getElementById('ncWorkFiles').click()">
 <div class="upload-zone-text">上传作品文件</div>
-<div class="upload-zone-hint">支持上传多个需要进行区块链存证的作品文件。</div>
-<input id="ncWorkFiles" multiple="" onchange="ncAddFiles('workFiles', this.files)" style="display:none" type="file"/>
+<div class="upload-zone-hint left-aligned">仅支持单个文件上传，作品样本文件：<br/>1.美术作品：jpg、png<br/>2.文字作品：放入word上传<br/>3.摄影作品：jpg、png<br/>4.视听作品：传MP4格式，作品小于200MB，视频末尾添加演职员表<br/>5.音乐作品：传mp3格式或曲谱</div>
+<input id="ncWorkFiles" onchange="ncAddFiles('workFiles', this.files)" style="display:none" type="file"/>
 </div>
 <div class="form-error" id="ncWorkFilesError"></div>
 <div class="file-list" id="ncWorkFilesList" style="display:none;"></div>
@@ -441,8 +441,8 @@
 <label>作品文件 <span class="required">*</span></label>
 <div class="upload-zone" onclick="document.getElementById('nrWorkFiles').click()">
 <div class="upload-zone-text">上传作品文件</div>
-<div class="upload-zone-hint">支持上传多个作品文件，文件格式及大小以平台要求为准。</div>
-<input id="nrWorkFiles" multiple="" onchange="nrAddFiles('workFiles', this.files)" style="display:none" type="file"/>
+<div class="upload-zone-hint left-aligned">仅支持单个文件上传，作品样本文件：<br/>1.美术作品：jpg、png<br/>2.文字作品：放入word上传<br/>3.摄影作品：jpg、png<br/>4.视听作品：传MP4格式，作品小于200MB，视频末尾添加演职员表<br/>5.音乐作品：传mp3格式或曲谱</div>
+<input id="nrWorkFiles" onchange="nrAddFiles('workFiles', this.files)" style="display:none" type="file"/>
 </div>
 <div class="form-error" id="nrWorkFilesError"></div>
 <div class="file-list" id="nrWorkFilesList" style="display:none;"></div>
