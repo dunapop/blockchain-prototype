@@ -575,7 +575,7 @@
 <label>权利保证书 <span class="required">*</span></label>
 <div class="upload-zone" onclick="document.getElementById('nrGuaranteeFile').click()">
 <div class="upload-zone-text">上传权利保证书</div>
-<div class="upload-zone-hint">单文件上传</div>
+<div class="upload-zone-hint">仅支持单个文件上传，文件小于200MB</div>
 <input id="nrGuaranteeFile" onchange="nrAddFiles('guaranteeFile', this.files)" style="display:none" type="file"/>
 </div>
 <div class="form-error" id="nrGuaranteeFileError"></div>
@@ -585,7 +585,7 @@
 <label>其他证明材料</label>
 <div class="upload-zone" onclick="document.getElementById('nrOtherProofFiles').click()">
 <div class="upload-zone-text">上传其他材料</div>
-<div class="upload-zone-hint">支持多个文件上传</div>
+<div class="upload-zone-hint">仅支持单个文件上传，文件小于200MB</div>
 <input id="nrOtherProofFiles" multiple="" onchange="nrAddFiles('otherProofFiles', this.files)" style="display:none" type="file"/>
 </div>
 <div class="file-list" id="nrOtherProofFilesList" style="display:none;"></div>
@@ -729,7 +729,7 @@
 <label>其他文件</label>
 <div class="upload-zone" onclick="showToast('上传其他文件（模拟）')">
 <div class="upload-zone-text">上传其他文件</div>
-<div class="upload-zone-hint">支持多个文件上传</div>
+<div class="upload-zone-hint">仅支持单个文件上传，文件小于200MB</div>
 </div>
 <div class="file-list visible" id="ownerOtherFilesList"></div>
 </div>
