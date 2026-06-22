@@ -229,7 +229,10 @@
 <div class="form-card-title">著作权人信息</div>
 <div id="ncHoldersContainer"></div>
 <div class="form-error" id="ncHoldersError"></div>
-<button class="add-holder-btn" onclick="ncAddHolderCard()">+ 添加著作权人</button>
+<div style="display:flex;gap:16px;align-items:center;flex-wrap:wrap;">
+<button class="add-holder-btn" onclick="ncAddHolderCard()">+ 添加一行选择</button>
+<button class="add-holder-btn" onclick="ncCreateOwnerFromCertification()">+ 新增著作权人</button>
+</div>
 </div>
 <div class="form-card">
 <div class="form-card-title">存证信息</div>
@@ -283,56 +286,7 @@
 <th>序号</th><th>作品名称</th><th>存证方</th><th>作品文件</th><th>著作权人类型</th><th>著作权人姓名/组织名称</th><th>著作权人身份证号码/统一社会信用代码</th><th>存证状态</th><th>存证编号</th><th>更新时间</th><th>操作</th>
 </tr>
 </thead>
-<tbody>
-<tr>
-<td><input class="row-checkbox record-check" type="checkbox"/></td>
-<td>1</td><td>青羊宫古建筑摄影集</td><td>成都数字版权服务中心</td><td class="table-mono">—</td><td>组织</td><td>成都城市影像工作室</td><td class="table-mono">91510100MA6CWK3X3K</td>
-<td><span class="table-badge badge-pending">待上传作品</span></td><td class="table-mono">—</td><td>2024-06-06 10:30</td>
-<td><button class="table-btn" onclick="openCertWorkUploadModal()">上传作品</button><button class="table-btn" onclick="showToast('请先上传作品文件')">提交</button></td>
-</tr>
-<tr>
-<td><input class="row-checkbox record-check" type="checkbox"/></td>
-<td>2</td><td>蜀道山水图</td><td>四川省文化大数据有限责任公司</td><td class="table-mono">W_蜀道山水图_01.jpg</td><td>自然人</td><td>张明远</td><td class="table-mono">510***********3X</td>
-<td><span class="table-badge badge-pending">待提交</span></td><td class="table-mono">—</td><td>2024-06-01 09:30</td>
-<td><button class="table-btn">编辑</button><button class="table-btn" onclick="showToast('已提交区块链存证，状态更新为存证中')">提交</button><button class="table-btn" style="color:var(--color-danger);">删除</button></td>
-</tr>
-<tr>
-<td><input class="row-checkbox record-check" type="checkbox"/></td>
-<td>3</td><td>川剧变脸数字化影像</td><td>四川省文化大数据有限责任公司</td><td class="table-mono">W_川剧变脸数字化影像_01.mp4</td><td>组织</td><td>四川文化传媒有限公司</td><td class="table-mono">91510100MA6CWK3X3K</td>
-<td><span class="table-badge badge-processing">存证中</span></td><td class="table-mono">—</td><td>2024-06-02 10:08</td>
-<td><button class="table-btn" onclick="showCertRecordDetail(2)">查看</button></td>
-</tr>
-<tr>
-<td><input class="row-checkbox record-check" type="checkbox"/></td>
-<td>4</td><td>羌族刺绣纹样集</td><td>成都数字版权服务中心</td><td class="table-mono">W_羌族刺绣纹样集_01.jpg</td><td>自然人</td><td>李秀芳</td><td class="table-mono">510***********7J</td>
-<td><span class="table-badge badge-done">已存证</span></td><td class="table-mono">BD-2024-SC-003891</td><td>2024-05-09 09:15</td>
-<td><button class="table-btn" onclick="showCertRecordDetail(3)">查看</button></td>
-</tr>
-<tr>
-<td><input class="row-checkbox record-check" type="checkbox"/></td>
-<td>5</td><td>峨眉山云海摄影</td><td>四川省文化大数据有限责任公司</td><td class="table-mono">—</td><td>自然人</td><td>陈志强</td><td class="table-mono">510***********18</td>
-<td><span class="table-badge badge-pending">待上传作品</span></td><td class="table-mono">—</td><td>2024-06-07 09:18</td>
-<td><button class="table-btn" onclick="openCertWorkUploadModal()">上传作品</button><button class="table-btn" onclick="showToast('请先上传作品文件')">提交</button></td>
-</tr>
-<tr>
-<td><input class="row-checkbox record-check" type="checkbox"/></td>
-<td>6</td><td>龙纹样数字素材包</td><td>四川省文化大数据有限责任公司</td><td class="table-mono">W_龙纹样数字素材包_01.zip</td><td>组织</td><td>四川博物院</td><td class="table-mono">91510100MA6CWK3X3K</td>
-<td><span class="table-badge badge-pending">待提交</span></td><td class="table-mono">—</td><td>2024-06-07 12:10</td>
-<td><button class="table-btn">编辑</button><button class="table-btn" onclick="showToast('已提交区块链存证，状态更新为存证中')">提交</button><button class="table-btn" style="color:var(--color-danger);">删除</button></td>
-</tr>
-<tr>
-<td><input class="row-checkbox record-check" type="checkbox"/></td>
-<td>7</td><td>巴蜀节庆影像志</td><td>成都数字版权服务中心</td><td class="table-mono">W_巴蜀节庆影像志_01.mp4</td><td>组织</td><td>四川影像资料馆</td><td class="table-mono">91510100MA6CWK3X3K</td>
-<td><span class="table-badge badge-done">已存证</span></td><td class="table-mono">BD-2024-SC-007188</td><td>2024-06-07 15:00</td>
-<td><button class="table-btn" onclick="showCertRecordDetail(6)">查看</button></td>
-</tr>
-<tr>
-<td><input class="row-checkbox record-check" type="checkbox"/></td>
-<td>8</td><td>川菜传统技艺视频</td><td>四川省文化大数据有限责任公司</td><td class="table-mono">W_川菜传统技艺视频_01.mp4</td><td>组织</td><td>四川美食文化中心</td><td class="table-mono">91510100MA6CWK3X3K</td>
-<td><span class="table-badge badge-processing">存证中</span></td><td class="table-mono">—</td><td>2024-06-07 10:22</td>
-<td><button class="table-btn" onclick="showCertRecordDetail(7)">查看</button></td>
-</tr>
-</tbody>
+<tbody id="certRecordsBody"></tbody>
 </table>
 </div>
 <div class="pagination-bar">
@@ -586,7 +540,7 @@
 <div class="upload-zone" onclick="document.getElementById('nrOtherProofFiles').click()">
 <div class="upload-zone-text">上传其他材料</div>
 <div class="upload-zone-hint">仅支持单个文件上传，文件小于200MB</div>
-<input id="nrOtherProofFiles" multiple="" onchange="nrAddFiles('otherProofFiles', this.files)" style="display:none" type="file"/>
+<input id="nrOtherProofFiles" onchange="nrAddFiles('otherProofFiles', this.files)" style="display:none" type="file"/>
 </div>
 <div class="file-list" id="nrOtherProofFilesList" style="display:none;"></div>
 </div>
@@ -951,7 +905,37 @@
     }
     function getPrototypeTargetPage() {
       const params = new URLSearchParams(window.location.search);
-      return params.get('page') || (window.location.hash ? window.location.hash.replace('#', '') : 'login');
+      const pageFromQuery = params.get('page');
+      if (pageFromQuery) return pageFromQuery;
+      const currentFile = (window.location.pathname.split('/').pop() || '').toLowerCase();
+      const filePageMap = {
+        'flow.html': 'admin-flow',
+        'login.html': 'login',
+        'cert-records.html': 'cert-records',
+        'blockchain-cert.html': 'blockchain-cert',
+        'cert-record-detail.html': 'cert-record-detail',
+        'cert-excel-upload-modal.html': 'cert-excel-upload-modal',
+        'cert-work-upload-modal.html': 'cert-work-upload-modal',
+        'reg-records.html': 'reg-records',
+        'new-registration.html': 'new-registration',
+        'reg-view.html': 'reg-record-detail',
+        'reg-view-initial-reviewing.html': 'reg-view-initial-reviewing',
+        'reg-view-reviewing.html': 'reg-view-reviewing',
+        'reg-view-copyright-reviewing.html': 'reg-view-copyright-reviewing',
+        'reg-view-initial-rejected.html': 'reg-view-initial-rejected',
+        'reg-view-review-rejected.html': 'reg-view-review-rejected',
+        'reg-view-copyright-rejected.html': 'reg-view-copyright-rejected',
+        'reg-view-completed.html': 'reg-view-completed',
+        'reg-view-rejected.html': 'reg-view-rejected',
+        'reg-excel-upload-modal.html': 'reg-excel-upload-modal',
+        'reg-work-upload-modal.html': 'reg-work-upload-modal',
+        'owner-management.html': 'owner-management',
+        'owner-edit.html': 'owner-edit',
+      };
+      const pageFromFile = filePageMap[currentFile];
+      if (pageFromFile) return pageFromFile;
+      if (window.location.hash) return window.location.hash.replace('#', '');
+      return 'login';
     }
     function getAdminPrototypeFile(page) {
       const pageFiles = {
@@ -1419,7 +1403,7 @@
         nrRenderFileList('nrGuaranteeFileList', nrState.guaranteeFile ? [nrState.guaranteeFile] : [], 'nrRemoveGuaranteeFile');
       }
       if (kind === 'otherProofFiles') {
-        nrState.otherProofFiles = nrState.otherProofFiles.concat(files);
+        nrState.otherProofFiles = files[0] ? [files[0]] : [];
         nrRenderFileList('nrOtherProofFilesList', nrState.otherProofFiles, 'nrRemoveOtherProofFile');
       }
       const inputIdMap = { workFiles: 'nrWorkFiles', guaranteeFile: 'nrGuaranteeFile', otherProofFiles: 'nrOtherProofFiles' };
@@ -1810,82 +1794,88 @@
       ncRenderFileList('ncWorkFilesList', ncState.workFiles, 'ncRemoveWorkFile');
     }
 
+    function ncGetHolderKey(holder) {
+      if (!holder) return '';
+      if (holder.ownerKey) return holder.ownerKey;
+      if (holder.type === '自然人') return holder.person && (holder.person.idNo || holder.person.name) || '';
+      return holder.org && (holder.org.idNo || holder.org.name) || '';
+    }
+
+    function ncHolderSummary(holder) {
+      if (!holder || !ncGetHolderKey(holder)) return '<div class="readonly-tip visible" style="margin:12px 0 0;">请选择著作权人；如果没有可选项，请点击“新增著作权人”。</div>';
+      const isPerson = holder.type === '自然人';
+      const data = isPerson ? holder.person : holder.org;
+      const files = [];
+      if (isPerson) {
+        if (data.idFront) files.push('身份证正面：' + data.idFront.name);
+        if (data.idBack) files.push('身份证反面：' + data.idBack.name);
+      } else if (data.licenseFile) {
+        files.push('营业执照：' + data.licenseFile.name);
+      }
+      (data.otherFiles || []).forEach(function(file, fileIdx) {
+        files.push(`补充材料${fileIdx + 1}：${file.name}`);
+      });
+      return `<div class="readonly-group visible">
+        <div class="readonly-tip visible">已选著作权人信息</div>
+        <div class="readonly-grid">
+          <div class="detail-info-row"><span class="detail-info-label">著作权人类型</span><span class="detail-info-value">${escapeHtml(holder.type || '—')}</span></div>
+          <div class="detail-info-row"><span class="detail-info-label">${isPerson ? '著作权人姓名' : '著作权人名称'}</span><span class="detail-info-value">${escapeHtml(data.name || '—')}</span></div>
+          <div class="detail-info-row"><span class="detail-info-label">${isPerson ? '身份证号码' : '统一社会信用代码或登记证件号码'}</span><span class="detail-info-value">${escapeHtml(data.idNo || '—')}</span></div>
+          ${!isPerson ? `<div class="detail-info-row"><span class="detail-info-label">法定代表人或负责人姓名</span><span class="detail-info-value">${escapeHtml(data.repName || '—')}</span></div>` : ''}
+          <div class="detail-info-row"><span class="detail-info-label">署名</span><span class="detail-info-value">${escapeHtml(data.sign || data.name || '—')}</span></div>
+          <div class="detail-info-row"><span class="detail-info-label">所在地区</span><span class="detail-info-value">${escapeHtml([data.country, data.province, data.city].filter(Boolean).join(' / ') || '—')}</span></div>
+          <div class="detail-info-row"><span class="detail-info-label">附件</span><span class="detail-info-value">${files.length ? files.map(escapeHtml).join('<br>') : '—'}</span></div>
+        </div>
+      </div>`;
+    }
+
     function ncRenderHolders() {
+      ensureOwnerRecords();
       const container = document.getElementById('ncHoldersContainer');
       if (!container) return;
-      if (!ncState.holders || ncState.holders.length === 0) {
-        ncState.holders = [
-          { type: '自然人', person: { name: '', idNo: '' }, org: { name: '', idNo: '', repName: '' } }
-        ];
-      }
+      if (!ncState.holders || ncState.holders.length === 0) ncState.holders = [{ ownerKey: '', type: '自然人', person: {}, org: {} }];
+      const options = ownerRecords.map(o => {
+        const key = o.idNo || o.name || '';
+        const label = [o.name, o.type, o.idNo].filter(Boolean).join(' / ');
+        return { key, label };
+      });
       container.innerHTML = ncState.holders.map((h, idx) => {
-        const isPerson = h.type === '自然人';
+        const selectedKey = ncGetHolderKey(h);
+        const selectOptions = '<option value="">请选择著作权人</option>' + options.map(o => `<option value="${escapeHtml(o.key)}" ${selectedKey === o.key ? 'selected' : ''}>${escapeHtml(o.label)}</option>`).join('');
         return `<div class="nc-card">
           <div class="nc-card-head">
             <div class="nc-card-title">著作权人${idx + 1}</div>
             <button class="nc-card-remove" onclick="ncRemoveHolderCard(${idx})">删除</button>
           </div>
           <div class="form-grid">
-            <div class="form-group-inline">
-              <label>著作权人类型 <span class="required">*</span></label>
-              <select onchange="ncChangeHolderType(${idx}, this.value)">
-                <option ${h.type === '自然人' ? 'selected' : ''}>自然人</option>
-                <option ${h.type === '企业法人' ? 'selected' : ''}>企业法人</option>
-                <option ${h.type === '机关法人' ? 'selected' : ''}>机关法人</option>
-                <option ${h.type === '事业单位法人' ? 'selected' : ''}>事业单位法人</option>
-                <option ${h.type === '社会团体法人' ? 'selected' : ''}>社会团体法人</option>
-                <option ${h.type === '其他组织' ? 'selected' : ''}>其他组织</option>
-              </select>
-              <div class="form-error" id="ncHolderTypeError${idx}"></div>
+            <div class="form-group-inline full-width">
+              <label>选择著作权人 <span class="required">*</span></label>
+              <select onchange="ncSelectHolder(${idx}, this.value)">${selectOptions}</select>
+              <div class="form-error" id="ncHolderSelectError${idx}"></div>
             </div>
-            ${isPerson
-              ? `<div class="form-group-inline">
-                  <label>著作权人姓名 <span class="required">*</span></label>
-                  <input type="text" value="${(h.person.name || '').replaceAll('"','&quot;')}" placeholder="请输入著作权人姓名" oninput="ncUpdateHolder(${idx}, 'person', 'name', this.value)">
-                  <div class="form-error" id="ncHolderPersonNameError${idx}"></div>
-                </div>
-                <div class="form-group-inline">
-                  <label>身份证号码 <span class="required">*</span></label>
-                  <input type="text" value="${(h.person.idNo || '').replaceAll('"','&quot;')}" placeholder="请输入身份证号码" oninput="ncUpdateHolder(${idx}, 'person', 'idNo', this.value)">
-                  <div class="form-error" id="ncHolderPersonIdNoError${idx}"></div>
-                </div>`
-              : `<div class="form-group-inline">
-                  <label>著作权人名称 <span class="required">*</span></label>
-                  <input type="text" value="${(h.org.name || '').replaceAll('"','&quot;')}" placeholder="请输入著作权人名称" oninput="ncUpdateHolder(${idx}, 'org', 'name', this.value)">
-                  <div class="form-error" id="ncHolderOrgNameError${idx}"></div>
-                </div>
-                <div class="form-group-inline">
-                  <label>统一社会信用代码或登记证件号码 <span class="required">*</span></label>
-                  <input type="text" value="${(h.org.idNo || '').replaceAll('"','&quot;')}" placeholder="请输入证件号码" oninput="ncUpdateHolder(${idx}, 'org', 'idNo', this.value)">
-                  <div class="form-error" id="ncHolderOrgIdNoError${idx}"></div>
-                </div>
-                <div class="form-group-inline">
-                  <label>法定代表人或负责人姓名 <span class="required">*</span></label>
-                  <input type="text" value="${(h.org.repName || '').replaceAll('"','&quot;')}" placeholder="请输入法定代表人或负责人姓名" oninput="ncUpdateHolder(${idx}, 'org', 'repName', this.value)">
-                  <div class="form-error" id="ncHolderOrgRepNameError${idx}"></div>
-                </div>`}
           </div>
+          ${ncHolderSummary(h)}
         </div>`;
       }).join('');
     }
 
-    function ncChangeHolderType(idx, val) {
-      const h = ncState.holders[idx];
-      if (!h) return;
-      h.type = val;
-      ncRenderHolders();
+    function ncSelectHolder(idx, key) {
+      ensureOwnerRecords();
+      const owner = ownerRecords.find(o => (o.idNo || o.name || '') === key);
+      ncState.holders[idx] = owner ? ownerRecordToNrHolder(owner) : { ownerKey: '', type: '自然人', person: {}, org: {} };
       setError('ncHoldersError', '');
+      setError(`ncHolderSelectError${idx}`, '');
+      ncRenderHolders();
     }
 
-    function ncUpdateHolder(idx, kind, key, val) {
-      const h = ncState.holders[idx];
-      if (!h) return;
-      h[kind][key] = val;
-      setError('ncHoldersError', '');
+    function ncCreateOwnerFromCertification() {
+      ownerEditIndex = -1;
+      window.__ownerReturnToCertification = true;
+      navigateTo('owner-edit');
     }
 
     function ncAddHolderCard() {
-      ncState.holders.push({ type: '自然人', person: { name: '', idNo: '' }, org: { name: '', idNo: '', repName: '' } });
+      ncState.holders.push({ ownerKey: '', type: '自然人', person: {}, org: {} });
       ncRenderHolders();
     }
 
@@ -1902,7 +1892,7 @@
       if (showErrors) {
         ['ncWorkNameError','ncWorkFilesError','ncCertifierError','ncHoldersError'].forEach(id => setError(id,''));
         ncState.holders.forEach((_, idx) => {
-          ['ncHolderTypeError','ncHolderPersonNameError','ncHolderPersonIdNoError','ncHolderOrgNameError','ncHolderOrgIdNoError','ncHolderOrgRepNameError'].forEach(prefix => setError(`${prefix}${idx}`,''));
+          setError(`ncHolderSelectError${idx}`, '');
         });
       }
       const workName = (document.getElementById('ncWorkName')?.value || '').trim();
@@ -1913,16 +1903,13 @@
       if (!ncState.holders || ncState.holders.length === 0) { ok = false; if (showErrors) setError('ncHoldersError', '请添加著作权人'); }
       let holderValid = true;
       ncState.holders.forEach((h, idx) => {
-        if (h.type === '自然人') {
-          if (!(h.person.name || '').trim()) { ok = false; holderValid = false; if (showErrors) setError(`ncHolderPersonNameError${idx}`, '请填写著作权人姓名'); }
-          if (!(h.person.idNo || '').trim()) { ok = false; holderValid = false; if (showErrors) setError(`ncHolderPersonIdNoError${idx}`, '请填写身份证号码'); }
-        } else {
-          if (!(h.org.name || '').trim()) { ok = false; holderValid = false; if (showErrors) setError(`ncHolderOrgNameError${idx}`, '请填写著作权人名称'); }
-          if (!(h.org.idNo || '').trim()) { ok = false; holderValid = false; if (showErrors) setError(`ncHolderOrgIdNoError${idx}`, '请填写证件号码'); }
-          if (!(h.org.repName || '').trim()) { ok = false; holderValid = false; if (showErrors) setError(`ncHolderOrgRepNameError${idx}`, '请填写法定代表人或负责人姓名'); }
+        if (!ncGetHolderKey(h)) {
+          ok = false;
+          holderValid = false;
+          if (showErrors) setError(`ncHolderSelectError${idx}`, '请选择著作权人');
         }
       });
-      if (!holderValid && showErrors) setError('ncHoldersError', '请完善著作权人信息');
+      if (!holderValid && showErrors) setError('ncHoldersError', '请选择著作权人；如无可选项，请先新增著作权人');
       if (!certifier) { ok = false; if (showErrors) setError('ncCertifierError', '请选择存证方'); }
       return ok;
     }
@@ -1978,6 +1965,70 @@
       { id: 'BD-CERT-007', name: '巴蜀节庆影像志', certifier: '成都数字版权服务中心', workFile: 'W_巴蜀节庆影像志_01.mp4', ownerType: '组织', ownerName: '四川影像资料馆', ownerNo: '91510100MA6CWK3X3K', certNo: 'BD-2024-SC-007188', time: '2024-06-07 15:00', status: '已存证', platform: '蜀信链', txHash: '0x7a3f8c2e1d4b5a6f9e0c3d8b7a2f1e4c5d6b9a0f3e8c7d6b5a4f3e2d1c0b9a', blockHeight: '12,847,563' },
       { id: 'BD-CERT-008', name: '川菜传统技艺视频', certifier: '四川省文化大数据有限责任公司', workFile: 'W_川菜传统技艺视频_01.mp4', ownerType: '组织', ownerName: '四川美食文化中心', ownerNo: '91510100MA6CWK3X3K', certNo: '', time: '2024-06-07 10:22', status: '存证中', platform: '蜀信链', txHash: '0x8b1f6d4a9c3e5b7d1f2a4c6e8d0b2f4a6c8e1d3f5a7b9c1d3e5f7a9b1c3d5e7', blockHeight: '' }
     ];
+
+    certRecords[3].holders = [
+      {
+        type: '自然人',
+        name: '李秀芳',
+        idType: '身份证',
+        idNo: '510***********7J',
+        sign: '李秀芳',
+        country: '中国',
+        province: '四川省',
+        city: '绵阳市',
+        idFront: { name: '李秀芳_身份证正面.jpg', size: 234567, mime: 'image/jpeg' },
+        idBack: { name: '李秀芳_身份证反面.jpg', size: 198765, mime: 'image/jpeg' },
+        otherFiles: []
+      },
+      {
+        type: '企业法人',
+        name: '成都锦绣工作室',
+        idType: '统一社会信用代码',
+        idNo: '91510100MA6C888888',
+        sign: '成都锦绣工作室',
+        country: '中国',
+        province: '四川省',
+        city: '成都市',
+        repName: '王岚',
+        licenseFile: { name: '成都锦绣工作室_营业执照.pdf', size: 345678, mime: 'application/pdf' },
+        otherFiles: [{ name: '合作说明.pdf', size: 188765, mime: 'application/pdf' }]
+      }
+    ];
+    certRecords[3].workFiles = [
+      { name: 'W_羌族刺绣纹样集_01.jpg', size: 1634521, mime: 'image/jpeg', hash: 'SHA256-63AC78F09D2E5B1C' }
+    ];
+    certRecords[6].holders = [
+      {
+        type: '企业法人',
+        name: '四川影像资料馆',
+        idType: '统一社会信用代码',
+        idNo: '91510100MA6CWK3X3K',
+        sign: '四川影像资料馆',
+        country: '中国',
+        province: '四川省',
+        city: '成都市',
+        repName: '周川',
+        licenseFile: { name: '四川影像资料馆_营业执照.pdf', size: 356781, mime: 'application/pdf' },
+        otherFiles: []
+      },
+      {
+        type: '自然人',
+        name: '刘山河',
+        idType: '身份证',
+        idNo: '510***********2X',
+        sign: '刘山河',
+        country: '中国',
+        province: '四川省',
+        city: '遂宁市',
+        idFront: { name: '刘山河_身份证正面.jpg', size: 210234, mime: 'image/jpeg' },
+        idBack: { name: '刘山河_身份证反面.jpg', size: 204321, mime: 'image/jpeg' },
+        otherFiles: [{ name: '授权声明.pdf', size: 177654, mime: 'application/pdf' }]
+      }
+    ];
+    certRecords[6].workFiles = [
+      { name: 'W_巴蜀节庆影像志_01.mp4', size: 186543210, mime: 'video/mp4', hash: 'SHA256-7A3F8C2E1D4B5A6F' }
+    ];
+    certRecords.forEach(ensureCertRecordShape);
 
     const regRecords = [
       {
@@ -2406,6 +2457,87 @@
       if (list.length === 0) return '—';
       if (list.length <= 2) return list.join('、');
       return list.slice(0, 2).join('、') + '等';
+    }
+
+    function guessMimeByName(name) {
+      const ext = String(name || '').toLowerCase().split('.').pop();
+      if (ext === 'jpg' || ext === 'jpeg') return 'image/jpeg';
+      if (ext === 'png') return 'image/png';
+      if (ext === 'mp4') return 'video/mp4';
+      if (ext === 'mp3') return 'audio/mpeg';
+      if (ext === 'doc' || ext === 'docx') return 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
+      if (ext === 'pdf') return 'application/pdf';
+      if (ext === 'zip') return 'application/zip';
+      return 'application/octet-stream';
+    }
+
+    function ensureCertRecordShape(record) {
+      if (!record) return record;
+      if (!Array.isArray(record.holders) || record.holders.length === 0) {
+        record.holders = [{
+          type: record.ownerType === '组织' ? '企业法人' : (record.ownerType || '自然人'),
+          name: record.ownerName || '—',
+          idType: record.ownerType === '组织' ? '统一社会信用代码' : '身份证',
+          idNo: record.ownerNo || '—',
+          sign: record.ownerName || '—',
+          country: '中国',
+          province: '四川省',
+          city: '成都市',
+          repName: record.ownerType === '组织' ? '机构负责人（示例）' : '',
+          otherFiles: []
+        }];
+      }
+      if (!Array.isArray(record.workFiles) || record.workFiles.length === 0) {
+        record.workFiles = record.workFile ? [{
+          name: record.workFile,
+          size: null,
+          mime: guessMimeByName(record.workFile),
+          hash: record.txHash ? 'SHA256-' + String(record.txHash).slice(2, 18).toUpperCase() : 'SHA256-待生成'
+        }] : [];
+      }
+      record.ownerType = joinNameList(record.holders, 'type');
+      record.ownerName = joinNameList(record.holders, 'name');
+      record.ownerNo = joinNameList(record.holders, 'idNo');
+      record.workFile = joinNameList(record.workFiles, 'name');
+      return record;
+    }
+
+    function getCertRecordIndex(record) {
+      return certRecords.indexOf(record);
+    }
+
+    function renderCertActions(record) {
+      const index = getCertRecordIndex(record);
+      const btn = (text, on, extra) => `<button class="table-btn" ${extra || ''} onclick="${on}">${text}</button>`;
+      if (record.status === '待上传作品') {
+        return btn('上传作品', 'openCertWorkUploadModal()') + btn('提交', "showToast('请先上传作品文件')") ;
+      }
+      if (record.status === '待提交') {
+        return btn('编辑', `navigateTo('blockchain-cert')`) + btn('提交', "showToast('已提交区块链存证，状态更新为存证中')") + btn('删除', "showToast('已删除（模拟）')", 'style="color:var(--color-danger);"');
+      }
+      return btn('查看', `showCertRecordDetail(${index})`);
+    }
+
+    function renderCertRecords(data) {
+      const tbody = document.getElementById('certRecordsBody');
+      if (!tbody) return;
+      tbody.innerHTML = data.map((record, idx) => {
+        ensureCertRecordShape(record);
+        return `<tr>
+          <td><input class="row-checkbox record-check" type="checkbox"/></td>
+          <td>${idx + 1}</td>
+          <td>${escapeHtml(record.name || '—')}</td>
+          <td>${escapeHtml(record.certifier || '—')}</td>
+          <td class="table-mono">${escapeHtml(record.workFile || '—')}</td>
+          <td>${escapeHtml(record.ownerType || '—')}</td>
+          <td>${escapeHtml(record.ownerName || '—')}</td>
+          <td class="table-mono">${escapeHtml(record.ownerNo || '—')}</td>
+          <td><span class="table-badge ${getCertBadgeClass(record.status)}">${escapeHtml(record.status || '—')}</span></td>
+          <td class="table-mono">${escapeHtml(record.certNo || '—')}</td>
+          <td>${escapeHtml(record.time || '—')}</td>
+          <td>${renderCertActions(record)}</td>
+        </tr>`;
+      }).join('');
     }
 
     function renderRegRecords(data) {
@@ -2932,7 +3064,34 @@
     }
 
     function showCertRecordDetail(index, fromPrototypePage) {
-      const r = certRecords[index] || certRecords[0];
+      const r = ensureCertRecordShape(certRecords[index] || certRecords[0]);
+      const workFilesRows = (r.workFiles || []).length
+        ? (r.workFiles || []).map(file => `<tr>
+            <td>${escapeHtml(file.name || '—')}</td>
+            <td class="table-mono">${typeof file.size === 'number' ? fmtFileSize(file.size) : '—'}</td>
+            <td class="table-mono">${escapeHtml(file.mime || '—')}</td>
+            <td class="table-mono" style="word-break:break-all;">${escapeHtml(file.hash || '—')}</td>
+            <td><button class="table-btn" onclick="showToast('查看文件（模拟）')">查看</button><button class="table-btn" onclick="showToast('下载文件（模拟）')">下载</button></td>
+          </tr>`).join('')
+        : '<tr><td colspan="5">—</td></tr>';
+      const holderCards = (r.holders || []).map((holder, idx) => {
+        const attachmentRows = [];
+        if (holder.idFront) attachmentRows.push(`<div class="detail-info-row"><span class="detail-info-label">身份证正面</span><span class="detail-info-value">${escapeHtml(holder.idFront.name)} <button class="table-btn" onclick="showToast('查看附件（模拟）')">查看</button> <button class="table-btn" onclick="showToast('下载附件（模拟）')">下载</button></span></div>`);
+        if (holder.idBack) attachmentRows.push(`<div class="detail-info-row"><span class="detail-info-label">身份证反面</span><span class="detail-info-value">${escapeHtml(holder.idBack.name)} <button class="table-btn" onclick="showToast('查看附件（模拟）')">查看</button> <button class="table-btn" onclick="showToast('下载附件（模拟）')">下载</button></span></div>`);
+        if (holder.licenseFile) attachmentRows.push(`<div class="detail-info-row"><span class="detail-info-label">营业执照或登记证书</span><span class="detail-info-value">${escapeHtml(holder.licenseFile.name)} <button class="table-btn" onclick="showToast('查看附件（模拟）')">查看</button> <button class="table-btn" onclick="showToast('下载附件（模拟）')">下载</button></span></div>`);
+        if (holder.otherFiles && holder.otherFiles.length) attachmentRows.push(`<div class="detail-info-row"><span class="detail-info-label">其他文件</span><span class="detail-info-value">${holder.otherFiles.map(file => `${escapeHtml(file.name)} <button class="table-btn" onclick="showToast('查看附件（模拟）')">查看</button> <button class="table-btn" onclick="showToast('下载附件（模拟）')">下载</button>`).join('<br>')}</span></div>`);
+        return `<div class="detail-info-group" style="margin-bottom:12px;">
+          <div class="detail-info-title">著作权人${idx + 1}</div>
+          <div class="detail-info-row"><span class="detail-info-label">著作权人类型</span><span class="detail-info-value">${escapeHtml(holder.type || '—')}</span></div>
+          <div class="detail-info-row"><span class="detail-info-label">著作权人名称</span><span class="detail-info-value">${escapeHtml(holder.name || '—')}</span></div>
+          <div class="detail-info-row"><span class="detail-info-label">证件类型</span><span class="detail-info-value">${escapeHtml(holder.idType || '—')}</span></div>
+          <div class="detail-info-row"><span class="detail-info-label">证件号码</span><span class="detail-info-value table-mono">${escapeHtml(holder.idNo || '—')}</span></div>
+          <div class="detail-info-row"><span class="detail-info-label">署名</span><span class="detail-info-value">${escapeHtml(holder.sign || holder.name || '—')}</span></div>
+          <div class="detail-info-row"><span class="detail-info-label">所在地区</span><span class="detail-info-value">${escapeHtml([holder.country, holder.province, holder.city].filter(Boolean).join(' / ') || '—')}</span></div>
+          ${holder.repName ? `<div class="detail-info-row"><span class="detail-info-label">法定代表人或负责人姓名</span><span class="detail-info-value">${escapeHtml(holder.repName)}</span></div>` : ''}
+          ${attachmentRows.join('')}
+        </div>`;
+      }).join('') || `<div class="detail-info-row"><span class="detail-info-label">著作权人信息</span><span class="detail-info-value">—</span></div>`;
       document.getElementById('detailOverlay').dataset.returnPage = 'cert-records';
       document.getElementById('detailTitle').textContent = '查看存证 - ' + r.name;
       document.getElementById('detailBody').innerHTML = `
@@ -2943,11 +3102,14 @@
           <div class="detail-info-row"><span class="detail-info-label">存证方</span><span class="detail-info-value">${r.certifier}</span></div>
           <div class="detail-info-row"><span class="detail-info-label">作品文件</span><span class="detail-info-value">${r.workFile || '—'}</span></div>
           <div class="detail-info-row"><span class="detail-info-label">存证说明</span><span class="detail-info-value">${r.remark || '—'}</span></div>
-          <div class="detail-info-row"><span class="detail-info-label">著作权人类型</span><span class="detail-info-value">${r.ownerType}</span></div>
-          <div class="detail-info-row"><span class="detail-info-label">著作权人姓名/组织名称</span><span class="detail-info-value">${r.ownerName}</span></div>
-          <div class="detail-info-row"><span class="detail-info-label">著作权人身份证号码/统一社会信用代码</span><span class="detail-info-value table-mono">${r.ownerNo}</span></div>
           <div class="detail-info-row"><span class="detail-info-label">文件Hash</span><span class="detail-info-value table-mono" style="word-break:break-all;">SHA256-${(r.txHash || '').slice(2, 34).toUpperCase()}</span></div>
+          <div class="detail-info-row"><span class="detail-info-label">著作权人摘要</span><span class="detail-info-value">${r.ownerName}</span></div>
+          <table class="flow-table" style="margin-top:12px;">
+            <thead><tr><th>文件名称</th><th>文件大小</th><th>MIME</th><th>文件 Hash</th><th>操作</th></tr></thead>
+            <tbody>${workFilesRows}</tbody>
+          </table>
         </div>
+        ${holderCards}
         <div class="detail-info-group">
           <div class="detail-info-title">区块链存证信息</div>
           <div class="detail-info-row"><span class="detail-info-label">存证状态</span><span class="detail-info-value"><span class="table-badge ${getCertBadgeClass(r.status)}">${r.status}</span></span></div>
@@ -3013,6 +3175,11 @@
       showToast(window.currentExcelUploadMode === 'reg' ? 'Excel表格已提交解析，列表数据状态为待上传资料' : 'Excel表格已提交解析，列表数据状态为待上传作品');
     }
     function submitWorkUpload() {
+      const isCert = window.currentUploadMode === 'cert';
+      if (isCert && window.currentWorkUploadHasDuplicate) {
+        showToast('检测到同一作品上传了多个文件，请每个作品仅保留 1 个文件后再提交');
+        return;
+      }
       document.querySelectorAll('.excel-import-row').forEach(row => {
         row.style.display = '';
         row.querySelectorAll('.upload-status').forEach(badge => {
@@ -3021,7 +3188,7 @@
         });
       });
       closeUploadModals();
-      showToast('资料已上传，相关记录状态更新为待提交');
+      showToast(isCert ? '作品文件已上传，已校验“每个作品仅对应 1 个文件”，相关记录状态更新为待提交' : '资料已上传，相关记录状态更新为待提交');
     }
     function toggleAllRows(source) {
       document.querySelectorAll('.record-check').forEach(cb => { cb.checked = source.checked; });
@@ -3062,6 +3229,7 @@
     }
     function setUploadMode(mode) {
       window.currentUploadMode = mode;
+      window.currentWorkUploadHasDuplicate = false;
       const isCert = mode === 'cert';
       const title = document.getElementById('workUploadTitle');
       const hint = document.getElementById('workUploadHint');
@@ -3074,15 +3242,20 @@
       if (fileList) { fileList.style.display = 'none'; fileList.innerHTML = ''; }
       if (title) title.textContent = isCert ? '上传作品' : '上传资料';
       if (codeTitle) codeTitle.textContent = isCert ? '作品代码说明' : '资料类型代码表';
-      if (hint) hint.textContent = isCert
-        ? '区块链存证只需要上传作品文件。上传时使用作品代码 W 标识作品文件，文件命名建议为：W_作品名称_序号，例如：W_蜀道山水图_01.jpg。'
+      if (hint) hint.innerHTML = isCert
+        ? '区块链存证支持一次上传多个作品文件，但每个作品仅支持 1 个文件。系统会按作品名称校验重复上传，同一作品出现多个文件时将提示错误并禁止提交。'
         : '版权登记资料按四类统一管理。上传时需要在文件名中标注资料代码、资料名称、序号，例如：G_蜀道山水图_01.pdf。';
       if (codeBody) codeBody.innerHTML = isCert
-        ? '<tr><td class="table-mono">W</td><td>作品文件</td><td>区块链存证唯一上传类型，用于生成文件 Hash 并上链</td><td>多文件按 01、02、03 递增</td></tr>'
+        ? '<tr><td class="table-mono">W</td><td>作品文件</td><td>区块链存证唯一上传类型，用于生成文件 Hash 并上链</td><td>支持批量上传多个作品；单个作品仅允许 1 个文件</td></tr>'
         : '<tr><td class="table-mono">W</td><td>作品文件</td><td>作品原始文件或作品样本</td><td>多文件按 01、02、03 递增</td></tr><tr><td class="table-mono">G</td><td>权利保证书文件</td><td>版权登记权利保证书</td><td>通常为 01，多份按序号递增</td></tr><tr><td class="table-mono">M</td><td>其他材料文件</td><td>授权材料、补充说明、证明材料等</td><td>多份材料按 01、02、03 递增</td></tr><tr><td class="table-mono">I</td><td>著作权人身份证或营业执照</td><td>自然人上传身份证，组织/企业上传营业执照</td><td>身份证正反面或多页材料按 01、02 递增</td></tr>';
-      if (codeRule) codeRule.textContent = isCert ? '仅使用 W，表示作品文件。' : '使用 W、G、M、I 四个大写字母。';
-      if (zoneText) zoneText.textContent = isCert ? '点击或拖拽作品文件至此处上传' : '点击或拖拽资料文件至此处上传';
-      if (zoneHint) zoneHint.textContent = isCert ? '仅上传作品文件，支持图片、文档、音视频、压缩包等格式' : '支持作品文件、权利保证书、其他材料、身份证或营业执照等资料';
+      if (codeRule) codeRule.textContent = isCert ? '仅使用 W，表示作品文件；系统按作品名称校验“每个作品仅 1 个文件”。' : '使用 W、G、M、I 四个大写字母。';
+      if (zoneText) zoneText.textContent = isCert ? '点击或拖拽作品文件至此处上传（支持批量）' : '点击或拖拽资料文件至此处上传';
+      if (zoneHint) {
+        zoneHint.classList.toggle('left-aligned', isCert);
+        zoneHint.innerHTML = isCert
+          ? '支持一次上传多个作品文件，每个作品仅支持单个文件上传，文件小于200MB。<br>作品样本文件说明：<br>1. 美术作品：jpg、png<br>2. 文字作品：放入 Word 上传<br>3. 摄影作品：jpg、png<br>4. 视听作品：传 MP4 格式，作品小于200MB，视频末尾添加演职员表<br>5. 音乐作品：传 mp3 格式或曲谱'
+          : '支持作品文件、权利保证书、其他材料、身份证或营业执照等资料';
+      }
     }
     function openWorkUploadModal() { openRegWorkUploadModal(); }
     function openCertWorkUploadModal() {
@@ -3113,10 +3286,11 @@
       if (list) {
         list.style.display = '';
         list.innerHTML = isCert
-          ? '<div class="upload-file-row"><span><span class="table-mono">W</span> / 蜀道山水图 / 01 / W_蜀道山水图_01.jpg</span><span><span class="table-badge badge-success">已上传</span></span></div>'
+          ? '<div class="upload-file-row"><span><span class="table-mono">W</span> / 蜀道山水图 / 01 / W_蜀道山水图_01.jpg</span><span><span class="table-badge badge-success">已上传</span></span></div><div class="upload-file-row"><span><span class="table-mono">W</span> / 羌族刺绣纹样集 / 01 / W_羌族刺绣纹样集_01.png</span><span><span class="table-badge badge-success">已上传</span></span></div><div class="upload-file-row"><span style="color:var(--color-text-tertiary);">校验规则：支持多个作品同时上传，但每个作品仅允许保留 1 个文件；若同一作品上传多个文件，系统将提示错误并禁止提交。</span></div>'
           : '<div class="upload-file-row"><span><span class="table-mono">W</span> / 蜀道山水图 / 01 / W_蜀道山水图_01.jpg</span><span><span class="table-badge badge-success">已上传</span></span></div><div class="upload-file-row"><span><span class="table-mono">G</span> / 蜀道山水图 / 01 / G_蜀道山水图_01.pdf</span><span><span class="table-badge badge-success">已上传</span></span></div><div class="upload-file-row"><span><span class="table-mono">I</span> / 张明远身份证 / 01 / I_张明远身份证_01.jpg</span><span><span class="table-badge badge-warning">校验中</span></span></div>';
       }
-      showToast(isCert ? '作品文件已上传，正在校验作品代码和序号' : '资料文件已上传，正在校验四类资料代码、名称和序号');
+      window.currentWorkUploadHasDuplicate = false;
+      showToast(isCert ? '作品文件已上传，正在校验作品代码、作品名称和“每个作品仅 1 个文件”规则' : '资料文件已上传，正在校验四类资料代码、名称和序号');
     }
     function submitRegistrationAndCert() {
       showConfirm('确认提交所选业务？', function(){
@@ -3440,6 +3614,16 @@
       if (ownerEditIndex >= 0) ownerRecords[ownerEditIndex] = next;
       else ownerRecords.unshift(next);
       showToast(ownerEditIndex >= 0 ? '已保存著作权人' : '已新增著作权人');
+      if (window.__ownerReturnToCertification) {
+        const selected = ownerRecordToNrHolder(next);
+        const blankIndex = (ncState.holders || []).findIndex(h => !ncGetHolderKey(h));
+        if (blankIndex >= 0) ncState.holders[blankIndex] = selected;
+        else ncState.holders.push(selected);
+        window.__ownerReturnToCertification = false;
+        navigateTo('blockchain-cert');
+        setTimeout(function(){ ncRenderHolders(); }, 0);
+        return;
+      }
       if (window.__ownerReturnToRegistration) {
         const selected = ownerRecordToNrHolder(next);
         const blankIndex = (nrState.holders || []).findIndex(h => !nrGetHolderKey(h));
@@ -3457,6 +3641,7 @@
     bootPrototypeFrame();
     toggleSingleRegEnterpriseFields();
     toggleAddRecordFields();
+    renderCertRecords(certRecords);
     renderRegRecords(regRecords);
     renderOwners();
     nrInit();
