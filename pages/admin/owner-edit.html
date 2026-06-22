@@ -283,7 +283,7 @@
 <thead>
 <tr>
 <th><input class="row-checkbox" id="selectAllRowsCert" onclick="toggleAllRows(this)" type="checkbox"/></th>
-<th>序号</th><th>作品名称</th><th>存证方</th><th>作品文件</th><th>著作权人类型</th><th>著作权人姓名/组织名称</th><th>著作权人身份证号码/统一社会信用代码</th><th>存证状态</th><th>存证编号</th><th>更新时间</th><th>操作</th>
+<th>序号</th><th>作品名称</th><th>存证方</th><th>作品文件</th><th>存证状态</th><th>存证编号</th><th>更新时间</th><th>操作</th>
 </tr>
 </thead>
 <tbody id="certRecordsBody"></tbody>
@@ -735,7 +735,7 @@
 <thead>
 <tr>
 <th><input class="row-checkbox" id="selectAllRowsReg" onclick="toggleAllRows(this)" type="checkbox"/></th>
-<th>作品名称</th><th>作品类型</th><th>作者</th><th>著作权人</th><th>存证方</th><th>受理号</th><th>登记证书编号</th><th>登记状态</th><th>更新时间</th><th>操作</th>
+<th>作品名称</th><th>作品类型</th><th>作者</th><th>存证方</th><th>受理号</th><th>登记证书编号</th><th>登记状态</th><th>更新时间</th><th>操作</th>
 </tr>
 </thead>
 <tbody id="regRecordsBody"></tbody>
@@ -2529,9 +2529,6 @@
           <td>${escapeHtml(record.name || '—')}</td>
           <td>${escapeHtml(record.certifier || '—')}</td>
           <td class="table-mono">${escapeHtml(record.workFile || '—')}</td>
-          <td>${escapeHtml(record.ownerType || '—')}</td>
-          <td>${escapeHtml(record.ownerName || '—')}</td>
-          <td class="table-mono">${escapeHtml(record.ownerNo || '—')}</td>
           <td><span class="table-badge ${getCertBadgeClass(record.status)}">${escapeHtml(record.status || '—')}</span></td>
           <td class="table-mono">${escapeHtml(record.certNo || '—')}</td>
           <td>${escapeHtml(record.time || '—')}</td>
@@ -2565,7 +2562,6 @@
           <td>${r.name || '—'}</td>
           <td>${r.category || '—'}</td>
           <td>${authorsText}</td>
-          <td>${holdersText}</td>
           <td>${r.certifier || '—'}</td>
           <td>${acceptNo}</td>
           <td>${regCertNo}</td>
