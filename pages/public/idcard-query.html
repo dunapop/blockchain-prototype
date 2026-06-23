@@ -65,7 +65,7 @@
 <div class="flow-arrow">→</div>
 <div class="flow-node"><strong>返回结果</strong><span>返回列表结果，左侧页面树定位到“查询结果示例”；点击“查看详情”进入对应详情弹窗。</span></div>
 <div class="flow-arrow">→</div>
-<div class="flow-node"><strong>核验信息</strong><span>可核验登记进度、证书编号、存证哈希与时间戳等信息。</span></div>
+<div class="flow-node"><strong>核验信息</strong><span>可核验登记进度、证书编号、数据指纹、授时时间与区块链ID等公开信息。</span></div>
 </div>
 </div>
 <div class="flow-section">
@@ -434,12 +434,16 @@
           regCertFile: { name: '登记证书.pdf' }
         },
         evidence: {
-          workHash: '9f86d081884c7d659a2feaa0c55ad015...',
-          wclHash: '0x7a3f8c2e1d4b5a6f9e0c3d8b7a2f1e4c...',
-          tpHash: '0x2f8e4c7a9b1d3f5e8c0a6d4b2f7e9c1a...',
-          onChainTime: '2024-06-08 10:23:45',
-          tsaTimestamp: '2024-06-08 10:24:12',
-          tsaMsg: '时间戳授时成功',
+          certificateName: '电子数据存证证书',
+          certNo: 'SOP52023520240608102412001',
+          dataFingerprint: '9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08',
+          fileCount: '1个',
+          platform: '斑马中国·数字版权产业服务平台',
+          tsaTime: '2024-06-08 10:24:12（UTC/GMT+08:00）',
+          blockchainId: '0x7a3f8c2e1d4b5a6f9e0c3d8b7a2f1e4c5d6b9a0f3e8c7d6b5a4f3e2d1c0b9a',
+          fileVerifyUrl: 'https://www.bmark.cn/copyrightRegistration/verification',
+          tsaVerifyUrl: 'https://v.tsa.cn',
+          chainBrowserUrl: 'https://blockchain.bmark.cn',
           evidenceCertFile: { name: '存证证书.pdf' }
         }
       },
@@ -452,12 +456,16 @@
           { name: '蜀道山水图_高清版.jpg', size: 3284121, mime: 'image/jpeg' }
         ],
         evidence: {
-          workHash: 'a1b2c3d4e5f6...',
-          wclHash: '0x5c9e2a7f4b1d8e3c6a0f2d8b4e7c9a1f...',
-          tpHash: '0x2f8e4c7a9b1d3f5e8c0a6d4b2f7e9c1a...',
-          onChainTime: '2024-05-09 09:15:33',
-          tsaTimestamp: '2024-05-09 09:16:00',
-          tsaMsg: '时间戳授时成功',
+          certificateName: '电子数据存证证书',
+          certNo: 'SOP52023520240509091600001',
+          dataFingerprint: 'a1b2c3d4e5f60718293a4b5c6d7e8f90123456789abcdef0123456789abcdef0',
+          fileCount: '1个',
+          platform: '斑马中国·数字版权产业服务平台',
+          tsaTime: '2024-05-09 09:16:00（UTC/GMT+08:00）',
+          blockchainId: '0x5c9e2a7f4b1d8e3c6a0f2d8b4e7c9a1f3d5b8e0c2a4f6d8b0e3c5a7f9d1b4e6',
+          fileVerifyUrl: 'https://www.bmark.cn/copyrightRegistration/verification',
+          tsaVerifyUrl: 'https://v.tsa.cn',
+          chainBrowserUrl: 'https://blockchain.bmark.cn',
           evidenceCertFile: { name: '存证证书.pdf' }
         }
       }
@@ -725,6 +733,29 @@
       `;
     }
 
+    function renderPublicEvidenceRows(ev) {
+      ev = ev || {};
+      return `
+        <div class="info-row"><span class="info-label">证书名称</span><span class="info-value">${escapeHtml(ev?.certificateName || '电子数据存证证书')}</span></div>
+        <div class="info-row"><span class="info-label">证书编号</span><span class="info-value info-mono">${escapeHtml(ev?.certNo || '—')}</span></div>
+        <div class="info-row"><span class="info-label">数据指纹</span><span class="info-value info-mono" style="word-break:break-all;">${escapeHtml(ev?.dataFingerprint || '—')}</span></div>
+        <div class="info-row"><span class="info-label">文件数量</span><span class="info-value">${escapeHtml(ev?.fileCount || '—')}</span></div>
+        <div class="info-row"><span class="info-label">存证平台</span><span class="info-value">${escapeHtml(ev?.platform || '—')}</span></div>
+        <div class="info-row"><span class="info-label">授时时间</span><span class="info-value">${escapeHtml(ev?.tsaTime || '—')}</span></div>
+        <div class="info-row"><span class="info-label">区块链ID</span><span class="info-value info-mono" style="word-break:break-all;">${escapeHtml(ev?.blockchainId || '—')}</span></div>
+        <div class="info-row"><span class="info-label">公开核验入口</span><span class="info-value">文件核验：${escapeHtml(ev?.fileVerifyUrl || '—')}<br>TSA可信时间戳验证中心：${escapeHtml(ev?.tsaVerifyUrl || '—')}<br>文创链区块链浏览器：${escapeHtml(ev?.chainBrowserUrl || '—')}</span></div>
+        <div class="info-row">
+          <span class="info-label">存证证书</span>
+          <span class="info-value">
+            ${ev?.evidenceCertFile?.name ? `
+              <button class="mini-btn" onclick="openPdfPreview('${escapeHtml(ev.evidenceCertFile.name)}')">查看证书</button>
+              <button class="mini-btn" onclick="triggerDownload('${escapeHtml(ev.evidenceCertFile.name)}')">下载证书</button>
+            ` : '—'}
+          </span>
+        </div>
+      `;
+    }
+
     function renderRegistrationDetail(item) {
       const workTypeName = mapBy(WORK_TYPE_MAP, item?.workTypeCd);
 
@@ -786,21 +817,8 @@
         </div>
       `;
 
-      const evidenceHtml = `
-        <div class="info-row"><span class="info-label">上链时间</span><span class="info-value">${escapeHtml(item?.evidence?.onChainTime || '—')}</span></div>
-        <div class="info-row"><span class="info-label">文创链上链哈希</span><span class="info-value info-mono" style="word-break:break-all;">${escapeHtml(item?.evidence?.wclHash || '—')}</span></div>
-        <div class="info-row"><span class="info-label">天平链存证哈希</span><span class="info-value info-mono" style="word-break:break-all;">${escapeHtml(item?.evidence?.tpHash || '—')}</span></div>
-        <div class="info-row"><span class="info-label">授时时间戳</span><span class="info-value">${escapeHtml(item?.evidence?.tsaTimestamp || '—')}</span></div>
-        <div class="info-row">
-          <span class="info-label">存证证书</span>
-          <span class="info-value">
-            ${item?.evidence?.evidenceCertFile?.name ? `
-              <button class="mini-btn" onclick="openPdfPreview('${escapeHtml(item.evidence.evidenceCertFile.name)}')">查看证书</button>
-              <button class="mini-btn" onclick="triggerDownload('${escapeHtml(item.evidence.evidenceCertFile.name)}')">下载证书</button>
-            ` : '—'}
-          </span>
-        </div>
-      `;
+      const evidenceHtml = renderPublicEvidenceRows(item?.evidence);
+
 
       return `
         <div class="info-group">
@@ -851,20 +869,7 @@
 
         <div class="info-group">
           <div class="info-group-title">区块链存证信息</div>
-          <div class="info-row"><span class="info-label">上链时间</span><span class="info-value">${escapeHtml(ev?.onChainTime || '—')}</span></div>
-          <div class="info-row"><span class="info-label">文创链上链哈希</span><span class="info-value info-mono" style="word-break:break-all;">${escapeHtml(ev?.wclHash || '—')}</span></div>
-          <div class="info-row"><span class="info-label">天平链存证哈希</span><span class="info-value info-mono" style="word-break:break-all;">${escapeHtml(ev?.tpHash || '—')}</span></div>
-          <div class="info-row"><span class="info-label">授时时间戳</span><span class="info-value">${escapeHtml(ev?.tsaTimestamp || '—')}</span></div>
-          <div class="info-row"><span class="info-label">时间戳返回信息</span><span class="info-value">${escapeHtml(ev?.tsaMsg || '—')}</span></div>
-          <div class="info-row">
-            <span class="info-label">存证证书</span>
-            <span class="info-value">
-              ${ev?.evidenceCertFile?.name ? `
-                <button class="mini-btn" onclick="openPdfPreview('${escapeHtml(ev.evidenceCertFile.name)}')">查看证书</button>
-                <button class="mini-btn" onclick="triggerDownload('${escapeHtml(ev.evidenceCertFile.name)}')">下载证书</button>
-              ` : '—'}
-            </span>
-          </div>
+          ${renderPublicEvidenceRows(ev)}
         </div>
       `;
     }

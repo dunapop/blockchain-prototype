@@ -12,10 +12,36 @@
 <link href="../../assets/css/style.css" rel="stylesheet"/></head>
 <body class="admin-prototype-page"><script>
 (function(){
-  var target = 'blockchain-cert';
-  if (location.hash !== '#' + target) { history.replaceState(null, '', '#' + target); }
+  var params = new URLSearchParams(window.location.search);
+  var currentFile = (window.location.pathname.split('/').pop() || '').toLowerCase();
+  var filePageMap = {
+    'flow.html': 'admin-flow',
+    'login.html': 'login',
+    'cert-records.html': 'cert-records',
+    'blockchain-cert.html': 'blockchain-cert',
+    'cert-record-detail.html': 'cert-record-detail',
+    'cert-excel-upload-modal.html': 'cert-excel-upload-modal',
+    'cert-work-upload-modal.html': 'cert-work-upload-modal',
+    'reg-records.html': 'reg-records',
+    'new-registration.html': 'new-registration',
+    'reg-view.html': 'reg-record-detail',
+    'reg-view-initial-reviewing.html': 'reg-view-initial-reviewing',
+    'reg-view-reviewing.html': 'reg-view-reviewing',
+    'reg-view-copyright-reviewing.html': 'reg-view-copyright-reviewing',
+    'reg-view-initial-rejected.html': 'reg-view-initial-rejected',
+    'reg-view-review-rejected.html': 'reg-view-review-rejected',
+    'reg-view-copyright-rejected.html': 'reg-view-copyright-rejected',
+    'reg-view-completed.html': 'reg-view-completed',
+    'reg-view-rejected.html': 'reg-view-rejected',
+    'reg-excel-upload-modal.html': 'reg-excel-upload-modal',
+    'reg-work-upload-modal.html': 'reg-work-upload-modal',
+    'owner-management.html': 'owner-management',
+    'owner-edit.html': 'owner-edit'
+  };
+  var target = params.get('page') || filePageMap[currentFile] || (location.hash ? location.hash.replace('#', '') : 'login');
+  if (location.hash !== '#' + target) { history.replaceState(null, '', location.pathname + location.search + '#' + target); }
   window.addEventListener('load', function() {
-    if (location.hash !== '#' + target) history.replaceState(null, '', '#' + target);
+    if (location.hash !== '#' + target) history.replaceState(null, '', location.pathname + location.search + '#' + target);
     window.dispatchEvent(new HashChangeEvent('hashchange'));
   });
 })();
@@ -97,7 +123,7 @@
 <div class="flow-arrow">→</div>
 <div class="flow-node"><strong>待提交</strong><span>作品上传完成，可单条或批量提交。</span></div>
 <div class="flow-arrow">→</div>
-<div class="flow-node"><strong>存证中 / 已存证</strong><span>上链处理成功后返回存证编号、TxHash、区块高度。</span></div>
+<div class="flow-node"><strong>存证中 / 已存证</strong><span>存证成功后返回证书编号、数据指纹、授时时间、区块链ID和证据核验入口。</span></div>
 </div>
 </div>
 <div class="flow-card">
@@ -1956,14 +1982,14 @@
 
     // ===== 登记记录模拟数据 =====
     const certRecords = [
-      { id: 'BD-CERT-001', name: '青羊宫古建筑摄影集', certifier: '成都数字版权服务中心', workFile: 'W_青羊宫古建筑摄影集_01.jpg', ownerType: '组织', ownerName: '成都城市影像工作室', ownerNo: '91510100MA6CWK3X3K', certNo: '', time: '2024-06-06 10:30', status: '待上传作品', platform: '蜀信链', txHash: '', blockHeight: '' },
-      { id: 'BD-CERT-002', name: '蜀道山水图', certifier: '四川省文化大数据有限责任公司', workFile: 'W_蜀道山水图_01.jpg', ownerType: '自然人', ownerName: '张明远', ownerNo: '510***********3X', certNo: '', time: '2024-06-01 09:30', status: '待提交', platform: '蜀信链', txHash: '', blockHeight: '' },
-      { id: 'BD-CERT-003', name: '川剧变脸数字化影像', certifier: '四川省文化大数据有限责任公司', workFile: 'W_川剧变脸数字化影像_01.mp4', ownerType: '组织', ownerName: '四川文化传媒有限公司', ownerNo: '91510100MA6CWK3X3K', certNo: '', time: '2024-06-02 10:08', status: '存证中', platform: '蜀信链', txHash: '0x2f8e4c7a9b1d3f5e8c0a6d4b2f7e9c1a3d5b8f0e2c4a6d8b0f3e5c7a9d1b4f', blockHeight: '' },
-      { id: 'BD-CERT-004', name: '羌族刺绣纹样集', certifier: '成都数字版权服务中心', workFile: 'W_羌族刺绣纹样集_01.jpg', ownerType: '自然人', ownerName: '李秀芳', ownerNo: '510***********7J', certNo: 'BD-2024-SC-003891', time: '2024-05-09 09:15', status: '已存证', platform: '蜀信链', txHash: '0x5c9e2a7f4b1d8e3c6a0f2d8b4e7c9a1f3d5b8e0c2a4f6d8b0e3c5a7f9d1b4e6', blockHeight: '12,815,422' },
-      { id: 'BD-CERT-005', name: '峨眉山云海摄影', certifier: '四川省文化大数据有限责任公司', workFile: 'W_峨眉山云海摄影_01.jpg', ownerType: '自然人', ownerName: '陈志强', ownerNo: '510***********18', certNo: '', time: '2024-06-07 09:18', status: '待上传作品', platform: '蜀信链', txHash: '', blockHeight: '' },
-      { id: 'BD-CERT-006', name: '龙纹样数字素材包', certifier: '四川省文化大数据有限责任公司', workFile: 'W_龙纹样数字素材包_01.zip', ownerType: '组织', ownerName: '四川博物院', ownerNo: '91510100MA6CWK3X3K', certNo: '', time: '2024-06-07 12:10', status: '待提交', platform: '蜀信链', txHash: '', blockHeight: '' },
-      { id: 'BD-CERT-007', name: '巴蜀节庆影像志', certifier: '成都数字版权服务中心', workFile: 'W_巴蜀节庆影像志_01.mp4', ownerType: '组织', ownerName: '四川影像资料馆', ownerNo: '91510100MA6CWK3X3K', certNo: 'BD-2024-SC-007188', time: '2024-06-07 15:00', status: '已存证', platform: '蜀信链', txHash: '0x7a3f8c2e1d4b5a6f9e0c3d8b7a2f1e4c5d6b9a0f3e8c7d6b5a4f3e2d1c0b9a', blockHeight: '12,847,563' },
-      { id: 'BD-CERT-008', name: '川菜传统技艺视频', certifier: '四川省文化大数据有限责任公司', workFile: 'W_川菜传统技艺视频_01.mp4', ownerType: '组织', ownerName: '四川美食文化中心', ownerNo: '91510100MA6CWK3X3K', certNo: '', time: '2024-06-07 10:22', status: '存证中', platform: '蜀信链', txHash: '0x8b1f6d4a9c3e5b7d1f2a4c6e8d0b2f4a6c8e1d3f5a7b9c1d3e5f7a9b1c3d5e7', blockHeight: '' }
+      { id: 'BD-CERT-001', name: '青羊宫古建筑摄影集', certifier: '成都数字版权服务中心', workFile: 'W_青羊宫古建筑摄影集_01.jpg', ownerType: '组织', ownerName: '成都城市影像工作室', ownerNo: '91510100MA6CWK3X3K', certNo: '', time: '2024-06-06 10:30', status: '待上传作品', platform: '斑马中国·数字版权产业服务平台', txHash: '', blockHeight: '' },
+      { id: 'BD-CERT-002', name: '蜀道山水图', certifier: '四川省文化大数据有限责任公司', workFile: 'W_蜀道山水图_01.jpg', ownerType: '自然人', ownerName: '张明远', ownerNo: '510***********3X', certNo: '', time: '2024-06-01 09:30', status: '待提交', platform: '斑马中国·数字版权产业服务平台', txHash: '', blockHeight: '' },
+      { id: 'BD-CERT-003', name: '川剧变脸数字化影像', certifier: '四川省文化大数据有限责任公司', workFile: 'W_川剧变脸数字化影像_01.mp4', ownerType: '组织', ownerName: '四川文化传媒有限公司', ownerNo: '91510100MA6CWK3X3K', certNo: '', time: '2024-06-02 10:08', status: '存证中', platform: '斑马中国·数字版权产业服务平台', txHash: '0x2f8e4c7a9b1d3f5e8c0a6d4b2f7e9c1a3d5b8f0e2c4a6d8b0f3e5c7a9d1b4f', blockHeight: '' },
+      { id: 'BD-CERT-004', name: '羌族刺绣纹样集', certifier: '成都数字版权服务中心', workFile: 'W_羌族刺绣纹样集_01.jpg', ownerType: '自然人', ownerName: '李秀芳', ownerNo: '510***********7J', certNo: 'SOP52023520240509091600001', time: '2024-05-09 09:15', status: '已存证', platform: '斑马中国·数字版权产业服务平台', txHash: '0x5c9e2a7f4b1d8e3c6a0f2d8b4e7c9a1f3d5b8e0c2a4f6d8b0e3c5a7f9d1b4e6', blockHeight: '12,815,422' },
+      { id: 'BD-CERT-005', name: '峨眉山云海摄影', certifier: '四川省文化大数据有限责任公司', workFile: 'W_峨眉山云海摄影_01.jpg', ownerType: '自然人', ownerName: '陈志强', ownerNo: '510***********18', certNo: '', time: '2024-06-07 09:18', status: '待上传作品', platform: '斑马中国·数字版权产业服务平台', txHash: '', blockHeight: '' },
+      { id: 'BD-CERT-006', name: '龙纹样数字素材包', certifier: '四川省文化大数据有限责任公司', workFile: 'W_龙纹样数字素材包_01.zip', ownerType: '组织', ownerName: '四川博物院', ownerNo: '91510100MA6CWK3X3K', certNo: '', time: '2024-06-07 12:10', status: '待提交', platform: '斑马中国·数字版权产业服务平台', txHash: '', blockHeight: '' },
+      { id: 'BD-CERT-007', name: '巴蜀节庆影像志', certifier: '成都数字版权服务中心', workFile: 'W_巴蜀节庆影像志_01.mp4', ownerType: '组织', ownerName: '四川影像资料馆', ownerNo: '91510100MA6CWK3X3K', certNo: 'SOP52023520240607150000001', time: '2024-06-07 15:00', status: '已存证', platform: '斑马中国·数字版权产业服务平台', txHash: '0x7a3f8c2e1d4b5a6f9e0c3d8b7a2f1e4c5d6b9a0f3e8c7d6b5a4f3e2d1c0b9a', blockHeight: '12,847,563' },
+      { id: 'BD-CERT-008', name: '川菜传统技艺视频', certifier: '四川省文化大数据有限责任公司', workFile: 'W_川菜传统技艺视频_01.mp4', ownerType: '组织', ownerName: '四川美食文化中心', ownerNo: '91510100MA6CWK3X3K', certNo: '', time: '2024-06-07 10:22', status: '存证中', platform: '斑马中国·数字版权产业服务平台', txHash: '0x8b1f6d4a9c3e5b7d1f2a4c6e8d0b2f4a6c8e1d3f5a7b9c1d3e5f7a9b1c3d5e7', blockHeight: '' }
     ];
 
     certRecords[3].holders = [
@@ -2728,6 +2754,8 @@
         ? `<div class="detail-info-row"><span class="detail-info-label">驳回意见</span><span class="detail-info-value">${(r.audit && r.audit.rejectReason) ? r.audit.rejectReason : '—'}</span></div>`
         : '';
 
+      const hideBlockchainInfoForStatus = ['版权局审核中', '复审驳回', '版权局审核驳回'].includes(st.name);
+
       const publishInfo = (r.creation && r.creation.published === '是')
         ? `<div class="detail-info-row"><span class="detail-info-label">首次发表时间</span><span class="detail-info-value">${r.creation.firstPublishTime || '—'}</span></div>
            <div class="detail-info-row"><span class="detail-info-label">首次发表地点</span><span class="detail-info-value">${r.creation.firstPublishPlace || '—'}</span></div>`
@@ -2792,18 +2820,31 @@
       const blockchainInfo = (() => {
         if (r.localStatus) return `<div class="detail-info-row"><span class="detail-info-label">说明</span><span class="detail-info-value">尚未进入区块链存证环节。</span></div>`;
         if (r.statusCd === 1100 || r.statusCd === 1200) return `<div class="detail-info-row"><span class="detail-info-label">说明</span><span class="detail-info-value">尚未进入区块链存证环节。</span></div>`;
-        if (r.blockchain && (r.blockchain.wenchuangHash || r.blockchain.tianpingHash || r.blockchain.chainTime)) {
+        if (r.blockchain && (r.blockchain.workHash || r.blockchain.wenchuangHash || r.blockchain.chainTime || r.blockchain.timestamp)) {
+          const evidenceNo = r.blockchain.evidenceCertNo || '—';
+          const fileCount = Array.isArray(r.workFiles) && r.workFiles.length ? `${r.workFiles.length}个` : '—';
+          const tsaTime = r.blockchain.timestamp ? `${r.blockchain.timestamp}（UTC/GMT+08:00）` : '—';
           return `
-            <div class="detail-info-row"><span class="detail-info-label">作品哈希</span><span class="detail-info-value table-mono">${r.blockchain.workHash || '—'}</span></div>
-            <div class="detail-info-row"><span class="detail-info-label">文创链上链哈希</span><span class="detail-info-value table-mono" style="word-break:break-all;">${r.blockchain.wenchuangHash || '—'}</span></div>
-            <div class="detail-info-row"><span class="detail-info-label">天平链存证哈希</span><span class="detail-info-value table-mono" style="word-break:break-all;">${r.blockchain.tianpingHash || '—'}</span></div>
-            <div class="detail-info-row"><span class="detail-info-label">上链时间</span><span class="detail-info-value">${r.blockchain.chainTime || '—'}</span></div>
-            <div class="detail-info-row"><span class="detail-info-label">授时时间戳</span><span class="detail-info-value">${r.blockchain.timestamp || '—'}</span></div>
+            <div class="detail-info-row"><span class="detail-info-label">证书名称</span><span class="detail-info-value">电子数据存证证书</span></div>
+            <div class="detail-info-row"><span class="detail-info-label">证书编号</span><span class="detail-info-value table-mono">${evidenceNo}</span></div>
+            <div class="detail-info-row"><span class="detail-info-label">数据指纹</span><span class="detail-info-value table-mono" style="word-break:break-all;">${r.blockchain.workHash || '—'}</span></div>
+            <div class="detail-info-row"><span class="detail-info-label">文件数量</span><span class="detail-info-value">${fileCount}</span></div>
+            <div class="detail-info-row"><span class="detail-info-label">存证平台</span><span class="detail-info-value">斑马中国·数字版权产业服务平台</span></div>
+            <div class="detail-info-row"><span class="detail-info-label">授时时间</span><span class="detail-info-value">${tsaTime}</span></div>
+            <div class="detail-info-row"><span class="detail-info-label">区块链ID</span><span class="detail-info-value table-mono" style="word-break:break-all;">${r.blockchain.wenchuangHash || '—'}</span></div>
+            <div class="detail-info-row"><span class="detail-info-label">证据核验</span><span class="detail-info-value">文件核验：https://www.bmark.cn/copyrightRegistration/verification<br>TSA可信时间戳验证中心：https://v.tsa.cn<br>文创链区块链浏览器：https://blockchain.bmark.cn</span></div>
             <div class="detail-info-row"><span class="detail-info-label">存证证书</span><span class="detail-info-value">${r.blockchain.evidenceCertFile ? `${r.blockchain.evidenceCertFile.name} <button class="table-btn" onclick="showToast('查看证书（模拟）')">在线查看</button> <button class="table-btn" onclick="regDownloadEvidenceCert(${index})">下载</button>` : '—'}</span></div>
           `;
         }
         return `<div class="detail-info-row"><span class="detail-info-label">说明</span><span class="detail-info-value">尚未进入区块链存证环节。</span></div>`;
       })();
+
+      const blockchainInfoGroup = hideBlockchainInfoForStatus ? '' : `
+        <div class="detail-info-group">
+          <div class="detail-info-title">区块链存证信息</div>
+          ${blockchainInfo}
+        </div>
+      `;
 
       const auditInfo = (() => {
         if (st.type === 'processing') {
@@ -2931,10 +2972,7 @@
           ${auditInfo}
         </div>
 
-        <div class="detail-info-group">
-          <div class="detail-info-title">区块链存证信息</div>
-          ${blockchainInfo}
-        </div>
+        ${blockchainInfoGroup}
 
         <div class="detail-info-group">
           <div class="detail-info-title">登记结果</div>
@@ -2950,7 +2988,7 @@
       if (isInPrototypeFrame() && !fromPrototypePage && window.location.hash !== '#' + viewPage) {
         history.replaceState(null, '', window.location.pathname + '#' + viewPage);
       }
-      notifyPrototypeFrame(viewPage);
+      notifyPrototypeFrame(fromPrototypePage ? getPrototypeTargetPage() : viewPage);
     }
 
     function regEdit(index) {
@@ -3039,7 +3077,7 @@
         r.blockchain = r.blockchain || {};
         r.blockchain.chainTime = r.blockchain.chainTime || r.updatedAt;
         r.blockchain.timestamp = r.blockchain.timestamp || r.updatedAt;
-        r.blockchain.evidenceCertNo = r.blockchain.evidenceCertNo || ('CWSP' + new Date().toISOString().slice(0, 10).replaceAll('-', '') + String(Math.floor(Math.random() * 900000 + 100000)));
+        r.blockchain.evidenceCertNo = r.blockchain.evidenceCertNo || ('SOP520235' + new Date().toISOString().slice(0, 10).replaceAll('-', '') + String(Math.floor(Math.random() * 900000 + 100000)));
         r.blockchain.evidenceCertFile = r.blockchain.evidenceCertFile || { name: '存证证书.pdf', size: 402100, mime: 'application/pdf' };
       }
       renderRegRecords(regRecords);
@@ -3090,6 +3128,12 @@
       }).join('') || `<div class="detail-info-row"><span class="detail-info-label">著作权人信息</span><span class="detail-info-value">—</span></div>`;
       document.getElementById('detailOverlay').dataset.returnPage = 'cert-records';
       document.getElementById('detailTitle').textContent = '查看存证 - ' + r.name;
+      const certificateNo = r.status === '已存证' ? (r.certNo || '—') : '—';
+      const dataFingerprint = r.dataFingerprint || (r.txHash ? String(r.txHash).slice(2).padEnd(64, '0').slice(0, 64) : '—');
+      const fileCount = Array.isArray(r.workFiles) && r.workFiles.length ? `${r.workFiles.length}个` : (r.workFile ? '1个' : '—');
+      const tsaTime = r.status === '已存证' ? `${r.time || '—'}（UTC/GMT+08:00）` : '—';
+      const blockchainId = r.status === '已存证' ? (r.blockchainId || r.txHash || '—') : '—';
+      const issuedAt = r.status === '已存证' ? (r.issuedAt || r.time || '—') : '—';
       document.getElementById('detailBody').innerHTML = `
         <div class="detail-info-group">
           <div class="detail-info-title">作品与文件信息</div>
@@ -3109,15 +3153,17 @@
         <div class="detail-info-group">
           <div class="detail-info-title">区块链存证信息</div>
           <div class="detail-info-row"><span class="detail-info-label">存证状态</span><span class="detail-info-value"><span class="table-badge ${getCertBadgeClass(r.status)}">${r.status}</span></span></div>
-          <div class="detail-info-row"><span class="detail-info-label">存证编号</span><span class="detail-info-value table-mono">${r.certNo || '—'}</span></div>
-          <div class="detail-info-row"><span class="detail-info-label">区块链平台</span><span class="detail-info-value">${r.platform || '—'}</span></div>
-          <div class="detail-info-row"><span class="detail-info-label">Hash算法</span><span class="detail-info-value">SHA-256</span></div>
-          <div class="detail-info-row"><span class="detail-info-label">数据指纹</span><span class="detail-info-value table-mono" style="word-break:break-all;">b67edae132806d994cd07f05ce1ab627addb400d211e70a144074334fbca88e9</span></div>
-          <div class="detail-info-row"><span class="detail-info-label">存证时间</span><span class="detail-info-value">${r.time || '—'}</span></div>
-          <div class="detail-info-row"><span class="detail-info-label">授时时间</span><span class="detail-info-value">2026-04-24 16:00:06（UTC/GMT+08:00）</span></div>
-          <div class="detail-info-row"><span class="detail-info-label">TxHash</span><span class="detail-info-value table-mono" style="word-break:break-all;">${r.txHash || '—'}</span></div>
-          <div class="detail-info-row"><span class="detail-info-label">区块高度</span><span class="detail-info-value">${r.blockHeight || '—'}</span></div>
-          <div class="detail-info-row"><span class="detail-info-label">著作权人</span><span class="detail-info-value">类型：${r.ownerType}<br>姓名或企业名称：${r.ownerName}<br>证件号码：${r.ownerNo}</span></div>
+          <div class="detail-info-row"><span class="detail-info-label">证书名称</span><span class="detail-info-value">电子数据存证证书</span></div>
+          <div class="detail-info-row"><span class="detail-info-label">证书编号</span><span class="detail-info-value table-mono">${certificateNo}</span></div>
+          <div class="detail-info-row"><span class="detail-info-label">申请人 / 存证人</span><span class="detail-info-value">${r.ownerName || '—'}</span></div>
+          <div class="detail-info-row"><span class="detail-info-label">存证人证件号码</span><span class="detail-info-value table-mono">${r.ownerNo || '—'}</span></div>
+          <div class="detail-info-row"><span class="detail-info-label">存证账号</span><span class="detail-info-value">${r.evidenceAccount || '—'}</span></div>
+          <div class="detail-info-row"><span class="detail-info-label">数据指纹</span><span class="detail-info-value table-mono" style="word-break:break-all;">${dataFingerprint}</span></div>
+          <div class="detail-info-row"><span class="detail-info-label">文件数量</span><span class="detail-info-value">${fileCount}</span></div>
+          <div class="detail-info-row"><span class="detail-info-label">存证平台</span><span class="detail-info-value">斑马中国·数字版权产业服务平台</span></div>
+          <div class="detail-info-row"><span class="detail-info-label">授时时间</span><span class="detail-info-value">${tsaTime}</span></div>
+          <div class="detail-info-row"><span class="detail-info-label">区块链ID</span><span class="detail-info-value table-mono" style="word-break:break-all;">${blockchainId}</span></div>
+          <div class="detail-info-row"><span class="detail-info-label">证据核验</span><span class="detail-info-value">文件核验：https://www.bmark.cn/copyrightRegistration/verification<br>TSA可信时间戳验证中心：https://v.tsa.cn<br>文创链区块链浏览器：https://blockchain.bmark.cn</span></div>
         </div>
         <div class="detail-info-group">
           <div class="detail-info-title">证书信息</div>
@@ -3126,17 +3172,18 @@
               <div class="cert-sheet">
                 <div class="cert-sheet-title">电子数据存证证书</div>
                 <div class="cert-sheet-sub">DATA DEPOSIT CERTIFICATE</div>
+                <div class="cert-sheet-line">No：${certificateNo}</div>
                 <div class="cert-sheet-line">作品名称：${r.name}</div>
-                <div class="cert-sheet-line">证书编号：${r.status === '已存证' ? 'CWSP23420260424147DB' : '—'}</div>
-                <div class="cert-sheet-line">状态：${r.status === '已存证' ? '已发放' : '未发放'}</div>
-                <div class="cert-sheet-footer"><span>可信时间戳</span><span>电子证书</span></div>
+                <div class="cert-sheet-line">数据指纹：${dataFingerprint}</div>
+                <div class="cert-sheet-line">授时时间：${tsaTime}</div>
+                <div class="cert-sheet-footer"><span>联合存证</span><span>文创链</span></div>
               </div>
             </div>
             <div class="detail-cert-meta">
               <div class="detail-cert-name">电子数据存证证书</div>
               <div class="detail-cert-row">证书状态：${r.status === '已存证' ? '已发放' : '未发放'}</div>
-              <div class="detail-cert-row">证书编号：${r.status === '已存证' ? 'CWSP23420260424147DB' : '—'}</div>
-              <div class="detail-cert-row">发放日期：${r.status === '已存证' ? '2026-04-24 16:00:08' : '—'}</div>
+              <div class="detail-cert-row">证书编号：${certificateNo}</div>
+              <div class="detail-cert-row">发放日期：${issuedAt}</div>
               <div class="detail-cert-actions">
                 ${r.status === '已存证' ? `<button class="detail-cert-btn" onclick="showToast('证书下载中...')">下载证书</button><button class="detail-cert-btn" onclick="showToast('可信时间戳下载中...')">下载可信时间戳</button>` : `<span style="font-size:13px;color:var(--color-text-tertiary);">暂无可下载证书</span>`}
               </div>
