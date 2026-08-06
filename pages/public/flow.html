@@ -33,62 +33,53 @@
 </div>
 <span class="navbar-title">区块链版权登记查询</span>
 </div>
-<div class="navbar-right">
-<a href="admin-system-framed-v38.html#login">管理入口</a>
-<svg class="link-icon" fill="none" stroke="currentColor" stroke-width="1.5" viewbox="0 0 16 16">
-<path d="M6 3h7v7M13 3L6 10"></path>
-</svg>
-</div>
 </nav>
 <!-- 前端查询端业务流程图 -->
 <section class="flow-page" id="publicFlowPage">
 <h1 class="flow-title">前端查询端业务流程图</h1>
-<p class="flow-desc">前端查询端只负责公开查询和详情核验，不产生新增、上传、提交或修改数据。查询结果列表展示版权登记核心信息与登记状态；证件号码与证件附件在公众端脱敏与受限展示。</p>
+<p class="flow-desc">前端查询端仅提供身份证查询入口，不提供作品/著作权人查询；不支持查看详情，仅以列表形式展示查询结果。前端查询端不产生新增、上传、提交或修改数据。</p>
 <div class="flow-section">
 <h3>一、身份证查询流程</h3>
 <div class="flow-steps">
 <div class="flow-node"><strong>输入身份信息</strong><span>用户输入姓名、身份证号。</span></div>
 <div class="flow-arrow">→</div>
-<div class="flow-node"><strong>查询本人作品</strong><span>系统按证件号检索名下版权作品。</span></div>
+<div class="flow-node"><strong>查询本人作品</strong><span>系统按姓名 + 身份证号检索匹配的著作权人名下已完成存证/登记的作品。</span></div>
 <div class="flow-arrow">→</div>
-<div class="flow-node"><strong>展示结果列表</strong><span>列表展示作品名称、作品类型、作者、著作权人、受理号、登记状态、登记证书编号与操作，左侧页面树定位到“查询结果示例”。</span></div>
-<div class="flow-arrow">→</div>
-<div class="flow-node"><strong>查看详情</strong><span>如记录为版权登记业务，打开“查看详情弹窗-已登记”；如仅为区块链存证业务，打开“查看详情弹窗-已存证”。</span></div>
+<div class="flow-node"><strong>展示结果列表</strong><span>查询结果直接在当前页下方展示列表，仅显示作品（缩略图 + 名称）、著作权人、证书编号三列；不提供"查看详情"入口。</span></div>
 </div>
 </div>
 <div class="flow-section">
-<h3>二、作品 / 著作权人查询流程</h3>
-<div class="flow-steps">
-<div class="flow-node"><strong>输入信息</strong><span>输入作品名称或著作权人信息。</span></div>
-<div class="flow-arrow">→</div>
-<div class="flow-node"><strong>匹配记录</strong><span>系统按作品名称或著作权人信息匹配版权登记记录或区块链存证记录。</span></div>
-<div class="flow-arrow">→</div>
-<div class="flow-node"><strong>返回结果</strong><span>返回列表结果，左侧页面树定位到“查询结果示例”；点击“查看详情”进入对应详情弹窗。</span></div>
-<div class="flow-arrow">→</div>
-<div class="flow-node"><strong>核验信息</strong><span>可核验登记进度、证书编号、数据指纹、授时时间与区块链ID等公开信息。</span></div>
-</div>
-</div>
-<div class="flow-section">
-<h3>三、查询结果列表字段</h3>
+<h3>二、查询结果列表字段</h3>
 <table class="flow-table">
 <thead><tr><th>字段</th><th>说明</th></tr></thead>
 <tbody>
-<tr><td>作品名称 / 作品类型</td><td>展示登记作品基础信息。</td></tr>
-<tr><td>作者 / 著作权人</td><td>支持多人简要展示。</td></tr>
-<tr><td>受理号</td><td>未生成受理号时显示“—”。</td></tr>
-<tr><td>登记状态</td><td>统一展示完整业务状态，仅显示中文名称。</td></tr>
-<tr><td>登记证书编号</td><td>登记完成后展示，未完成显示“—”。</td></tr>
-<tr><td>操作</td><td>统一为“查看详情”。</td></tr>
+<tr><td>作品</td><td>缩略图标注文件类型（图片/视频/其他）+ 作品名称简要展示。</td></tr>
+<tr><td>著作权人</td><td>展示作品登记/存证时的著作权人；多人时支持简要展示，超过两人显示前两人加"等"。</td></tr>
+<tr><td>证书编号</td><td>即区块链存证证书编号（由九天接口返回），展示时按编号规则转换前缀后显示。</td></tr>
 </tbody>
 </table>
 </div>
 <div class="flow-section">
-<h3>四、详情弹窗规则</h3>
-<table class="flow-table">
-<thead><tr><th>详情页面</th><th>触发条件</th><th>展示内容</th></tr></thead>
+<h3>三、证书编号规则</h3>
+<p class="flow-desc" style="margin-top:8px;">存证证书编号由九天接口返回原始编号，公开展示时进行前缀替换：</p>
+<table class="flow-table" style="margin-top:12px;">
+<thead><tr><th>项目</th><th>规则说明</th></tr></thead>
 <tbody>
-<tr><td>查看详情弹窗-已登记</td><td>记录为版权登记业务</td><td>展示登记进度与六节点时间线、作品/作者/著作权人/权利信息、登记结果与区块链存证结果（按状态动态展示）；作品文件仅展示一个。</td></tr>
-<tr><td>查看详情弹窗-已存证</td><td>记录仅为区块链存证业务</td><td>仅展示区块链存证相关内容，不混入版权登记信息。</td></tr>
+<tr><td>替换规则</td><td>将原始编号前缀 <strong>SOP52044620</strong> 替换为 <strong>CWS230519</strong>，后续序号部分保持不变。</td></tr>
+<tr><td>示例</td><td>原始：<code>SOP52044620260729095116049</code> &nbsp;→&nbsp; 展示：<code style="color:#111;font-weight:600;">CWS230519260729095116049</code></td></tr>
+<tr><td>适用范围</td><td>身份证查询结果列表的"证书编号"列统一按此规则转换展示。</td></tr>
+</tbody>
+</table>
+</div>
+<div class="flow-section">
+<h3>四、功能边界说明</h3>
+<table class="flow-table">
+<thead><tr><th>项目</th><th>说明</th></tr></thead>
+<tbody>
+<tr><td>查询入口</td><td>仅保留身份证查询（姓名 + 身份证号）；不提供作品名称/著作权人查询入口。</td></tr>
+<tr><td>结果展示</td><td>结果以列表形式展示在身份证查询页下方，不跳转到独立"查询结果示例"页。</td></tr>
+<tr><td>详情能力</td><td>不提供"查看详情"按钮；不打开详情弹窗；不展示登记进度时间线、证件附件、材料下载等后台能力。</td></tr>
+<tr><td>数据范围</td><td>仅展示已完成存证/登记且匹配身份证号的作品；证件号码、证件附件等隐私信息不对外展示。</td></tr>
 </tbody>
 </table>
 </div>
@@ -98,13 +89,7 @@
 <h1 class="hero-title">版权作品查询</h1>
 <p class="hero-subtitle">基于区块链技术的版权存证与登记查询系统</p>
 <div class="search-card">
-<!-- 搜索 Tab -->
-<div class="search-tabs">
-<button class="search-tab active" data-tab="idcard" onclick="switchTab('idcard')">身份证查询</button>
-<button class="search-tab" data-tab="cert" onclick="switchTab('cert')">作品/著作权人查询</button>
-</div>
 <div class="search-body">
-<!-- Tab1：身份证查询 -->
 <div class="search-form active" id="tab-idcard">
 <div class="search-row">
 <div class="search-field">
@@ -114,16 +99,6 @@
 <div class="search-field">
 <label>身份证号</label>
 <input id="inputIdcard" placeholder="请输入身份证号码" type="text"/>
-</div>
-<button class="search-btn" onclick="doSearch()">查询</button>
-</div>
-</div>
-<!-- Tab2：作品/著作权人查询 -->
-<div class="search-form" id="tab-cert">
-<div class="search-row">
-<div class="search-field">
-<label>作品名称 / 著作权人信息</label>
-<input id="inputCertNo" placeholder="请输入作品名称、著作权人信息查询" type="text"/>
 </div>
 <button class="search-btn" onclick="doSearch()">查询</button>
 </div>
@@ -139,14 +114,9 @@
 <table class="results-table">
 <thead>
 <tr>
-<th>作品名称</th>
-<th>作品类型</th>
+<th>作品</th>
 <th>著作权人</th>
-<th>作者</th>
-<th>登记证书号</th>
-<th>登记完成时间</th>
-<th>上链时间</th>
-<th>操作</th>
+<th>证书编号</th>
 </tr>
 </thead>
 <tbody id="resultsBody"></tbody>
@@ -200,12 +170,8 @@
         const pageFiles = {
           'public-flow': 'pages/public/flow.html',
           'idcard-query': 'pages/public/idcard-query.html',
-          'cert-query': 'pages/public/cert-query.html',
-          'results': 'pages/public/results.html',
-          'results-detail-registered': 'pages/public/results-detail-registered.html',
-          'results-detail-certified': 'pages/public/results-detail-certified.html',
         };
-        window.parent.postMessage({ type: 'prototype:navigate', file: pageFiles[page] || 'pages/public/idcard-query.html', page: page }, '*');
+        window.parent.postMessage({ type: 'prototype:navigate', file: pageFiles[page] || 'pages/public/flow.html', page: page }, '*');
       }
     }
     function navigatePublicPrototype(page) {
@@ -224,11 +190,12 @@
         heroSection.style.display = 'none';
         if (flowPage) flowPage.classList.add('visible');
       }
-      if (page === 'cert-query') switchTab('cert');
-      if (page === 'idcard-query') switchTab('idcard');
-      if (page === 'results') { closeModal(true); doSearch(); }
-      if (page === 'results-detail-registered') { closeModal(true); doSearch(); setTimeout(function(){ openDetail(3, true); }, 0); }
-      if (page === 'results-detail-certified') { closeModal(true); doSearch(); setTimeout(function(){ openDetail(4, true); }, 0); }
+      if (page === 'idcard-query') {
+        const q = document.getElementById('idcardName');
+        const q2 = document.getElementById('idcardNumber');
+        if (q) q.value = '';
+        if (q2) q2.value = '';
+      }
       if (isInPrototypeFrame() && window.location.hash !== '#' + page) {
         history.replaceState(null, '', window.location.pathname + '#' + page);
       }
@@ -435,7 +402,7 @@
         },
         evidence: {
           certificateName: '电子数据存证证书',
-          certNo: 'SOP52023520240608102412001',
+          certNo: 'SOP52044620260729095116049',
           dataFingerprint: '9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08',
           fileCount: '1个',
           platform: '斑马中国·数字版权产业服务平台',
@@ -457,7 +424,7 @@
         ],
         evidence: {
           certificateName: '电子数据存证证书',
-          certNo: 'SOP52023520240509091600001',
+          certNo: 'SOP52044620260509102208037',
           dataFingerprint: 'a1b2c3d4e5f60718293a4b5c6d7e8f90123456789abcdef0123456789abcdef0',
           fileCount: '1个',
           platform: '斑马中国·数字版权产业服务平台',
@@ -582,6 +549,12 @@
       if (!s) return '—';
       if (s.length <= 8) return s[0] + '****' + s[s.length - 1];
       return s.slice(0, 4) + '********' + s.slice(-4);
+    }
+
+    function formatCertNo(certNo) {
+      const s = String(certNo || '').trim();
+      if (!s) return '—';
+      return s.replace(/^SOP52044620/, 'CWS230519');
     }
 
     function getRegStatusInfo(item) {
@@ -735,9 +708,10 @@
 
     function renderPublicEvidenceRows(ev) {
       ev = ev || {};
+      const displayCertNo = formatCertNo(ev?.certNo);
       return `
         <div class="info-row"><span class="info-label">证书名称</span><span class="info-value">${escapeHtml(ev?.certificateName || '电子数据存证证书')}</span></div>
-        <div class="info-row"><span class="info-label">证书编号</span><span class="info-value info-mono">${escapeHtml(ev?.certNo || '—')}</span></div>
+        <div class="info-row"><span class="info-label">证书编号</span><span class="info-value info-mono">${escapeHtml(displayCertNo)}</span></div>
         <div class="info-row"><span class="info-label">数据指纹</span><span class="info-value info-mono" style="word-break:break-all;">${escapeHtml(ev?.dataFingerprint || '—')}</span></div>
         <div class="info-row"><span class="info-label">文件数量</span><span class="info-value">${escapeHtml(ev?.fileCount || '—')}</span></div>
         <div class="info-row"><span class="info-label">存证平台</span><span class="info-value">${escapeHtml(ev?.platform || '—')}</span></div>
@@ -874,21 +848,6 @@
       `;
     }
 
-    // ===== Tab 切换 =====
-    function switchTab(tab) {
-      document.querySelectorAll('.search-tab').forEach(el => el.classList.remove('active'));
-      document.querySelectorAll('.search-form').forEach(el => el.classList.remove('active'));
-      document.querySelector(`.search-tab[data-tab="${tab}"]`).classList.add('active');
-      document.getElementById(`tab-${tab}`).classList.add('active');
-      const hint = document.querySelector('.search-hint');
-      if (hint) {
-        hint.textContent = tab === 'idcard'
-          ? '请输入完整的身份证号码，系统将返回该证件人名下所有登记作品'
-          : '请输入作品名称、著作权人信息查询';
-      }
-      notifyPrototypeFrame(tab === 'cert' ? 'cert-query' : 'idcard-query');
-    }
-
     // ===== 查询操作 =====
     function doSearch() {
       const heroSection = document.getElementById('heroSection');
@@ -909,13 +868,13 @@
       if (!completed.length) {
         resultsSection.classList.remove('visible');
         noResults.classList.add('visible');
-        notifyPrototypeFrame('results');
+        notifyPrototypeFrame('idcard-query');
         return;
       }
 
       renderResults(completed);
       resultsSection.classList.add('visible');
-      notifyPrototypeFrame('results');
+      notifyPrototypeFrame('idcard-query');
     }
 
     // ===== 渲染结果表格 =====
@@ -925,21 +884,28 @@
 
       tbody.innerHTML = data.map((item) => {
         const workTypeName = mapBy(WORK_TYPE_MAP, item?.workTypeCd);
-        const authorsText = item?.kind === 'registration' ? joinNameList(item?.authors, 'authorName') : '—';
         const holdersText = item?.kind === 'registration' ? joinNameList(item?.holders, 'holderName') : '—';
-        const regCertNo = item?.kind === 'registration' ? (item?.result?.regCertNo || '—') : '—';
-        const regDoneTime = item?.kind === 'registration' ? (item?.result?.issuedAt || '—') : '—';
-        const onChainTime = item?.kind === 'registration' ? (item?.evidence?.onChainTime || '—') : (item?.evidence?.onChainTime || '—');
+        const rawCertNo = item?.evidence?.certNo || '';
+        const displayCertNo = formatCertNo(rawCertNo);
+        const firstFile = Array.isArray(item?.workFiles) && item.workFiles.length ? item.workFiles[0] : null;
+        const mime = (firstFile?.mime || '').toLowerCase();
+        const isImage = mime.startsWith('image/');
+        const isVideo = mime.startsWith('video/');
+        let thumbClass = 'work-thumb work-thumb-file';
+        let thumbLabel = workTypeName || 'FILE';
+        if (isImage) { thumbClass = 'work-thumb work-thumb-img'; thumbLabel = 'IMG'; }
+        else if (isVideo) { thumbClass = 'work-thumb work-thumb-video'; thumbLabel = 'VIDEO'; }
+        const workName = escapeHtml(item?.workName || '—');
         return `
           <tr>
-            <td>${escapeHtml(item?.workName || '—')}</td>
-            <td>${escapeHtml(workTypeName)}</td>
+            <td>
+              <div class="work-thumb-cell">
+                <div class="${thumbClass}">${thumbLabel}</div>
+                <div class="work-thumb-name" title="${workName}">${workName}</div>
+              </div>
+            </td>
             <td>${escapeHtml(holdersText)}</td>
-            <td>${escapeHtml(authorsText)}</td>
-            <td><span class="info-mono">${escapeHtml(regCertNo)}</span></td>
-            <td>${escapeHtml(regDoneTime)}</td>
-            <td>${escapeHtml(onChainTime)}</td>
-            <td><button class="detail-btn" onclick="openDetail(${Number(item?.id)})">查看详情</button></td>
+            <td><span class="info-mono">${escapeHtml(displayCertNo)}</span></td>
           </tr>
         `;
       }).join('');
@@ -947,30 +913,18 @@
 
     // ===== 打开详情弹窗 =====
     function openDetail(id, fromPrototypePage) {
-      const item = mockData.find(d => d.id === id);
-      if (!item) return;
-      const body = document.getElementById('modalBody');
-      const isRegistration = item?.kind === 'registration';
-      document.getElementById('modalTitle').textContent = isRegistration ? '版权登记详情' : '存证详情';
-      body.innerHTML = isRegistration ? renderRegistrationDetail(item) : renderEvidenceOnlyDetail(item);
-
-      document.getElementById('modalOverlay').classList.add('visible');
-      document.body.style.overflow = 'hidden';
-      const detailPage = isRegistration ? 'results-detail-registered' : 'results-detail-certified';
-      document.getElementById('modalOverlay').dataset.returnPage = 'results';
-      if (isInPrototypeFrame() && !fromPrototypePage && window.location.hash !== '#' + detailPage) {
-        history.replaceState(null, '', window.location.pathname + '#' + detailPage);
-      }
-      notifyPrototypeFrame(detailPage);
+      showToast('查询端不支持查看详情，仅以列表形式展示作品、著作权人、证书编号');
     }
 
-    // ===== 关闭弹窗 =====
     function closeModal(skipHistory) {
       document.getElementById('modalOverlay').classList.remove('visible');
       document.body.style.overflow = '';
-      if (isInPrototypeFrame() && !skipHistory && ['#results-detail-registered', '#results-detail-certified'].includes(window.location.hash)) {
-        history.replaceState(null, '', window.location.pathname + '#results');
-        notifyPrototypeFrame('results');
+      if (isInPrototypeFrame() && !skipHistory) {
+        const hash = window.location.hash || '';
+        if (['#results-detail-registered', '#results-detail-certified', '#results'].includes(hash)) {
+          history.replaceState(null, '', window.location.pathname + '#idcard-query');
+          notifyPrototypeFrame('idcard-query');
+        }
       }
     }
     function closeModalOutside(e) {

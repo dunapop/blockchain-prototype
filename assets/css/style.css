@@ -305,6 +305,38 @@
     .results-table tbody tr:last-child td { border-bottom: none; }
     .results-table tbody tr:hover { background: var(--color-surface); }
 
+    /* ===== 作品缩略图 ===== */
+    .work-thumb-cell {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .work-thumb {
+      width: 56px;
+      height: 56px;
+      border-radius: var(--radius-md);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      font-weight: 600;
+      color: #fff;
+      flex-shrink: 0;
+      letter-spacing: 0.02em;
+    }
+    .work-thumb-img { background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%); }
+    .work-thumb-video { background: linear-gradient(135deg, #0ea5e9 0%, #06b6d4 100%); }
+    .work-thumb-file { background: linear-gradient(135deg, #64748b 0%, #475569 100%); }
+    .work-thumb-name {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--color-text-primary);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 280px;
+    }
+
     /* 状态 Badge */
     .badge {
       display: inline-flex;
